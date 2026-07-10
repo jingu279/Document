@@ -8,7 +8,7 @@ GitHub Actions는 CI/CD(지속적 통합/지속적 배포)를 자동화하는 Gi
 
 ```mermaid
 flowchart TB
-  Dev["👨‍💻 개발자 코드 푸시"] --> Event["⚡ Event 발생!<br/>(push / PR 생성 등)"]
+  Dev["🧑 개발자 코드 푸시"] --> Event["⚡ Event 발생!<br/>(push / PR 생성 등)"]
   Event --> Trigger["🚀 Workflow 트리거<br/>(ci.yml 파일 실행)"]
   Trigger --> Runner["🖥️ Runner 서버<br/>ubuntu-latest"]
 

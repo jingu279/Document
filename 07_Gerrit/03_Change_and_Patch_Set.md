@@ -16,7 +16,7 @@ flowchart LR
     PS1 --> PS2 --> PS3
   end
 
-  Note["💡 PS1→PS2: '스타일이 없습니다' 리뷰 반영<br/>💡 PS2→PS3: 'README도 업데이트해주세요' 리뷰 반영<br/>💡 각 PS 간의 diff를 Gerrit UI에서 볼 수 있음"]
+  Explanation["💡 PS1→PS2: '스타일이 없습니다' 리뷰 반영<br/>💡 PS2→PS3: 'README도 업데이트해주세요' 리뷰 반영<br/>💡 각 PS 간의 diff를 Gerrit UI에서 볼 수 있음"]
 ```
 
 ## Change (변경)

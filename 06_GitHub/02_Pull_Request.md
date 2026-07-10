@@ -6,9 +6,9 @@ Pull Request(PR)는 GitHub의 핵심 협업 기능입니다. 브랜치의 변경
 
 ```mermaid
 sequenceDiagram
-    participant Local as 개발자 로컬
+    participant Local as "개발자 로컬"
     participant GitHub as GitHub
-    participant Team as 팀
+    participant Team as "팀"
 
     Local->>GitHub: ① git push origin feature/login
     GitHub->>Team: ② Pull Request 생성 "리뷰해주세요!"

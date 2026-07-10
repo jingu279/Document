@@ -8,9 +8,9 @@ gitGraph
    commit id: "C2"
    branch feature/login
    checkout feature/login
-   commit id: "C3: 로그인 폼"
-   commit id: "C4: 유효성 검사"
-   commit id: "C5: 스타일 적용"
+   commit id: "C3 - 로그인 폼"
+   commit id: "C4 - 유효성 검사"
+   commit id: "C5 - 스타일 적용"
    checkout main
    commit id: "C6"
    cherry-pick id: "C4"

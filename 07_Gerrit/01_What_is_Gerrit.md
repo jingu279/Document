@@ -22,7 +22,7 @@ flowchart TB
   subgraph GerritServer[Gerrit 서버]
     Pending["📋 리뷰 대기열<br/>Change 123: 로그인 (PS2) [+2 CR]<br/>Change 124: 결제 (PS1) [-1 V]<br/>Change 125: 문서 (PS3) [NEW]"]
     MainBranch["🌿 main 브랜치<br/>C1-C2-C3-C4 (Submit된 변경들)"]
-    Pending -->|리뷰어 승인 → Submit| MainBranch
+    Pending -->|"리뷰어 승인 → Submit"| MainBranch
   end
 
   subgraph Developer[개발자 로컬 저장소]
