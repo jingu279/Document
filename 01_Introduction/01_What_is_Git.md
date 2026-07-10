@@ -6,26 +6,43 @@ Git은 소프트웨어 개발 프로젝트의 **버전 관리 시스템 (Version
 
 초보자가 가장 혼동하는 개념 중 하나가 **"Git"**과 **"저장소(Repository)"**의 차이입니다.
 
-```
-┌────────────────────────────────────────────────────────────┐
-│  Git ≠ 저장소(Repository)                                   │
-│                                                            │
-│  Git = 소프트웨어 = 프로그램                                │
-│      예) 한글, 포토샵, 크롬 같은 "도구"                       │
-│                                                            │
-│  Repository = 프로젝트 = 데이터                             │
-│      예) 한글로 작성한 "문서", 포토샵으로 편집한 "사진"       │
-└────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  G[("⚙️ Git = 버전 관리 도구<br/>컴퓨터에 한 번만 설치")]
+
+  subgraph Repos[내 컴퓨터의 프로젝트들]
+    direction TB
+    R1["📁 Project A<br/>.git/ → 프로젝트 A의 이력"]
+    R2["📁 Project B<br/>.git/ → 프로젝트 B의 이력"]
+    R3["📁 Project C<br/>.git/ → 프로젝트 C의 이력"]
+  end
+
+  G --> R1
+  G --> R2
+  G --> R3
+
+  style G fill:#2d5a2d,stroke:#2d5a2d,color:#fff
+  style Repos fill:#1a1a2e,stroke:#16213e,color:#eee
 ```
 
-| 개념 | Git | Repository (저장소) |
-|---|---|---|
-| **정의** | 버전을 관리하는 **도구** | Git으로 관리되는 **프로젝트** |
-| **비유** | 📷 **카메라** (찍는 도구) | 🖼️ **사진 앨범** (찍힌 결과물) |
-| **설치** | 한 번만 설치 (`git --version`) | 프로젝트마다 생성 (`git init`) |
-| **개수** | 컴퓨터에 하나만 있으면 됨 | 여러 개를 동시에 가질 수 있음 |
-| **명령어** | `git add`, `git commit`, `git push` | `git init`, `git clone`으로 생성 |
-| **실체** | `/usr/bin/git` 실행 파일 | `.git/` 폴더 (프로젝트 안에 숨김) |
+```mermaid
+flowchart TB
+  subgraph GitConcept[Git]
+    direction TB
+    G1["📷 카메라 (찍는 도구)"]
+    G2["버전 관리 소프트웨어"]
+    G3["한 번만 설치하면 모든 프로젝트에서 사용"]
+    G4["/usr/bin/git 실행 파일"]
+  end
+
+  subgraph RepoConcept[Repository 저장소]
+    direction TB
+    R1["🖼️ 사진 앨범 (찍힌 결과물)"]
+    R2["Git으로 관리되는 프로젝트"]
+    R3["프로젝트마다 새로 생성 (git init)"]
+    R4[".git/ 숨김 폴더 (프로젝트 안에 생성)"]
+  end
+```
 
 ```bash
 # Git 설치 (한 번만)
