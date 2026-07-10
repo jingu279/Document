@@ -8,33 +8,25 @@
 
 **충돌 상황 시각화:**
 
-```
-두 개발자가 같은 파일의 같은 줄을 수정한 경우:
+```mermaid
+flowchart TB
+  subgraph DeveloperA[개발자 A: main 브랜치]
+    A1["index.html (원본):<br/>&lt;p&gt;안녕하세요&lt;/p&gt;"]
+    A2["'환영합니다'로 수정"]
+    A3["&lt;p&gt;환영합니다&lt;/p&gt;"]
+    A1 --> A2 --> A3
+  end
 
-  개발자 A: main 브랜치           개발자 B: feature/login 브랜치
+  subgraph DeveloperB[개발자 B: feature/login 브랜치]
+    B1["index.html (원본):<br/>&lt;p&gt;안녕하세요&lt;/p&gt;"]
+    B2["'Welcome'으로 수정"]
+    B3["&lt;p&gt;Welcome&lt;/p&gt;"]
+    B1 --> B2 --> B3
+  end
 
-  index.html (원본):             index.html (원본):
-  <p>안녕하세요</p>              <p>안녕하세요</p>
-        │                              │
-        │ "환영합니다"로 수정           │ "Welcome"으로 수정
-        ▼                              ▼
-  <p>환영합니다</p>               <p>Welcome</p>
-
-        └──────────┬──────────┘
-                   ▼
-          git merge feature/login
-                   │
-          Git의 선택: 🤷 "둘 중 뭐가 맞는지 모르겠어요!"
-                   │
-                   ▼
-          CONFLICT! 사람이 직접 결정해야 함
-
-  충돌 마커가 삽입된 파일:
-  <<<<<<< HEAD
-  <p>환영합니다</p>        ← main 브랜치의 내용
-  =======
-  <p>Welcome</p>           ← feature/login 브랜치의 내용
-  >>>>>>> feature/login
+  A3 & B3 --> Merge["git merge feature/login"]
+  Merge --> Conflict["🤷 Git: '둘 중 뭐가 맞는지 모르겠어요!'<br/><br/>CONFLICT! 사람이 직접 결정해야 함"]
+  Conflict --> Markers["충돌 마커가 삽입된 파일:<br/><<<<<<< HEAD<br/>&lt;p&gt;환영합니다&lt;/p&gt;<br/>========<br/>&lt;p&gt;Welcome&lt;/p&gt;<br/>>>>>>>> feature/login"]
 ```
 
 ```

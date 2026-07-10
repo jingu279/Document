@@ -32,21 +32,28 @@ $ git revert a1b2c3d --no-edit
 
 **브랜치 협업 개념도:**
 
-```
-                         시간 ──────────────────────────────►
-
-  main 브랜치:     C1────C2──────────────────────────C3────C4
-                      \                               /
-                       \                             /
-  feature/login:       └──C2-1──C2-2──C2-3 (로그인) /
-                                             \     /
-  feature/payment:                           └────┘ (결제)
-
-  개발자 A: [main]────[login]───────────────────────────────►
-  개발자 B: [main]────[payment]─────────────────────────────►
-  개발자 C: [main]────[hotfix]──────────────────────────────►
-
-  각자 독립적으로 작업하다가, 완료 후 main에 병합!
+```mermaid
+gitGraph
+   commit id: "C1"
+   commit id: "C2"
+   branch feature/login
+   checkout feature/login
+   commit id: "로그인 폼"
+   commit id: "로그인 API"
+   commit id: "로그인 완료"
+   checkout main
+   branch feature/payment
+   checkout feature/payment
+   commit id: "결제 폼"
+   commit id: "결제 API"
+   checkout main
+   merge feature/payment
+   checkout main
+   branch hotfix/typo
+   checkout hotfix/typo
+   commit id: "오타 수정"
+   checkout main
+   merge hotfix/typo
 ```
 
 **실제 협업 예시: 3명의 개발자가 동시에 작업**

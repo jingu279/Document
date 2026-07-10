@@ -6,31 +6,23 @@
 
 **Reset과 Revert의 동작 방식 비교:**
 
-```
-Reset: 타임머신처럼 시간을 되돌린다 (히스토리 변경!)
+```mermaid
+gitGraph
+   commit id: "C1"
+   commit id: "C2"
+   commit id: "C3"
+   branch reset-branch
+   checkout reset-branch
+   reset main
+   note over reset-branch: "Reset: C3가 사라짐! 🗑️"
+   checkout main
 
-  커밋 이력:
-  C1 ◄── C2 ◄── C3 (HEAD)
-                      │
-          git reset --hard HEAD~1
-                      │
-                      ▼
-  C1 ◄── C2 (HEAD)
-          ✂️ C3는 완전히 사라짐!
-
-
-Revert: "실행 취소" 커밋을 새로 만든다 (히스토리 보존!)
-
-  커밋 이력:
-  C1 ◄── C2 ◄── C3 (HEAD)
-                      │
-          git revert HEAD
-                      │
-                      ▼
-  C1 ◄── C2 ◄── C3 ◄── C4 (Revert "C3")
-                          │
-                          └── C3의 변경을 취소하는 새 커밋!
-                              C3는 히스토리에 그대로 남음
+gitGraph
+   commit id: "C1"
+   commit id: "C2"
+   commit id: "C3"
+   commit id: "Revert C3" type: HIGHLIGHT
+   note over main: "Revert: C3는 그대로,<br/>되돌리기 커밋만 추가! ✅"
 ```
 
 | `git reset` | `git revert` |
@@ -45,40 +37,38 @@ Revert: "실행 취소" 커밋을 새로 만든다 (히스토리 보존!)
 
 ### reset의 세 가지 모드 상세 비교
 
-```
-초기 상태:
-┌────┐ ┌────┐ ┌────┐
-│ C1 │◄──│ C2 │◄──│ C3 │  ← HEAD (main)
-└────┘ └────┘ └────┘
+```mermaid
+flowchart TB
+  subgraph Initial[초기 상태]
+    direction LR
+    C1a[C1] --> C2a[C2] --> C3a[C3]
+    C3a -.- H1["HEAD (main)"]
+  end
 
-각 모드별 git reset --X HEAD~1 실행 결과:
+  subgraph Soft["--soft: 커밋만 취소, Staged 유지"]
+    direction LR
+    C1b[C1] --> C2b[C2]
+    C2b -.- H2["HEAD"]
+    S1["📋 Staging Area: C3 변경 내용<br/>→ 바로 git commit 가능!"]
+  end
 
-┌────────────────────────────────────────────────────────┐
-│ --soft: 커밋만 취소, 변경 사항은 Staged로 유지           │
-│                                                        │
-│   ┌────┐ ┌────┐                                        │
-│   │ C1 │◄──│ C2 │ ← HEAD                               │
-│   └────┘ └────┘                                        │
-│                  📋 Staging Area: [C3 변경 내용] ← 바로 커밋 가능! │
-└────────────────────────────────────────────────────────┘
+  subgraph Mixed["--mixed: 커밋 취소 + Staging 초기화"]
+    direction LR
+    C1c[C1] --> C2c[C2]
+    C2c -.- H3["HEAD"]
+    S2["📝 Working Dir: C3 변경 내용<br/>→ 수정 후 git add 필요!"]
+  end
 
-┌────────────────────────────────────────────────────────┐
-│ --mixed: 커밋 취소 + Staging 초기화, 작업 디렉토리에 유지   │
-│                                                        │
-│   ┌────┐ ┌────┐                                        │
-│   │ C1 │◄──│ C2 │ ← HEAD                               │
-│   └────┘ └────┘                                        │
-│                  📝 Working Dir: [C3 변경 내용] ← 수정 후 add 필요! │
-└────────────────────────────────────────────────────────┘
+  subgraph Hard["--hard: 모두 초기화"]
+    direction LR
+    C1d[C1] --> C2d[C2]
+    C2d -.- H4["HEAD"]
+    S3["🗑️ C3 변경 내용 완전 삭제!<br/>⚠️ 복구 불가!"]
+  end
 
-┌────────────────────────────────────────────────────────┐
-│ --hard: 커밋 + Staging + 작업 디렉토리 모두 초기화        │
-│                                                        │
-│   ┌────┐ ┌────┐                                        │
-│   │ C1 │◄──│ C2 │ ← HEAD                               │
-│   └────┘ └────┘                                        │
-│                  🗑️ C3 변경 내용 완전 삭제! (복구 불가)    │
-└────────────────────────────────────────────────────────┘
+  Initial --> Soft
+  Initial --> Mixed
+  Initial --> Hard
 ```
 
 ```bash

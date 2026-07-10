@@ -4,21 +4,25 @@ Git에서 변경 사항을 기록하는 가장 기본적인 단계는 `add`와 `
 
 **add와 commit의 관계:**
 
-```
-  add = 사진 찍기 전 "구도 잡기"
-  commit = "셔터 누르기"
+```mermaid
+flowchart LR
+  subgraph WD[작업 디렉토리]
+    W1[index.html]
+    W2[style.css]
+  end
+  subgraph SA[스테이징 영역]
+    S1[index.html]
+    S2[style.css]
+  end
+  subgraph RE[저장소 .git]
+    R1["커밋 a1b2c3d<br/>index.html<br/>style.css"]
+  end
 
-  작업 디렉토리         스테이징 영역           저장소 (.git)
-  ┌────────────┐      ┌────────────┐        ┌────────────┐
-  │ index.html │      │ index.html │        │ 커밋 a1b2c3d│
-  │ (수정됨)    │─────►│ (staged)   │───────►│            │
-  │            │ add  │            │commit  │ index.html │
-  │ style.css  │      │ style.css  │        │ style.css  │
-  │ (수정됨)    │─────►│ (staged)   │        │            │
-  └────────────┘      └────────────┘        └────────────┘
-       │                    │                      │
-   "최종본 아님"      "이번 커밋에 넣을 것"    "영구 저장된 스냅샷"
-                      = 사진 구도            = 실제 사진
+  WD -->|"git add<br/>사진 찍기 전 구도 잡기"| SA
+  SA -->|"git commit<br/>셔터 누르기"| RE
+  WD -.->|최종본 아님| W1
+  SA -.->|이번 커밋에 넣을 것| S1
+  RE -.->|영구 저장된 스냅샷| R1
 ```
 
 ## 1. 작업 상태 확인하기: `git status`

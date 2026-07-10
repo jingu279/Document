@@ -39,6 +39,21 @@ PR 생명주기:
       │                                  │                              │
 ```
 
+```mermaid
+sequenceDiagram
+    participant Local as 개발자 로컬
+    participant GitHub as GitHub
+    participant Team as 팀
+
+    Local->>GitHub: ① git push origin feature/login
+    GitHub->>Team: ② Pull Request 생성 "리뷰해주세요!"
+    Team->>Local: ③ 코드 리뷰 의견 "여기 수정해주세요"
+    Local->>GitHub: ④ git push (피드백 반영)
+    Team->>Local: ⑤ 승인 Approve "LGTM!"
+    GitHub->>GitHub: ⑥ Merge PR main ◄── feature/login
+    Local->>GitHub: ⑦ git pull origin main
+```
+
 ## PR 생성하기 (GitHub CLI)
 
 ```bash

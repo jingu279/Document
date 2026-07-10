@@ -4,21 +4,17 @@
 
 **Init vs Clone 개념도:**
 
-```
-git init (처음부터 시작):             git clone (기존 저장소 복사):
+```mermaid
+flowchart TB
+  subgraph Init[git init - 처음부터 시작]
+    I1["내 컴퓨터<br/>my-project/ (빈 폴더)"] --> I2["내 컴퓨터<br/>.git/ 폴더 생성"]
+    I2 --> I3["💡 내가 처음부터 만들래!"]
+  end
 
-  내 컴퓨터                             GitHub                       내 컴퓨터
-  ┌──────────────┐                    ┌──────────────┐            ┌──────────────┐
-  │ my-project/  │                    │  원격 저장소  │            │ my-project/  │
-  │              │   git init          │              │  git clone  │              │
-  │  (빈 폴더)   │ ────────────►      │  C1─C2─C3    │ ──────────►│  C1─C2─C3    │
-  │              │                    │              │            │              │
-  │              │  .git/ 폴더 생성    │   URL 필요    │            │  .git/ 자동   │
-  │              │                    │              │            │  생성 + 설정  │
-  └──────────────┘                    └──────────────┘            └──────────────┘
-
-  💡 git init: "내가 처음부터 만들래!"       💡 git clone: "다른 사람이 만든 걸 가져올래!"
-  💡 git clone = git init + git remote + git fetch + git checkout
+  subgraph Clone[git clone - 기존 저장소 복사]
+    C1["GitHub<br/>원격 저장소<br/>C1-C2-C3"] -->|"git clone URL"| C2["내 컴퓨터<br/>my-project/<br/>C1-C2-C3 + .git/ 자동 설정"]
+    C2 --> C3["💡 다른 사람이 만든 걸 가져올래!"]
+  end
 ```
 
 ## 1. `git init` — 새로운 Git 저장소 만들기

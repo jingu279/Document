@@ -35,6 +35,22 @@ Git은 파일의 상태를 다음과 같이 구분합니다.
   💡 포인트: 커밋하면 Unmodified로 돌아가고, 수정하면 Modified로 이동!
 ```
 
+```mermaid
+stateDiagram-v2
+  [*] --> Untracked : 새 파일 생성
+  Untracked --> Staged : git add (첫 추가)
+
+  state Unmodified {
+    [*] --> Clean
+  }
+  Unmodified --> Modified : 파일 수정
+  Modified --> Staged : git add
+  Staged --> Unmodified : git commit
+
+  note right of Staged : "이번 커밋에 넣을 파일"의 대기실
+  note right of Unmodified : 커밋 후 안정 상태
+```
+
 ![Git Workflow Diagram](https://git-scm.com/book/en/v2/images/lifecycle.png)
 
 1.  **Untracked (추적되지 않음):** Git이 아직 관리하지 않는 새로운 파일. 한 번도 스테이징(stage)되지 않은 파일입니다.
@@ -47,30 +63,23 @@ Git은 파일의 상태를 다음과 같이 구분합니다.
 Git은 위의 파일 상태를 관리하기 위해 세 가지 주요 영역을 사용합니다.
 
 ```
-  ┌─────────────────────────────────────────────────────────────┐
-  │                    세 가지 영역 개념도                        │
-  │                                                             │
-  │  ┌─────────────────┐     git add     ┌─────────────────┐    │
-  │  │  Working Tree   │ ──────────────► │  Staging Area   │    │
-  │  │  (작업 디렉토리)  │                 │  (스테이징 영역)  │    │
-  │  │                 │                 │                 │    │
-  │  │  실제 파일들을    │                 │  다음 커밋에      │    │
-  │  │  편집하는 공간    │                 │  포함할 변경 사항  │    │
-  │  │                 │                 │  을 준비하는 곳   │    │
-  │  │  📝 index.html  │                 │  📋 index.html   │    │
-  │  └────────┬────────┘                 └────────┬─────────┘    │
-  │           │                                   │              │
-  │           │                                   │ git commit   │
-  │           │                                   ▼              │
-  │           │                          ┌─────────────────┐    │
-  │           │                          │   Repository    │    │
-  │           └──────────────────────────│  (.git 저장소)   │    │
-  │              git checkout/switch     │                 │    │
-  │                                     │  모든 커밋 이력  │    │
-  │                                     │  이 저장되는 곳   │    │
-  │                                     │  🗄️ a1b2c3d...  │    │
-  │                                     └─────────────────┘    │
-  └─────────────────────────────────────────────────────────────┘
+
+```mermaid
+flowchart LR
+  subgraph ThreeAreas[Git의 세 가지 영역]
+    direction LR
+    W[작업 디렉토리<br/>Working Tree<br/>📝 파일을 편집하는 공간]
+    S[스테이징 영역<br/>Staging Area<br/>📋 다음 커밋에 넣을 파일]
+    R[저장소<br/>Repository<br/>🗄️ 모든 커밋 이력]
+
+    W -->|git add| S
+    S -->|git commit| R
+    R -.->|git switch/checkout| W
+  end
+
+  Photo[사진 비유] -.-> W
+  Photo -.-> S
+  Photo -.-> R
 ```
 
 사진 찍는 것에 비유하면:

@@ -48,6 +48,29 @@ Fork 관계도 (3개의 저장소):
   └─────────────────────────────────────────────┘
 ```
 
+```mermaid
+flowchart TB
+  subgraph Upstream[원본 저장소 upstream]
+    U["github.com/facebook/react<br/>main: C1-C2-C3-C4-C5"]
+  end
+
+  subgraph Origin[내 저장소 origin]
+    O["github.com/me/react<br/>main: C1-C2-C3-C4-C5"]
+  end
+
+  subgraph Local[내 컴퓨터 로컬 저장소]
+    L1["main: C1-C2-C3-C4-C5"]
+    L2["fix/typo: C6"]
+    L1 --> L2
+  end
+
+  Upstream -->|"① Fork (GitHub 서버에서 복사)"| Origin
+  Origin -->|"② Clone (내 컴퓨터로 복사)"| Local
+  Local -.->|"③ PR은 upstream으로!"| Upstream
+  Local -.->|"④ origin에는 push 가능!"| Origin
+  Upstream -.->|"⑤ upstream은 pull만!"| Local
+```
+
 ## Fork 기여 워크플로우
 
 ```bash
