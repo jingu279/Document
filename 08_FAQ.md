@@ -90,18 +90,9 @@ $ git switch -c new-branch
 
 ```mermaid
 flowchart LR
-  subgraph Reset["git reset"]
-    R1["용도: 커밋 자체를 되돌림 (삭제)"]
-    R2["히스토리: 수정됨 (과거를 없었던 일로)"]
-  end
-  subgraph Revert["git revert"]
-    RV1["용도: 커밋의 변경을 취소하는 새 커밋 생성"]
-    RV2["히스토리: 보존됨"]
-  end
-  subgraph Restore["git restore"]
-    RS1["용도: 파일을 특정 시점으로 복원"]
-    RS2["히스토리: 영향 없음"]
-  end
+  Reset["<b>git reset</b><br/>용도: 커밋 자체를 되돌림 (삭제)<br/>히스토리: 수정됨 (과거를 없었던 일로)"]
+  Revert["<b>git revert</b><br/>용도: 커밋의 변경을 취소하는 새 커밋 생성<br/>히스토리: 보존됨"]
+  Restore["<b>git restore</b><br/>용도: 파일을 특정 시점으로 복원<br/>히스토리: 영향 없음"]
 ```
 
 ### Q: `git stash`는 언제 사용하나요?

@@ -101,18 +101,8 @@ git merge origin/main
 
 ```mermaid
 flowchart LR
-  subgraph Pull[git pull]
-    direction TB
-      P1["원격 변경 사항을 가져와서 자동으로 병합"]
-      P2["바로 작업을 이어나갈 수 있음"]
-      P3["편리하지만 예상치 못한 충돌이 발생할 수 있음"]
-  end
-  subgraph Fetch[git fetch]
-    direction TB
-      F1["원격 변경 사항을 가져오기만 함"]
-      F2["변경 사항을 검토한 후 수동으로 병합해야 함"]
-      F3["더 안전하게 변경 사항을 관리할 수 있음"]
-  end
+  Pull["<b>git pull</b><br/>원격 변경 사항을 가져와서 자동으로 병합<br/>바로 작업을 이어나갈 수 있음<br/>⚠️ 편리하지만 예상치 못한 충돌이 발생할 수 있음"]
+  Fetch["<b>git fetch</b><br/>원격 변경 사항을 가져오기만 함<br/>변경 사항을 검토한 후 수동으로 병합해야 함<br/>✅ 더 안전하게 변경 사항을 관리할 수 있음"]
 ```
 
 > **팁:** 초보자에게는 단순히 `git pull`을 사용하는 것이 편리합니다. 하지만 변경 사항을 먼저 검토하고 싶다면 `git fetch`를 사용하는 습관을 들이는 것이 좋습니다.

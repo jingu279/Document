@@ -111,7 +111,7 @@ $ git push origin feature/login-form
 ### 리뷰 상태
 
 ```mermaid
-flowchart TB
+flowchart LR
   Comment["💬 Comment<br/>의견만 남김 (승인/거절 아님)"]
   Approve["✅ Approve<br/>변경 승인, 병합 가능"]
   RequestChanges["❌ Request Changes<br/>수정 필요, 재리뷰 필요"]
@@ -132,10 +132,10 @@ $ gh pr merge feature/login-form --merge
 ### 병합 옵션
 
 ```mermaid
-flowchart TB
-  Merge["Create a merge commit<br/>모든 커밋 유지 + 병합 커밋 생성<br/>---A---B---C---M"]
-  Squash["Squash and merge<br/>여러 커밋을 하나로 압축<br/>---A---B---C---S (Squash)"]
-  Rebase["Rebase and merge<br/>커밋을 그대로 재배치 (fast-forward)<br/>---A---B---C"]
+flowchart LR
+  Merge["Create a merge commit<br/>모든 커밋 유지 + 병합 커밋 생성<br/>A━B━C━M"]
+  Squash["Squash and merge<br/>여러 커밋을 하나로 압축<br/>A━B━C━S (Squash)"]
+  Rebase["Rebase and merge<br/>커밋을 그대로 재배치 (fast-forward)<br/>A━B━C"]
 ```
 
 **Squash 예시:**

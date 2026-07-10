@@ -12,14 +12,7 @@ GitHub는 Git 저장소를 호스팅하는 가장 인기 있는 웹 서비스입
 
 ```mermaid
 flowchart TB
-  Repo["📦 저장소 (Repository)<br/>Git 저장소를 웹에서 호스팅"]
-  PR["🔄 Pull Request<br/>코드 변경 요청 및 리뷰 시스템"]
-  Issues["🐛 Issues<br/>버그, 기능 요청, 할 일 추적"]
-  Projects["📋 Projects<br/>칸반 보드 형태의 프로젝트 관리"]
-  Actions["⚡ Actions<br/>CI/CD 자동화 (빌드, 테스트, 배포)"]
-  Wiki["📖 Wiki<br/>프로젝트 문서화"]
-  Pages["🌐 GitHub Pages<br/>정적 웹사이트 호스팅"]
-  Discussions["💬 Discussions<br/>팀 커뮤니케이션 포럼"]
+  Features["<b>GitHub 주요 기능</b><br/>📦 저장소 (Repository) - Git 저장소를 웹에서 호스팅<br/>🔄 Pull Request - 코드 변경 요청 및 리뷰 시스템<br/>🐛 Issues - 버그, 기능 요청, 할 일 추적<br/>📋 Projects - 칸반 보드 형태의 프로젝트 관리<br/>⚡ Actions - CI/CD 자동화 (빌드, 테스트, 배포)<br/>📖 Wiki - 프로젝트 문서화<br/>🌐 GitHub Pages - 정적 웹사이트 호스팅<br/>💬 Discussions - 팀 커뮤니케이션 포럼"]
 ```
 
 ## GitHub 저장소 만들기
@@ -68,7 +61,7 @@ Settings    → 저장소 설정 (브랜치 보호, 협업자 등)
 ## 저장소 가시성 (Visibility)
 
 ```mermaid
-flowchart TB
+flowchart LR
   Public["🌍 Public<br/>누구나 저장소를 볼 수 있음 (오픈소스)"]
   Private["🔒 Private<br/>초대된 사람만 볼 수 있음"]
   Internal["🏢 Internal (Enterprise)<br/>조직 내 모든 구성원이 볼 수 있음"]

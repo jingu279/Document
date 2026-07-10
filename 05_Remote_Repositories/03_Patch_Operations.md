@@ -10,7 +10,7 @@ flowchart TB
     C1["커밋: C1-C2-C3"] --> FP["git format-patch<br/>→ 0001-xxx.patch<br/>→ 0002-xxx.patch"]
   end
 
-  FP -->|"파일 전송 (이메일 등)"| Receiver
+  FP -->|"파일 전송 (이메일 등)"| R1
 
   subgraph Receiver[적용할 개발자]
     R1["git apply *.patch<br/>또는 git am *.patch"]

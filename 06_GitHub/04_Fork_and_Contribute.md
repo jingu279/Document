@@ -20,11 +20,11 @@ flowchart TB
     L1 --> L2
   end
 
-  Upstream -->|"① Fork (GitHub 서버에서 복사)"| Origin
-  Origin -->|"② Clone (내 컴퓨터로 복사)"| Local
-  Local -.->|"③ PR은 upstream으로!"| Upstream
-  Local -.->|"④ origin에는 push 가능!"| Origin
-  Upstream -.->|"⑤ upstream은 pull만!"| Local
+  U -->|"① Fork (GitHub 서버에서 복사)"| O
+  O -->|"② Clone (내 컴퓨터로 복사)"| L1
+  L1 -.->|"③ PR은 upstream으로!"| U
+  L1 -.->|"④ origin에는 push 가능!"| O
+  U -.->|"⑤ upstream은 pull만!"| L1
 ```
 
 ## Fork 기여 워크플로우
@@ -124,20 +124,8 @@ $ gh pr merge 12346 --squash   # Squash 병합
 
 ```mermaid
 flowchart LR
-  subgraph Fork["Fork 전략"]
-    F1["적용 대상: 외부 기여자 (오픈소스)"]
-    F2["저장소 권한: Fork는 누구나 가능"]
-    F3["브랜치 위치: 기여자의 Fork에 생성"]
-    F4["PR 방식: cross-repo PR"]
-    F5["장점: 원본 보호, 자유로운 실험"]
-  end
-  subgraph Branch["브랜치 전략"]
-    B1["적용 대상: 팀 내부 개발자"]
-    B2["저장소 권한: 저장소 쓰기 권한 필요"]
-    B3["브랜치 위치: 같은 저장소에 직접 생성"]
-    B4["PR 방식: same-repo PR"]
-    B5["장점: 간단한 워크플로우"]
-  end
+  Fork["<b>Fork 전략</b><br/>적용 대상: 외부 기여자 (오픈소스)<br/>저장소 권한: Fork는 누구나 가능<br/>브랜치 위치: 기여자의 Fork에 생성<br/>PR 방식: cross-repo PR<br/>장점: 원본 보호, 자유로운 실험"]
+  Branch["<b>브랜치 전략</b><br/>적용 대상: 팀 내부 개발자<br/>저장소 권한: 저장소 쓰기 권한 필요<br/>브랜치 위치: 같은 저장소에 직접 생성<br/>PR 방식: same-repo PR<br/>장점: 간단한 워크플로우"]
 ```
 
 ## 유명 오픈소스 프로젝트 Fork 해보기

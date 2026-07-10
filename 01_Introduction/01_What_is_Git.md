@@ -26,22 +26,9 @@ flowchart TB
 ```
 
 ```mermaid
-flowchart TB
-  subgraph GitConcept[Git]
-    direction TB
-    G1["📷 카메라 (찍는 도구)"]
-    G2["버전 관리 소프트웨어"]
-    G3["한 번만 설치하면 모든 프로젝트에서 사용"]
-    G4["/usr/bin/git 실행 파일"]
-  end
-
-  subgraph RepoConcept[Repository 저장소]
-    direction TB
-    R1["🖼️ 사진 앨범 (찍힌 결과물)"]
-    R2["Git으로 관리되는 프로젝트"]
-    R3["프로젝트마다 새로 생성 (git init)"]
-    R4[".git/ 숨김 폴더 (프로젝트 안에 생성)"]
-  end
+flowchart LR
+  Git["<b>Git</b><br/>📷 카메라 (찍는 도구)<br/>버전 관리 소프트웨어<br/>한 번만 설치하면 모든 프로젝트에서 사용<br/>/usr/bin/git 실행 파일"]
+  Repo["<b>Repository</b><br/>🖼️ 사진 앨범 (찍힌 결과물)<br/>Git으로 관리되는 프로젝트<br/>프로젝트마다 새로 생성 (git init)<br/>.git/ 숨김 폴더 (프로젝트 안에 생성)"]
 ```
 
 ```bash
@@ -144,29 +131,17 @@ flowchart TB
         DS --- DC[개발자 C<br/>전체 이력!]
       end
 
-      Centralized -.-> Note1["⛔ 서버 없으면 작업 불가!"]
-      Distributed -.-> Note2["✅ 서버가 죽어도 각자 계속 작업 가능!"]
+      CS -.-> Note1["⛔ 서버 없으면 작업 불가!"]
+      DS -.-> Note2["✅ 서버가 죽어도 각자 계속 작업 가능!"]
 ```
 
     **분산형 vs 중앙집중식 비교 예시:**
 
-    ```mermaid
-    flowchart LR
-      subgraph Centralized[중앙집중식 SVN]
-        direction TB
-          C1["서버 다운 → 모든 작업 중단"]
-          C2["인터넷 없음 → 커밋 불가"]
-          C3["서버 데이터 손실 → 모든 이력 손실"]
-          C4["속도: 네트워크 속도에 의존"]
-      end
-      subgraph Distributed[분산식 Git]
-        direction TB
-          D1["서버 다운 → 로컬에서 계속 작업 가능"]
-          D2["인터넷 없음 → 로컬에 자유롭게 커밋 가능"]
-          D3["서버 데이터 손실 → 각 개발자 로컬에 복사본 존재"]
-          D4["속도: 로컬 디스크 속도로 즉시 처리"]
-      end
-    ```
+```mermaid
+flowchart LR
+  Centralized["<b>중앙집중식 SVN</b><br/>⛔ 서버 다운 → 모든 작업 중단<br/>⛔ 인터넷 없음 → 커밋 불가<br/>⛔ 서버 데이터 손실 → 모든 이력 손실<br/>🐢 속도: 네트워크 속도에 의존"]
+  Distributed["<b>분산식 Git</b><br/>✅ 서버 다운 → 로컬에서 계속 작업 가능<br/>✅ 인터넷 없음 → 로컬에 자유롭게 커밋 가능<br/>✅ 서버 데이터 손실 → 각 개발자 로컬에 복사본 존재<br/>⚡ 속도: 로컬 디스크 속도로 즉시 처리"]
+```
 
 *   **성능 (Performance):** Git은 매우 빠르게 동작합니다. 대부분의 작업이 로컬에서 이루어지기 때문에 네트워크 지연 없이 즉각적으로 반응합니다.
 

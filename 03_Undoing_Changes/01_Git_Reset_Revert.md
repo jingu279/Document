@@ -26,18 +26,8 @@ gitGraph
 
 ```mermaid
 flowchart LR
-  subgraph Reset[git reset]
-    direction TB
-      R1["히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)"]
-      R2["이미 푸시된 커밋에는 사용하면 위험함"]
-      R3["로컬 작업에 적합"]
-  end
-  subgraph Revert[git revert]
-    direction TB
-      V1["히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)"]
-      V2["이미 푸시된 커밋에도 안전하게 사용 가능"]
-      V3["원격 저장소와 공유된 작업에 적합"]
-  end
+  Reset["<b>git reset</b><br/>히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)<br/>이미 푸시된 커밋에는 사용하면 위험함<br/>로컬 작업에 적합"]
+  Revert["<b>git revert</b><br/>히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)<br/>이미 푸시된 커밋에도 안전하게 사용 가능<br/>원격 저장소와 공유된 작업에 적합"]
 ```
 
 ## 1. `git reset` — 커밋 되돌리기 (히스토리 수정)
@@ -75,9 +65,9 @@ flowchart TB
     S3["🗑️ C3 변경 내용 완전 삭제!<br/>⚠️ 복구 불가!"]
   end
 
-  Initial --> Soft
-  Initial --> Mixed
-  Initial --> Hard
+  C3a -.->|--soft| C1b
+  C3a -.->|--mixed| C1c
+  C3a -.->|--hard| C1d
 ```
 
 ```bash

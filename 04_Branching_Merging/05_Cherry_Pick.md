@@ -20,9 +20,10 @@ gitGraph
 
 ```mermaid
 flowchart TB
-  HF["🚑 버그 수치 (hotfix)<br/>개발 중인 브랜치에서<br/>버그 수정 커밋만 골라서<br/>main에 적용"]
-  BP["📦 선별적 기능 백포트<br/>최신 브랜치의 특정 기능만<br/>예전 릴리스 브랜치에 적용"]
-  MV["🔀 실수한 커밋 위치 수정<br/>잘못된 브랜치에 한 커밋을<br/>올바른 브랜치로 이동"]
+  Title["<b>Cherry-Pick이 필요한 상황</b>"]
+  Title --> HF["🚑 버그 수치 (hotfix)<br/>개발 중인 브랜치에서<br/>버그 수정 커밋만 골라서<br/>main에 적용"]
+  Title --> BP["📦 선별적 기능 백포트<br/>최신 브랜치의 특정 기능만<br/>예전 릴리스 브랜치에 적용"]
+  Title --> MV["🔀 실수한 커밋 위치 수정<br/>잘못된 브랜치에 한 커밋을<br/>올바른 브랜치로 이동"]
 ```
 
 ## 기본 사용법
@@ -129,10 +130,11 @@ $ git cherry-pick main       # main의 최신 커밋을 가져옴
 
 ```mermaid
 flowchart TB
-  O1["-e, --edit<br/>커밋 메시지 편집 허용"]
-  O2["--no-commit<br/>변경 사항만 적용,<br/>커밋은 직접 수행"]
-  O3["-x<br/>커밋 메시지에<br/>원본 커밋 해시 추가"]
-  O4["--signoff<br/>커밋에<br/>Signed-off-by 줄 추가"]
+  Options["<b>Cherry-Pick 옵션</b>"]
+  Options --> O1["-e, --edit<br/>커밋 메시지 편집 허용"]
+  Options --> O2["--no-commit<br/>변경 사항만 적용, 커밋은 직접 수행"]
+  Options --> O3["-x<br/>커밋 메시지에 원본 커밋 해시 추가"]
+  Options --> O4["--signoff<br/>커밋에 Signed-off-by 줄 추가"]
 ```
 
 ```bash

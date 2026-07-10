@@ -136,18 +136,8 @@ g7h8i9j 프로젝트 초기화
 
 ```mermaid
 flowchart LR
-  subgraph Init[git init]
-    direction TB
-      I1["새로운 프로젝트를 시작할 때 사용"]
-      I2["로컬에서 처음부터 모든 것을 만듦"]
-      I3["원격 저장소와 자동으로 연결되지 않음"]
-  end
-  subgraph Clone[git clone]
-    direction TB
-      C1["기존 프로젝트에 참여할 때 사용"]
-      C2["원격 저장소에서 코드를 가져옴"]
-      C3["원격 저장소와 자동으로 연결됨 origin"]
-  end
+  Init["<b>git init</b><br/>새로운 프로젝트를 시작할 때 사용<br/>로컬에서 처음부터 모든 것을 만듦<br/>원격 저장소와 자동으로 연결되지 않음"]
+  Clone["<b>git clone</b><br/>기존 프로젝트에 참여할 때 사용<br/>원격 저장소에서 코드를 가져옴<br/>원격 저장소와 자동으로 연결됨 (origin)"]
 ```
 
 `git init`으로 생성한 저장소는 나중에 `git remote add` 명령어를 통해 원격 저장소와 연결할 수 있습니다.

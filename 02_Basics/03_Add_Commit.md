@@ -18,11 +18,10 @@ flowchart LR
     R1["커밋 a1b2c3d<br/>index.html<br/>style.css"]
   end
 
-  WD -->|"git add<br/>사진 찍기 전 구도 잡기"| SA
-  SA -->|"git commit<br/>셔터 누르기"| RE
-  WD -.->|최종본 아님| W1
-  SA -.->|이번 커밋에 넣을 것| S1
-  RE -.->|영구 저장된 스냅샷| R1
+  W1 -->|"git add<br/>사진 찍기 전 구도 잡기"| S1
+  W2 --> S2
+  S1 -->|"git commit<br/>셔터 누르기"| R1
+  S2 --> R1
 ```
 
 ## 1. 작업 상태 확인하기: `git status`

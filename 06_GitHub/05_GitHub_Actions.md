@@ -22,17 +22,12 @@ flowchart TB
     S1 --> S2 --> S3 --> S4
   end
 
-  Runner --> Job
-  Job --> Result["📊 GitHub Actions 탭<br/>✅ CI / test (ubuntu-latest)<br/>✓ actions/checkout@v4<br/>✓ actions/setup-node@v4<br/>✓ npm ci<br/>✓ npm test"]
+  Runner --> S1
+  S4 --> Result["📊 GitHub Actions 탭<br/>✅ CI / test (ubuntu-latest)<br/>✓ actions/checkout@v4<br/>✓ actions/setup-node@v4<br/>✓ npm ci<br/>✓ npm test"]
 ```
 ```mermaid
 flowchart TB
-  Workflow["📋 Workflow<br/>자동화 프로세스 전체 (.github/workflows/ YAML 파일)"]
-  Job["🔧 Job<br/>워크플로우 내의 작업 단위 (test, build, deploy)"]
-  Step["📝 Step<br/>Job 내의 개별 명령어 또는 액션 실행"]
-  Action["⚙️ Action<br/>재사용 가능한 자동화 단위 (Marketplace)"]
-  Runner["🖥️ Runner<br/>워크플로우를 실행하는 서버"]
-  Event["⚡ Event<br/>워크플로우를 트리거 (push, pull_request 등)"]
+  Terms["<b>GitHub Actions 용어</b><br/>📋 Workflow - 자동화 프로세스 전체 (.github/workflows/ YAML 파일)<br/>🔧 Job - 워크플로우 내의 작업 단위 (test, build, deploy)<br/>📝 Step - Job 내의 개별 명령어 또는 액션 실행<br/>⚙️ Action - 재사용 가능한 자동화 단위 (Marketplace)<br/>🖥️ Runner - 워크플로우를 실행하는 서버<br/>⚡ Event - 워크플로우를 트리거 (push, pull_request 등)"]
 ```
 
 ## 첫 번째 워크플로우 만들기

@@ -26,9 +26,9 @@ flowchart TB
     TB[로컬 저장소<br/>전체 이력]
   end
 
-  Remote <-->|push / pull| LocalMe
-  Remote <-->|push / pull| TeamA
-  Remote <-->|push / pull| TeamB
+  R <-->|push / pull| LM
+  R <-->|push / pull| TA
+  R <-->|push / pull| TB
 ```
 
 ```
