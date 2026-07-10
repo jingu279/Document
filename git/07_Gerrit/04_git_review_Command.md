@@ -1,8 +1,17 @@
 # git review 명령어 사용법
 
-`git review`는 Gerrit 작업을 더 편리하게 해주는 명령줄 도구입니다. 복잡한 `refs/for/main` 문법 대신 간단한 명령어로 Gerrit과 상호작용할 수 있습니다.
+지금까지 우리는 Gerrit에 변경 사항을 push하기 위해 `git push origin HEAD:refs/for/main`과 같은 긴 명령어를 사용해왔습니다. 이 장에서는 이러한 복잡한 명령어를 대신하여 Gerrit 작업을 더욱 편리하게 만들어주는 **git review** 도구에 대해 알아보겠습니다. git review를 사용하면 간단한 명령어만으로 Gerrit과 상호작용할 수 있어 개발 생산성을 크게 향상시킬 수 있습니다.
+
+## 학습 목표
+
+- git review 도구의 설치 및 설정 방법을 이해한다
+- git review의 기본 명령어와 고급 사용법을 익힌다
+- git review를 활용한 일일 개발 워크플로우를 설명할 수 있다
+- git review 설정 파일(.gitreview)의 역할을 이해한다
 
 ## git review 설치
+
+git review를 사용하기 위해서는 먼저 설치가 필요합니다. 운영체제에 따라 아래 방법 중 하나를 선택하여 설치할 수 있습니다.
 
 ```bash
 # pip로 설치
@@ -17,6 +26,8 @@ git-review 2.4.0
 ```
 
 ## git review 설정
+
+설치가 완료되었다면, 저장소에서 git review를 사용할 수 있도록 초기화해야 합니다. 이 과정은 저장소마다 한 번만 수행하면 됩니다.
 
 ```bash
 # 저장소 클론 후 한 번만 설정
@@ -36,7 +47,11 @@ origin   ssh://username@gerrit.example.com:29418/my-project (push)
 
 ## git review 기본 명령어
 
+이제 git review가 설치되고 설정되었습니다. 기본 명령어를 하나씩 살펴보겠습니다.
+
 ### 리뷰 요청 (Push)
+
+가장 많이 사용하는 명령어는 `git review`입니다. 전통적인 방식과 비교하면 훨씬 간결합니다.
 
 ```bash
 # 전통적인 방식
@@ -53,6 +68,8 @@ $ git review
 
 ### 특정 브랜치로 리뷰 요청
 
+기본적으로 git review는 main 브랜치를 대상으로 합니다. 다른 브랜치로 리뷰를 요청하려면 브랜치 이름을 인자로 전달하면 됩니다.
+
 ```bash
 # main 브랜치로 리뷰 요청
 $ git review main
@@ -65,6 +82,8 @@ $ git review feature/new-feature
 ```
 
 ### 리뷰 다운로드
+
+`git review -d` 명령어를 사용하면 Gerrit의 특정 Change를 로컬로 다운로드할 수 있습니다. 이는 다른 사람의 변경 사항을 로컬에서 테스트해볼 때 유용합니다.
 
 ```bash
 # Change 123의 최신 Patch Set 다운로드
@@ -82,6 +101,8 @@ $ git branch
 
 ### 완료된 리뷰 브랜치 정리
 
+리뷰가 완료된 후에는 불필요한 로컬 브랜치를 정리하는 것이 좋습니다.
+
 ```bash
 # 리뷰 완료 후 로컬 리뷰 브랜치 삭제
 $ git review -x
@@ -91,6 +112,8 @@ $ git branch -D review/alice/123
 ```
 
 ## git review 고급 사용법
+
+지금까지 기본 명령어를 알아보았습니다. 다음으로 더 다양한 상황에서 활용할 수 있는 고급 사용법을 살펴보겠습니다.
 
 ### WIP (Work In Progress)
 
@@ -131,6 +154,8 @@ $ git review
 ```
 
 ## git review 실제 워크플로우
+
+이제 실제 개발 현장에서 git review를 어떻게 활용하는지 전체 워크플로우를 살펴보겠습니다.
 
 ### 일일 개발 워크플로우
 
@@ -212,7 +237,7 @@ $ git review -x
 
 ## git review 설정 파일
 
-프로젝트별 설정을 `.gitreview` 파일에 저장할 수 있습니다.
+프로젝트별 설정을 `.gitreview` 파일에 저장할 수 있습니다. 이 파일이 있으면 매번 `git review -s`로 초기화할 필요가 없습니다.
 
 ```ini
 # .gitreview
@@ -293,3 +318,24 @@ $ chmod +x .git/hooks/commit-msg
 $ git commit --amend
 # :wq로 저장하면 hook이 자동으로 Change-ID 추가
 ```
+
+## 한눈에 정리
+
+| 개념 | 설명 |
+|------|------|
+| git review | Gerrit 작업을 간편하게 해주는 CLI 도구 |
+| `git review` | 현재 브랜치의 커밋을 리뷰 요청 (refs/for/main) |
+| `git review -s` | Gerrit 원격 저장소 초기화 |
+| `git review -d <번호>` | 특정 Change 다운로드 |
+| `git review -r <이메일>` | 리뷰어 지정 |
+| `git review -t <주제>` | topic 설정 |
+| `git review -D` | WIP 상태로 push |
+| `.gitreview` | 프로젝트별 Gerrit 설정 파일 |
+
+## 연습 문제
+
+1. `git push origin HEAD:refs/for/main%r=alice@example.com,topic=login`과 동일한 동작을 하는 git review 명령어를 작성하시오.
+
+2. git review를 사용하여 Change 456의 최신 Patch Set을 로컬로 다운로드하는 명령어를 작성하시오.
+
+3. 리뷰 피드백을 반영한 후 `git review`를 실행하면 Gerrit에서 어떤 동작이 발생하는지 설명하시오.

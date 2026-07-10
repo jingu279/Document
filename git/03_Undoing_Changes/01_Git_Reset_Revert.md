@@ -1,6 +1,13 @@
 # Reset과 Revert
 
-개발을 하다 보면 이전 상태로 되돌리고 싶은 순간이 있습니다. Git은 이러한 상황을 위해 `git reset`과 `git revert`라는 두 가지 도구를 제공합니다.
+## 학습 목표
+
+- 작업 중 실수로 이전 상태로 되돌려야 할 때 `git reset`과 `git revert`의 차이점을 이해합니다.
+- `git reset`의 세 가지 모드(`--soft`, `--mixed`, `--hard`)를 각 상황에 맞게 활용할 수 있습니다.
+- 이미 원격 저장소에 푸시된 커밋은 `git revert`를 사용하여 안전하게 되돌리는 방법을 습득합니다.
+- `git reset`으로 삭제된 커밋을 `ORIG_HEAD`를 통해 복구하는 방법을 학습합니다.
+
+우리는 개발을 진행하면서 때때로 "아, 이전 상태로 되돌리고 싶다"는 생각을 하게 됩니다. 버그를 포함한 커밋을 만들어 버렸거나, 실수로 잘못된 파일을 커밋에 포함시켰을 때가 대표적인 예입니다. 이러한 상황에서 적절한 도구를 사용하여 코드를 안전하게 되돌리는 능력은 협업 환경에서 특히 중요합니다. Git은 이러한 상황을 위해 `git reset`과 `git revert`라는 두 가지 도구를 제공합니다. 이번 장에서는 두 명령어의 차이점을 명확히 이해하고, 각각을 언제如何使用해야 하는지 학습해보겠습니다.
 
 ## Reset vs Revert: 핵심 차이
 
@@ -29,6 +36,8 @@ flowchart LR
   Reset["<b>git reset</b><br/>히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)<br/>이미 푸시된 커밋에는 사용하면 위험함<br/>로컬 작업에 적합"]
   Revert["<b>git revert</b><br/>히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)<br/>이미 푸시된 커밋에도 안전하게 사용 가능<br/>원격 저장소와 공유된 작업에 적합"]
 ```
+
+지금까지 Reset과 Revert의 핵심 차이에 대해 살펴보았습니다. 이제 각각의 명령어를 더욱 자세히 알아보겠습니다.
 
 ## 1. `git reset` — 커밋 되돌리기 (히스토리 수정)
 
@@ -152,6 +161,8 @@ git reset --hard HEAD~1
 git reset --hard a1b2c3d
 ```
 
+지금까지 `git reset` 명령어의 세 가지 모드와 각각의 활용법에 대해 학습하였습니다. 다음으로 히스토리를 보존하면서 안전하게 커밋을 되돌리는 `git revert`에 대해 알아보겠습니다.
+
 ## 2. `git revert` — 커밋 되돌리기 (히스토리 보존)
 
 `git revert`는 기존 커밋을 취소하는 **새로운 커밋**을 만듭니다. 즉, 이전 커밋은 히스토리에 그대로 남아 있고, 그 변경을 되돌리는 커밋이 추가됩니다.
@@ -217,6 +228,8 @@ $ git revert -n HEAD~3..HEAD
 $ git commit -m "C1, C2, C3를 한 번에 revert"
 ```
 
+지금까지 `git revert`의 사용법과 다양한 옵션에 대해 살펴보았습니다. 그렇다면 실제 상황에서는 `git reset`과 `git revert` 중 어떤 것을 선택해야 할까요? 다음에서 정리해보겠습니다.
+
 ## 언제 무엇을 사용할까?
 
 ```mermaid
@@ -228,6 +241,8 @@ flowchart TB
 ```
 
 > **중요:** 이미 원격 저장소에 푸시된 커밋을 `git reset`으로 되돌리고 강제로 푸시(`git push --force`)하는 것은 팀원들에게 혼란을 줄 수 있으므로 피해야 합니다. 공유된 히스토리는 `git revert`를 사용하여 안전하게 되돌리는 것이 좋습니다.
+
+지금까지 이론적으로 두 명령어의 차이점을 학습하였습니다. 이제 실제 실습 시나리오를 통해 그 차이를 직접 체험해보겠습니다.
 
 ## 실습 시나리오: reset과 revert의 차이 체험
 
@@ -255,6 +270,8 @@ $ git push --force origin main
 # 동료의 로컬 히스토리와 충돌 발생! 🚨
 ```
 
+만약 실수로 `git reset --hard`를 실행하여 커밋을 삭제하였다면, Git의 `ORIG_HEAD` 기능을 이용하여 복구할 수 있습니다. 이에 대해 알아보겠습니다.
+
 ## reset으로 삭제된 커밋 복구하기 (ORIG_HEAD)
 
 혹시라도 `git reset --hard`로 커밋을 삭제했다면, `ORIG_HEAD`를 사용해 복구할 수 있습니다.
@@ -272,3 +289,25 @@ c3d4e5f C3: 치명적인 버그 추가
 b2c3d4e C2: 기능 추가
 a1b2c3d C1: 초기화
 ```
+
+## 한눈에 정리
+
+| 개념 | 설명 | 주요 명령어 |
+|------|------|-----------|
+| `git reset` | 브랜치 포인터를 이전 커밋으로 이동시켜 히스토리를 수정합니다. 로컬 작업에 적합합니다. | `git reset --soft HEAD~1`, `git reset --hard <커밋해시>` |
+| `git reset --soft` | HEAD만 이동하며, 변경 사항은 Staged 상태로 유지됩니다. | `git reset --soft HEAD~1` |
+| `git reset --mixed` | HEAD 이동과 함께 Staging Area를 초기화합니다. 변경 사항은 Working Directory에 유지됩니다. (기본값) | `git reset HEAD~1` |
+| `git reset --hard` | HEAD 이동, Staging Area, Working Directory를 모두 초기화합니다. 복구가 불가능하므로 주의가 필요합니다. | `git reset --hard HEAD~1` |
+| `git revert` | 기존 커밋을 취소하는 새로운 커밋을 생성하여 히스토리를 보존합니다. 원격 저장소에 푸시된 커밋도 안전하게 되돌릴 수 있습니다. | `git revert HEAD`, `git revert <커밋해시>` |
+| `ORIG_HEAD` | `git reset` 직전의 HEAD 위치를 기억하는 참조입니다. 실수로 reset한 경우 복구에 사용됩니다. | `git reset --hard ORIG_HEAD` |
+
+## 연습 문제
+
+1. `git reset`과 `git revert`의 가장 큰 차이점은 무엇인지 설명하고, 각각을 사용해야 하는 상황을 예를 들어 서술해보세요.
+
+2. 다음 중 이미 원격 저장소에 푸시된 커밋을 되돌릴 때 안전한 방법은 무엇인가요?
+   - (a) `git reset --hard HEAD~1` 후 `git push --force`
+   - (b) `git revert HEAD` 후 `git push`
+   - (c) `git reset --soft HEAD~1` 후 `git push --force`
+
+3. `git reset`의 세 가지 모드(`--soft`, `--mixed`, `--hard`)의 차이점을 Staging Area와 Working Directory의 관점에서 설명해보세요.

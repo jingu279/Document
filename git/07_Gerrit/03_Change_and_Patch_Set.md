@@ -1,6 +1,13 @@
 # Change와 Patch Set 이해하기
 
-Gerrit의 Change와 Patch Set은 코드 리뷰의 핵심 단위입니다. 이 개념을 이해하면 Gerrit 워크플로우를 효과적으로 활용할 수 있습니다.
+Gerrit에서 가장 중요한 개념 중 하나는 Change와 Patch Set입니다. 이 두 개념을 올바르게 이해해야 Gerrit 워크플로우를 효과적으로 활용할 수 있습니다. 우리는 이 장에서 Change와 Patch Set의 관계와 생명주기, 그리고 여러 커밋을 다루는 방법까지 상세히 알아보겠습니다. 이 개념을 숙지하면 리뷰 과정에서 발생하는 다양한 상황에 유연하게 대처할 수 있습니다.
+
+## 학습 목표
+
+- Change와 Patch Set의 관계를 이해하고 설명할 수 있다
+- Change-ID의 역할과 중요성을 설명할 수 있다
+- Patch Set의 생명주기와 관리 방법을 익힌다
+- 여러 커밋을 Gerrit에서 다루는 방법을 이해한다
 
 **Change와 Patch Set의 관계:**
 
@@ -19,9 +26,11 @@ flowchart LR
 
 ## Change (변경)
 
-Change는 하나의 논리적인 작업 단위입니다. GitHub의 Pull Request와 유사하지만, Gerrit에서는 하나의 **커밋**이 하나의 Change가 됩니다.
+Change는 하나의 논리적인 작업 단위입니다. GitHub의 Pull Request와 유사하지만, Gerrit에서는 하나의 **커밋**이 하나의 Change가 된다는 차이점이 있습니다.
 
 ### Change의 구성 요소
+
+Change는 다양한 메타데이터로 구성됩니다. 아래 예시를 통해 각 구성 요소를 살펴보겠습니다.
 
 ```
 Change 12345
@@ -43,7 +52,7 @@ Change 12345
 
 ### Change-ID
 
-Change-ID는 Change를 식별하는 고유 값입니다. 커밋 메시지에 포함되며, `git commit --amend`로 수정해도 같은 Change-ID를 유지하면 동일한 Change의 새 Patch Set이 됩니다.
+Change-ID는 Change를 식별하는 고유 값입니다. 커밋 메시지에 포함되며, `git commit --amend`로 수정해도 같은 Change-ID를 유지하면 동일한 Change의 새 Patch Set이 됩니다. Change-ID가 없다면 Gerrit는 매번 새로운 Change로 인식합니다.
 
 ```bash
 # Change-ID의 형식
@@ -56,6 +65,8 @@ $ git commit -m "내용"
 
 ### Change 상태
 
+Change는 생성부터 병합 또는 포기까지 여러 상태를 거치게 됩니다. 아래 다이어그램에서 상태 전이를 확인해보겠습니다.
+
 ```mermaid
 flowchart LR
   New["🆕 New<br/>새로 생성됨, 아직 리뷰 전"] --> Open["🔍 Open<br/>리뷰 진행 중"]
@@ -65,6 +76,8 @@ flowchart LR
 ```
 
 ## Patch Set (패치 세트)
+
+지금까지 Change의 개념과 구성 요소에 대해 배웠습니다. 이제 Change의 버전을 나타내는 Patch Set에 대해 알아보겠습니다.
 
 Patch Set은 Change의 버전입니다. 첫 push는 PS1, 수정 후 다시 push하면 PS2가 됩니다.
 
@@ -97,7 +110,7 @@ $ git push origin HEAD:refs/for/main
 
 ### Patch Set 간 차이 보기
 
-Gerrit 웹 UI에서 각 Patch Set 간의 차이를 확인할 수 있습니다.
+Gerrit 웹 UI에서 각 Patch Set 간의 차이를 확인할 수 있습니다. 이를 통해 리뷰어는 변경된 부분만 집중적으로 검토할 수 있습니다.
 
 ```
 Gerrit UI:
@@ -121,6 +134,8 @@ Gerrit UI:
 
 ## 여러 커밋 다루기
 
+지금까지 단일 Change의 Patch Set 관리에 대해 배웠습니다. 다음으로 여러 커밋을 Gerrit에서 어떻게 다루는지 알아보겠습니다.
+
 Gerrit은 기본적으로 **커밋 하나 = Change 하나**입니다. 여러 커밋을 푸시하면 각각 별도의 Change가 생성됩니다.
 
 ```bash
@@ -139,7 +154,7 @@ $ git push origin HEAD:refs/for/main
 
 ### 의존 관계 (Dependency)
 
-순서대로 적용되어야 하는 변경은 의존 관계가 생깁니다.
+순서대로 적용되어야 하는 변경은 의존 관계가 생깁니다. 의존 관계가 있는 Change는 선행 Change가 먼저 승인되어야 합니다.
 
 ```
 Change 124: 문서 업데이트 (의존성 없음)
@@ -157,6 +172,8 @@ Change 125
 ```
 
 ## Patch Set 관리 팁
+
+효과적인 Patch Set 관리를 위한 몇 가지 실용적인 팁을 소개합니다.
 
 ### 1. 작은 단위로 유지
 
@@ -209,3 +226,23 @@ $ git push origin HEAD:refs/for/main%wip
 # 또는 CLI로
 $ git push origin HEAD:refs/for/main%ready
 ```
+
+## 한눈에 정리
+
+| 개념 | 설명 |
+|------|------|
+| Change | 하나의 논리적 작업 단위, GitHub의 PR과 유사 |
+| Patch Set | Change의 버전 (PS1, PS2, ...) |
+| Change-ID | Change를 식별하는 고유 40자리 hash |
+| Change 상태 | New → Open → Merged / Abandoned |
+| 의존 관계 | 선행 Change가 승인되어야 후속 Change 승인 가능 |
+| WIP | 작업 중인 변경, 리뷰어에게 알림 미전송 |
+| 커밋 = Change | Gerrit에서 각 커밋은 독립적인 Change로 생성됨 |
+
+## 연습 문제
+
+1. Gerrit에서 Change와 Patch Set의 차이점을 설명하고, Change-ID가 동일할 때와 다를 때 각각 어떤 동작이 발생하는지 서술하시오.
+
+2. 세 개의 커밋(a, b, c)을 순서대로 push했습니다. 세 커밋이 서로 의존 관계에 있을 때 Gerrit에서 어떤 순서로 승인되어야 하는지 설명하시오.
+
+3. 리뷰어가 "PS1의 스타일이 마음에 들지 않습니다. 수정해주세요."라고 코멘트를 남겼습니다. 개발자가 취해야 할 git 명령어 단계를 순서대로 작성하시오.

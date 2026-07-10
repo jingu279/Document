@@ -1,6 +1,13 @@
 # Issues와 Projects 관리
 
-GitHub의 Issues와 Projects는 버그 추적, 기능 요청, 작업 관리를 위한 강력한 도구입니다.
+## 학습 목표
+
+- Issue의 개념과 좋은 Issue 작성법을 이해합니다
+- Issue에 라벨, 담당자, 마일스톤을 지정하고 관리할 수 있습니다
+- Issue를 PR과 연결하는 방법을 이해합니다
+- Projects를 사용하여 작업을 시각적으로 관리할 수 있습니다
+
+프로젝트 개발에서 "무엇을 해야 하는지"를 체계적으로 관리하는 것은 코드를 작성하는 것만큼 중요합니다. GitHub의 Issues와 Projects는 버그 추적, 기능 요청, 작업 관리를 위한 강력한 도구입니다. 우리는 이번 장에서 Issue와 Projects를 활용하여 프로젝트를 효과적으로 관리하는 방법을 알아보겠습니다.
 
 ## Issues (이슈)
 
@@ -142,6 +149,8 @@ git commit -m "Resolves #50"
 
 ## Projects (프로젝트)
 
+Issue를 효과적으로 작성하고 관리하는 방법을 배웠습니다. 이제 여러 Issue와 PR을 한눈에 관리할 수 있는 Projects에 대해 알아보겠습니다.
+
 Projects는 칸반 보드 스타일의 프로젝트 관리 도구입니다. Issue와 PR을 시각적으로 관리할 수 있습니다.
 
 ### Projects 보기
@@ -192,6 +201,8 @@ v2.0.0
 
 ## Labels (라벨) 커스터마이징
 
+Projects와 Milestone까지 살펴보았습니다. 이제 Issue를 더욱 체계적으로 분류하기 위한 라벨 커스터마이징에 대해 알아보겠습니다.
+
 ```bash
 # GitHub CLI로 라벨 생성
 $ gh label create bug --color d73a4a --description "버그 리포트"
@@ -214,6 +225,8 @@ wontfix       🚫  수정하지 않음
 
 ## Saved Replies (저장된 답변)
 
+Labels를 활용한 Issue 분류 방법까지 배웠습니다. 마지막으로 반복적인 응답을 효율적으로 처리할 수 있는 Saved Replies 기능을 알아보겠습니다.
+
 자주 사용하는 답변을 저장해 두었다가 재사용할 수 있습니다.
 
 ```
@@ -222,3 +235,21 @@ GitHub Settings → Saved replies → New saved reply
 Title: "재현 방법 필요"
 Body: 재현 방법을 자세히 알려주시겠어요? 로그나 스크린샷이 있으면 도움이 됩니다.
 ```
+
+## 한눈에 정리
+
+| 개념 | 설명 |
+|------|------|
+| Issue | 버그 신고, 기능 요청, 작업 단위를 추적하는 도구 |
+| Label | Issue를 분류하는 태그 (bug, feature, docs 등) |
+| Milestone | 특정 버전이나 릴리스를 위한 Issue 그룹 |
+| Project | 칸반 보드 스타일의 시각적 작업 관리 도구 |
+| Saved Replies | 자주 사용하는 응답을 저장하여 재사용하는 기능 |
+| Issue Template | Issue 생성을 위한 표준 양식 |
+| 자동 연결 키워드 | PR 병합 시 Issue를 자동으로 닫는 키워드 (Fixes, Closes, Resolves) |
+
+## 연습 문제
+
+1. 좋은 Issue를 작성하는 방법을 버그 리포트와 기능 요청 각각에 대해 설명해보세요.
+2. Issue와 PR을 연결하는 키워드에는 무엇이 있으며, 각각 어떻게 동작하는지 설명해보세요.
+3. Projects를 사용하면 어떤 이점이 있는지 칸반 보드의 관점에서 설명해보세요.

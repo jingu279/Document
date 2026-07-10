@@ -1,6 +1,13 @@
 # Checkout 사용하기
 
-`git checkout`은 Git에서 가장 다재다능한 명령어 중 하나입니다. 브랜치 전환, 파일 복원, 특정 커밋 상태 확인 등 다양한 용도로 사용됩니다. 하지만 최신 Git(2.23+ 버전)에서는 역할이 분리되었습니다.
+## 학습 목표
+
+- `git checkout` 명령어의 다양한 용도와 최신 Git에서의 역할 분리를 이해합니다.
+- 브랜치 전환, 파일 복원, 특정 커밋 확인 등 주요 기능을 상황에 맞게 활용할 수 있습니다.
+- Detached HEAD 상태의 개념을 이해하고, 이 상태에서 안전하게 작업하는 방법을 습득합니다.
+- `git switch`와 `git restore`를 사용하여 더 직관적으로 브랜치와 파일을 관리할 수 있습니다.
+
+`git checkout`은 Git에서 가장 다재다능한 명령어 중 하나입니다. 하나의 명령어로 브랜치 전환, 파일 복원, 특정 커밋 상태 확인 등 다양한 작업을 수행할 수 있기 때문입니다. 그러나 이러한 다양한 기능이 오히려 초보자에게는 혼란을 줄 수 있습니다. 최신 Git(2.23+ 버전)에서는 이러한 복잡성을 해결하기 위해 `git checkout`의 역할을 `git switch`와 `git restore`로 분리하였습니다. 이번 장에서는 전통적인 `git checkout` 방식과 새로운 명령어 방식을 함께 학습하며, 각 상황에 가장 적합한 도구를 선택하는 방법을 알아보겠습니다.
 
 > **참고:** Git 2.23부터 `git checkout`의 기능은 `git switch` (브랜치 전환)와 `git restore` (파일 복원)로 분리되었습니다. 하지만 여전히 `git checkout`도 널리 사용됩니다. 이 문서에서는 전통적인 `git checkout` 방식과 새로운 명령어 방식을 함께 소개합니다.
 
@@ -16,6 +23,8 @@ git checkout main
 git switch main
 ```
 
+지금까지 브랜치를 전환하는 방법을 알아보았습니다. 이제 새 브랜치를 생성하면서 동시에 전환하는 방법을 학습해보겠습니다.
+
 ## 2. 새 브랜치 생성 및 전환
 
 **전통적인 방식:**
@@ -27,6 +36,8 @@ git checkout -b feature/new-feature
 ```bash
 git switch -c feature/new-feature
 ```
+
+지금까지 브랜치 생성과 전환을 함께 수행하는 방법을 배웠습니다. 다음으로 특정 커밋으로 이동하는 Detached HEAD 상태에 대해 알아보겠습니다.
 
 ## 3. 특정 커밋으로 이동하기 (Detached HEAD 상태)
 
@@ -74,6 +85,8 @@ $ git switch main
 Warning: 1 commit left behind...   # Git이 알려줌
 ```
 
+지금까지 Detached HEAD 상태에서 특정 커밋을 확인하고 실험하는 방법을 학습하였습니다. 이제 작업 중인 파일을 복원하는 방법에 대해 알아보겠습니다.
+
 ## 4. 파일 복원하기
 
 작업 디렉토리의 특정 파일을 마지막 커밋 상태로 되돌립니다.
@@ -109,6 +122,8 @@ $ git restore --source=a1b2c3d style.css
 $ git restore --source=HEAD~1 --staged README.md
 ```
 
+파일 복원 방법에 대해 알아보았습니다. 이제 특정 커밋 시점의 파일로 복원하는 방법을 더 자세히 살펴보겠습니다.
+
 ## 5. 특정 커밋 시점의 파일로 복원하기
 
 **전통적인 방식:**
@@ -120,6 +135,8 @@ git checkout a1b2c3d -- index.html
 ```bash
 git restore --source=a1b2c3d index.html
 ```
+
+지금까지 파일 복원에 대해 학습하였습니다. 다음으로 스테이징 영역에서 파일을 제거하는 Unstage 작업에 대해 알아보겠습니다.
 
 ## 6. 스테이징 취소하기 (Unstaging)
 
@@ -199,3 +216,22 @@ $ git restore file2.txt file3.txt
 $ git status
 nothing to commit, working tree clean
 ```
+
+## 한눈에 정리
+
+| 개념 | 설명 | 주요 명령어 |
+|------|------|-----------|
+| 브랜치 전환 | 현재 작업 중인 브랜치를 다른 브랜치로 변경합니다. | `git switch <브랜치명>`, `git checkout <브랜치명>` |
+| 브랜치 생성 및 전환 | 새 브랜치를 생성하면서 동시에 해당 브랜치로 전환합니다. | `git switch -c <브랜치명>`, `git checkout -b <브랜치명>` |
+| Detached HEAD | 특정 브랜치가 아닌 과거 커밋을 직접 확인하는 상태입니다. 이 상태에서 만든 커밋은 브랜치를 떠나면 사라집니다. | `git checkout <커밋해시>` |
+| 파일 복원 | 작업 디렉토리의 파일을 마지막 커밋 상태 또는 특정 커밋 시점으로 되돌립니다. | `git restore <파일>`, `git restore --source=<커밋해시> <파일>` |
+| Unstage | Staging Area에 추가된 파일을 제거하여 Modified 상태로 되돌립니다. | `git restore --staged <파일>` |
+| 스테이징 및 작업 디렉토리 초기화 | Staging Area와 Working Directory를 모두 마지막 커밋 상태로 되돌립니다. | `git restore --staged --worktree <파일>` |
+
+## 연습 문제
+
+1. `git checkout`의 역할이 Git 2.23 이후 어떤 두 명령어로 분리되었는지 설명하고, 각 명령어가 담당하는 기능을 서술해보세요.
+
+2. Detached HEAD 상태란 무엇인지 설명하고, 이 상태에서 새로 만든 커밋이 브랜치를 떠날 때 어떻게 되는지 서술해보세요.
+
+3. 작업 디렉토리의 파일을 마지막 커밋 상태로 되돌리려면 어떤 명령어를 사용해야 하는지 작성해보세요.

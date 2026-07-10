@@ -1,6 +1,13 @@
 # Git 자주 묻는 질문 (FAQ)
 
-Git을 사용하면서 자주遇到하는 질문들과 그 해결 방법을 모았습니다.
+Git을 사용하다 보면 예상치 못한 오류나 궁금증에 부딪히는 경우가 많습니다. 이 장은 Git을 실무에서 사용하면서 자주 마주치는 질문들과 그 해결 방법을 주제별로 정리한 참고 자료입니다. 각 질문은 실제 개발 현장에서 발생하는 상황을 바탕으로 구성되었으므로, 필요할 때마다 원하는 항목을 찾아 빠르게 해결 방법을 확인할 수 있습니다.
+
+## 학습 목표
+
+- Git 사용 중 자주 발생하는 오류의 원인과 해결 방법을 이해한다
+- 커밋, 브랜치, 병합 등 주요 작업별 문제 해결 능력을 기른다
+- 원격 저장소 관련 문제와 협업 시 발생하는 상황에 대처할 수 있다
+- 고급 Git 명령어(reflog, bisect, cherry-pick 등)의 활용법을 익힌다
 
 ---
 
@@ -1029,3 +1036,23 @@ $ git prune
 # 가장 큰 파일 찾기
 $ git rev-list --objects --all | git cat-file --batch-check='%(objectsize:disk) %(rest)' | sort -rn | head -20
 ```
+
+## 한눈에 정리
+
+| 구분 | 주요 명령어 / 개념 | 설명 |
+|------|-------------------|------|
+| 개념 | Git vs GitHub | Git = 버전 관리 도구, GitHub = 호스팅 플랫폼 |
+| 개념 | Merge vs Rebase | Merge = 병합 커밋 생성, Rebase = 커밋 재배치 |
+| 설정 | `git config --global` | 사용자 정보, alias, 편집기 등 전역 설정 |
+| 커밋 | `git commit --amend` | 마지막 커밋 메시지 수정 |
+| 커밋 | `git rebase -i` | 여러 커밋을 squash하거나 수정 |
+| 브랜치 | `git branch -m` | 브랜치 이름 변경 |
+| 브랜치 | `git merge --abort` | 충돌 중 병합 취소 |
+| 원격 | `git remote set-url` | 원격 저장소 주소 변경 |
+| 되돌리기 | `git reset --soft/hard` | 커밋 취소 (안전/위험) |
+| 되돌리기 | `git revert` | push된 커밋 안전하게 취소 |
+| 파일 | `.gitignore` | 추적 제외 파일 패턴 정의 |
+| 협업 | Git Flow | 5가지 브랜치 전략 (main/develop/release/hotfix/feature) |
+| 고급 | `git reflog` | HEAD 이동 기록, 삭제된 커밋 복구 |
+| 고급 | `git bisect` | 이진 탐색으로 버그 발생 커밋 찾기 |
+| 고급 | `git cherry-pick` | 특정 커밋만 다른 브랜치에 적용 |
