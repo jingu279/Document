@@ -223,11 +223,11 @@ $ git switch main
 $ git pull origin main   # 최신 상태 유지
 
 # 패치 적용 전 검증
-$ git apply --check ~/patches/0001-*.patch
+$ git apply --check ~/patches/00*.patch
 # (문제 없으면 출력 없음)
 
 # 패치 적용 + 커밋 (git am 사용)
-$ git am ~/patches/0001-*.patch
+$ git am ~/patches/00*.patch
 Applying: 새 기능 추가
 Applying: 버그 수정
 
