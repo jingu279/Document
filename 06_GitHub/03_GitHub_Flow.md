@@ -20,12 +20,12 @@ gitGraph
    commit id: "C2"
    branch feature/add-search
    checkout feature/add-search
-   commit id: "C2-1: 검색 필드"
-   commit id: "C2-2: 검색 로직"
-   commit id: "C2-3: PR 생성"
+   commit id: "C2-1 - 검색 필드"
+   commit id: "C2-2 - 검색 로직"
+   commit id: "C2-3 - PR 생성"
    checkout main
    merge feature/add-search
-   commit id: "C4: 배포"
+   commit id: "C4 - 배포"
 ```
 
 ```bash

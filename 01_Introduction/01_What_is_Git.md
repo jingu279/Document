@@ -69,8 +69,8 @@ Git은 여러 버전 관리 시스템 중에서도 특히 **분산형 버전 관
 
     **중앙집중식 vs 분산식 구조 비교:**
 
-    ```mermaid
-    flowchart TB
+```mermaid
+flowchart TB
       subgraph Centralized[중앙집중식 SVN]
         CS[서버<br/>중앙 저장소<br/>전체 이력] --- CA[개발자 A<br/>일부만 가짐]
         CS --- CB[개발자 B<br/>일부만 가짐]
@@ -85,7 +85,7 @@ Git은 여러 버전 관리 시스템 중에서도 특히 **분산형 버전 관
 
       Centralized -.-> Note1["⛔ 서버 없으면 작업 불가!"]
       Distributed -.-> Note2["✅ 서버가 죽어도 각자 계속 작업 가능!"]
-    ```
+```
 
     **분산형 vs 중앙집중식 비교 예시:**
 

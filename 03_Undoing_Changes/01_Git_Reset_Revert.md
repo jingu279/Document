@@ -14,15 +14,14 @@ gitGraph
    branch reset-branch
    checkout reset-branch
    reset main
-   note over reset-branch: "Reset: C3가 사라짐! 🗑️"
-   checkout main
+```
 
+```mermaid
 gitGraph
    commit id: "C1"
    commit id: "C2"
    commit id: "C3"
    commit id: "Revert C3" type: HIGHLIGHT
-   note over main: "Revert: C3는 그대로,<br/>되돌리기 커밋만 추가! ✅"
 ```
 
 | `git reset` | `git revert` |
