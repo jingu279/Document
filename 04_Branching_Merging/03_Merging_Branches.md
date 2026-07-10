@@ -63,16 +63,17 @@ Git은 상황에 따라 두 가지 방식으로 병합을 수행합니다.
 
 이 경우 Git은 단순히 브랜치 포인터를 최신 커밋으로 앞으로 이동(fast-forward)시키기만 하면 되므로, 별도의 병합 커밋이 생성되지 않습니다.
 
-```
-병합 전:
-    A---B---C (feature/login)
-    /
-D---E (main)
-
-병합 후:
-    A---B---C (main, feature/login)
-    /
-D---E
+```mermaid
+gitGraph
+   commit id: "D"
+   commit id: "E"
+   branch feature/login
+   checkout feature/login
+   commit id: "A"
+   commit id: "B"
+   commit id: "C"
+   checkout main
+   merge feature/login
 ```
 
 ### 2. 3-Way 병합 (Merge Commit)
@@ -81,17 +82,18 @@ D---E
 
 Git은 두 브랜치의 공통 조상(Common Ancestor)을 기준으로 각 브랜치의 변경 사항을 비교하여 새로운 병합 커밋(Merge Commit)을 만듭니다.
 
-```
-병합 전:
-    A---B---C (feature/login)
-    /
-D---E---F (main)
-
-병합 후:
-    A---B---C
-    /         \
-D---E---F------G (main)  ← G가 병합 커밋
-  (feature/login)
+```mermaid
+gitGraph
+   commit id: "D"
+   commit id: "E"
+   branch feature/login
+   checkout feature/login
+   commit id: "A"
+   commit id: "B"
+   commit id: "C"
+   checkout main
+   commit id: "F"
+   merge feature/login id: "G (병합 커밋)"
 ```
 
 **3-way 병합 실제 예시:**
@@ -139,11 +141,25 @@ $ git merge --no-ff feature/login
 ```
 Fast-forward가 가능해도 항상 병합 커밋을 만듭니다. 기능 브랜치의 이력을 명확히 남기고 싶을 때 사용합니다.
 
+```mermaid
+gitGraph
+   commit id: "A"
+   commit id: "B"
+   commit id: "C"
 ```
---no-ff 없을 때:    --no-ff 사용할 때:
-A---B---C (main)    A---B---C---D (main)
-                      \       /
-                       E---F---G (feature/login)
+
+```mermaid
+gitGraph
+   commit id: "A"
+   commit id: "B"
+   commit id: "C"
+   branch feature/login
+   checkout feature/login
+   commit id: "E"
+   commit id: "F"
+   commit id: "G"
+   checkout main
+   merge feature/login id: "D"
 ```
 
 ### --squash: 여러 커밋을 하나로 압축해서 병합

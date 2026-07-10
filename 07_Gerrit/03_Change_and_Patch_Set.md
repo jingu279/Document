@@ -58,13 +58,13 @@ $ git commit -m "내용"
 
 ### Change 상태
 
-| 상태 | 설명 |
-|---|---|
-| **New** | 새로 생성됨, 아직 리뷰 전 |
-| **Open** | 리뷰 진행 중 |
-| **Merged** | 리뷰 완료, main에 병합됨 |
-| **Abandoned** | 포기됨 (더 이상 진행하지 않음) |
-| **Draft** | 비공개 초안 (초대된 사람만 볼 수 있음) |
+```mermaid
+flowchart LR
+  New["🆕 New<br/>새로 생성됨, 아직 리뷰 전"] --> Open["🔍 Open<br/>리뷰 진행 중"]
+  Open --> Merged["✅ Merged<br/>리뷰 완료, main에 병합"]
+  Open --> Abandoned["🗑️ Abandoned<br/>포기됨"]
+  New --> Draft["✏️ Draft<br/>비공개 초안"]
+```
 
 ## Patch Set (패치 세트)
 

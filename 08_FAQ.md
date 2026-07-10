@@ -88,11 +88,21 @@ $ git switch -c new-branch
 
 ### Q: `reset`, `revert`, `restore`의 차이는 무엇인가요?
 
-| 명령어 | 용도 | 히스토리 |
-|---|---|---|
-| `git reset` | 커밋 자체를 되돌림 (삭제) | 수정됨 (과거를 없었던 일로) |
-| `git revert` | 커밋의 변경을 취소하는 새 커밋 생성 | 보존됨 |
-| `git restore` | 파일을 특정 시점으로 복원 | 영향 없음 |
+```mermaid
+flowchart LR
+  subgraph Reset["git reset"]
+    R1["용도: 커밋 자체를 되돌림 (삭제)"]
+    R2["히스토리: 수정됨 (과거를 없었던 일로)"]
+  end
+  subgraph Revert["git revert"]
+    RV1["용도: 커밋의 변경을 취소하는 새 커밋 생성"]
+    RV2["히스토리: 보존됨"]
+  end
+  subgraph Restore["git restore"]
+    RS1["용도: 파일을 특정 시점으로 복원"]
+    RS2["히스토리: 영향 없음"]
+  end
+```
 
 ### Q: `git stash`는 언제 사용하나요?
 
@@ -706,12 +716,33 @@ $ git config --global pull.rebase true
 
 Git Flow는 main, develop, release, hotfix, feature의 5가지 브랜치를 사용하는 워크플로우입니다.
 
-```
-main      : v1.0 ───── v1.1 ───── v2.0
-develop   :    ── d1 ── d2 ── d3 ──
-feature   :          └── f1 ── f2 ──
-hotfix    :    └── h1 ──
-release   :                └── r1 ──
+```mermaid
+gitGraph
+   commit id: "v1.0"
+   branch develop
+   checkout develop
+   commit id: "d1"
+   branch feature
+   checkout feature
+   commit id: "f1"
+   commit id: "f2"
+   checkout develop
+   merge feature
+   commit id: "d2"
+   branch release
+   checkout release
+   commit id: "r1"
+   checkout main
+   merge release
+   branch hotfix
+   checkout hotfix
+   commit id: "h1"
+   checkout main
+   merge hotfix
+   commit id: "v1.1"
+   checkout develop
+   merge hotfix
+   commit id: "d3"
 ```
 
 주로 정기 릴리스가 있는 제품 개발에 적합합니다. 단순한 프로젝트에는 GitHub Flow가 더 적합합니다.

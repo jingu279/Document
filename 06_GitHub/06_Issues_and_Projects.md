@@ -147,16 +147,11 @@ Projects는 칸반 보드 스타일의 프로젝트 관리 도구입니다. Issu
 ### Projects 보기
 
 GitHub 저장소에서 **Projects** 탭 클릭 → **Create project** → **Board** 선택
-
-```
-To Do          In Progress    Review         Done
-┌──────────┐  ┌──────────┐   ┌──────────┐   ┌──────────┐
-│ #42 버그  │  │ #45 다크  │   │ #43 결제  │   │ #40 로그  │
-│   수정    │→ │   모드    │→  │   모듈    │→  │   인 구현 │
-│           │  │          │   │          │   │          │
-│ #44 문서  │  │          │   │          │   │          │
-│   업데이트│  │          │   │          │   │          │
-└──────────┘  └──────────┘   └──────────┘   └──────────┘
+```mermaid
+flowchart LR
+  Todo["📋 To Do<br/>#42 버그 수정<br/>#44 문서 업데이트"] --> InProgress["🔨 In Progress<br/>#45 다크 모드"]
+  InProgress --> Review["👀 Review<br/>#43 결제 모듈"]
+  Review --> Done["✅ Done<br/>#40 로그인 구현"]
 ```
 
 ### Projects 자동화

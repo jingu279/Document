@@ -24,11 +24,21 @@ gitGraph
    commit id: "Revert C3" type: HIGHLIGHT
 ```
 
-| `git reset` | `git revert` |
-|---|---|
-| **히스토리를 덮어씁니다** (과거를 없었던 일로 만듦) | **히스토리를 보존합니다** (되돌린 사실을 새 커밋으로 기록) |
-| 이미 푸시된 커밋에는 사용하면 위험함 | 이미 푸시된 커밋에도 안전하게 사용 가능 |
-| 로컬 작업에 적합 | 원격 저장소와 공유된 작업에 적합 |
+```mermaid
+flowchart LR
+  subgraph Reset[git reset]
+    direction TB
+      R1["히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)"]
+      R2["이미 푸시된 커밋에는 사용하면 위험함"]
+      R3["로컬 작업에 적합"]
+  end
+  subgraph Revert[git revert]
+    direction TB
+      V1["히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)"]
+      V2["이미 푸시된 커밋에도 안전하게 사용 가능"]
+      V3["원격 저장소와 공유된 작업에 적합"]
+  end
+```
 
 ## 1. `git reset` — 커밋 되돌리기 (히스토리 수정)
 
@@ -121,11 +131,21 @@ nothing to commit, working tree clean
 
 ### 세 가지 모드 한눈에 비교
 
-| 모드 | HEAD 이동 | Staging Area | Working Directory |
-|---|---|---|---|
-| `--soft` | 이동 | 변경 사항 보존 | 변경 사항 보존 |
-| `--mixed` | 이동 | 초기화 | 변경 사항 보존 |
-| `--hard` | 이동 | 초기화 | 초기화 (모두 삭제) |
+```mermaid
+flowchart TB
+  subgraph Modes[세 가지 모드 비교]
+    direction LR
+    S[--soft] --> S1["HEAD 이동"]
+    S --> S2["Staging Area: 변경 사항 보존"]
+    S --> S3["Working Directory: 변경 사항 보존"]
+    M[--mixed] --> M1["HEAD 이동"]
+    M --> M2["Staging Area: 초기화"]
+    M --> M3["Working Directory: 변경 사항 보존"]
+    H[--hard] --> H1["HEAD 이동"]
+    H --> H2["Staging Area: 초기화"]
+    H --> H3["Working Directory: 초기화 모두 삭제"]
+  end
+```
 
 ### 예시: 마지막 커밋 취소하기
 
@@ -209,12 +229,13 @@ $ git commit -m "C1, C2, C3를 한 번에 revert"
 
 ## 언제 무엇을 사용할까?
 
-| 상황 | 추천 명령어 |
-|---|---|
-| 로컬에서 작업 중이고, 커밋을 아직 푸시하지 않음 | `git reset` |
-| 이미 원격 저장소에 푸시된 커밋을 되돌려야 함 | `git revert` |
-| 작업 중인 변경 사항을 모두 버리고 마지막 커밋 상태로 돌아가고 싶음 | `git reset --hard HEAD` |
-| 특정 커밋의 변경 사항만 취소하고 싶음 (히스토리 보존) | `git revert <커밋해시>` |
+```mermaid
+flowchart TB
+  S1["로컬에서 작업 중이고, 커밋을 아직 푸시하지 않음"] --> C1["git reset"]
+  S2["이미 원격 저장소에 푸시된 커밋을 되돌려야 함"] --> C2["git revert"]
+  S3["작업 중인 변경 사항을 모두 버리고 마지막 커밋 상태로 돌아가고 싶음"] --> C3["git reset --hard HEAD"]
+  S4["특정 커밋의 변경 사항만 취소하고 싶음 (히스토리 보존)"] --> C4["git revert <커밋해시>"]
+```
 
 > **중요:** 이미 원격 저장소에 푸시된 커밋을 `git reset`으로 되돌리고 강제로 푸시(`git push --force`)하는 것은 팀원들에게 혼란을 줄 수 있으므로 피해야 합니다. 공유된 히스토리는 `git revert`를 사용하여 안전하게 되돌리는 것이 좋습니다.
 

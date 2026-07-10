@@ -60,10 +60,11 @@ flowchart LR
 
 일반적인 Git 작업 흐름은 다음과 같습니다.
 
-```
-Working Directory  → (git add) → Staging Area → (git commit) → Repository
-      ↑                                                              │
-      └─────────────────────── (git switch) ─────────────────────────┘
+```mermaid
+flowchart LR
+  WD["Working Directory<br/>작업 디렉토리"] -->|git add| SA["Staging Area<br/>스테이징 영역"]
+  SA -->|git commit| RE["Repository<br/>저장소"]
+  RE -.->|git switch| WD
 ```
 
 1.  **작업 디렉토리에서 파일 수정:** 새로운 기능을 추가하거나 버그를 수정합니다.

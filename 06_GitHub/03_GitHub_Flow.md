@@ -117,13 +117,23 @@ $ git switch -c feature/profile
 
 ## GitHub Flow vs Git Flow
 
-| 특징 | GitHub Flow | Git Flow |
-|---|---|---|
-| **복잡도** | 매우 간단 | 복잡함 |
-| **브랜치** | main + feature만 | main, develop, release, hotfix, feature |
-| **배포 주기** | 지속적 (매 PR마다) | 정기적 (릴리스 단위) |
-| **적합한 프로젝트** | 웹 서비스, CI/CD 환경 | 정기 릴리스가 있는 제품 |
-| **릴리스 관리** | 필요 없음 (항상 배포 가능) | release 브랜치로 관리 |
+```mermaid
+flowchart LR
+  subgraph GitHubFlow["GitHub Flow"]
+    GF1["복잡도: 매우 간단"]
+    GF2["브랜치: main + feature만"]
+    GF3["배포 주기: 지속적 (매 PR마다)"]
+    GF4["적합: 웹 서비스, CI/CD 환경"]
+    GF5["릴리스 관리: 필요 없음 (항상 배포 가능)"]
+  end
+  subgraph GitFlow["Git Flow"]
+    GL1["복잡도: 복잡함"]
+    GL2["브랜치: main, develop, release, hotfix, feature"]
+    GL3["배포 주기: 정기적 (릴리스 단위)"]
+    GL4["적합: 정기 릴리스가 있는 제품"]
+    GL5["릴리스 관리: release 브랜치로 관리"]
+  end
+```
 
 ## GitHub Flow의 모범 사례
 

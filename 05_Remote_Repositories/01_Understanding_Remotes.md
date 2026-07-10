@@ -98,11 +98,12 @@ git remote add origin https://github.com/username/my-project.git
 
 Git은 다양한 프로토콜을 통해 원격 저장소에 접근할 수 있습니다.
 
-| 프로토콜 | 예시 URL |
-|---|---|
-| HTTPS | `https://github.com/username/repo.git` |
-| SSH | `git@github.com:username/repo.git` |
-| 로컬 | `/path/to/repo.git` |
+```mermaid
+flowchart TB
+  H[HTTPS] --> H1["https://github.com/username/repo.git"]
+  S[SSH] --> S1["git@github.com:username/repo.git"]
+  L[로컬] --> L1["/path/to/repo.git"]
+```
 
 초보자에게는 **HTTPS** 방식이 가장 설정하기 쉽고 간편합니다. SSH 방식은 한 번 설정하면 비밀번호 없이 사용할 수 있다는 장점이 있지만, 초기 SSH 키 설정이 필요합니다.
 

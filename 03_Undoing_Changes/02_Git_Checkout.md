@@ -150,12 +150,13 @@ $ git restore --staged --worktree app.js
 
 ## 요약: `git restore` 사용법
 
-| 명령어 | 설명 |
-|---|---|
-| `git restore <파일>` | 작업 디렉토리의 파일을 마지막 커밋 상태로 복원 |
-| `git restore --staged <파일>` | 스테이징 영역에서 파일 제거 (Unstage) |
-| `git restore --source=<커밋해시> <파일>` | 특정 커밋 시점의 파일로 복원 |
-| `git restore --staged --worktree <파일>` | 스테이징과 작업 디렉토리 모두 복원 |
+```mermaid
+flowchart TB
+  R1["git restore &lt;파일&gt;"] --> D1["작업 디렉토리의 파일을 마지막 커밋 상태로 복원"]
+  R2["git restore --staged &lt;파일&gt;"] --> D2["스테이징 영역에서 파일 제거 Unstage"]
+  R3["git restore --source=&lt;커밋해시&gt; &lt;파일&gt;"] --> D3["특정 커밋 시점의 파일로 복원"]
+  R4["git restore --staged --worktree &lt;파일&gt;"] --> D4["스테이징과 작업 디렉토리 모두 복원"]
+```
 
 ## `git checkout` 팁
 
