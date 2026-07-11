@@ -327,14 +327,15 @@ flowchart TB
   subgraph Pandas_Struct[Pandas 데이터 구조]
     Series["Series<br/>1차원 레이블된 배열<br/>하나의 열"]
     DF["DataFrame<br/>2차원 테이블<br/>여러 개의 Series"]
+    DF --> Pandas_Out
   end
-
+  Pandas_Out["→"]
   subgraph DF_Visual[DataFrame 예시]
-    DF_Table["|    | 이름 | 나이 | 도시  |<br/>|----|------|------|-------|<br/>| 0  | 철수 |  25  | 서울  |<br/>| 1  | 영희 |  30  | 부산  |<br/>| 2  | 민수 |  28  | 대구  |"]
+    DF_Visual_In["←"] --> DF_Table["|    | 이름 | 나이 | 도시  |<br/>|----|------|------|-------|<br/>| 0  | 철수 |  25  | 서울  |<br/>| 1  | 영희 |  30  | 부산  |<br/>| 2  | 민수 |  28  | 대구  |"]
   end
+  Pandas_Out --> DF_Visual_In
 
   Series --> DF
-  DF --> DF_Table
 ```
 
 ```python

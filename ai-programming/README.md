@@ -25,12 +25,11 @@ flowchart LR
     Python["🐍 Python 기본 문법<br/>변수, 함수, 클래스"]
     Logic["🧩 기초 논리 & 알고리즘<br/>조건문, 반복문, 배열"]
     English["📖 영어 독해 능력<br/>공식 문서와 논문"]
-    Pre_Out["➡️"]
   end
-
+  Pre_Out["➡️"]
+  Nice_In["⬅️"]
   subgraph NiceToHave[있으면 더 좋지만,<br/>책에서 다시 가르쳐줌]
     direction LR
-    Nice_In["⬅️"]
     Math["📐 고등학교 수학<br/>행렬, 미분, 확률"]
     Git["🔀 Git 기초"]
     Linux["💻 터미널 사용 경험"]
@@ -62,7 +61,8 @@ flowchart TB
     Ch03["03장: 수학 기초"]
     Ch04["04장: Python 데이터 과학"]
   end
-
+  P1_Out["→"]
+  P2_In["←"]
   subgraph Part2[PART 2: 머신러닝]
     direction TB
     Ch05["05장: 머신러닝 개념"]
@@ -70,7 +70,8 @@ flowchart TB
     Ch07["07장: 비지도 학습"]
     Ch08["08장: 모델 평가와 최적화"]
   end
-
+  P2_Out["→"]
+  P3_In["←"]
   subgraph Part3[PART 3: 딥러닝과 응용]
     direction TB
     Ch09["09장: 신경망 기초"]
@@ -79,7 +80,8 @@ flowchart TB
     Ch12["12장: 생성형 AI와 LLM"]
     Ch13["13장: AI Agent, MCP, Harness"]
   end
-
+  P3_Out["→"]
+  P4_In["←"]
   subgraph Part4[PART 4: 실무 프로젝트]
     direction TB
     Ch14["14장: AI 개발 워크플로우"]
@@ -87,11 +89,14 @@ flowchart TB
     Ch16["16장: AI 윤리와 미래"]
   end
 
-  Ch01 --> Ch02 --> Ch03 --> Ch04
-  Ch04 --> Ch05 --> Ch06 --> Ch07 --> Ch08
-  Ch08 --> Ch09 --> Ch10
-  Ch09 --> Ch11 --> Ch12
-  Ch12 --> Ch13 --> Ch14 --> Ch15 --> Ch16
+  Ch01 --> Ch02 --> Ch03 --> Ch04 --> P1_Out
+  P2_In --> Ch05 --> Ch06 --> Ch07 --> Ch08 --> P2_Out
+  P3_In --> Ch09 --> Ch10
+  Ch09 --> Ch11 --> Ch12 --> Ch13 --> P3_Out
+  P4_In --> Ch14 --> Ch15 --> Ch16
+  P1_Out --> P2_In
+  P2_Out --> P3_In
+  P3_Out --> P4_In
 
   classDef p1 fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   classDef p2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
@@ -192,6 +197,8 @@ flowchart LR
     V["📐 벡터<br/>데이터 표현"]
     M["🔲 행렬<br/>변환과 연산"]
   end
+  LA_Out["→"]
+  CAL_In["←"]
   subgraph CAL[📈 미적분]
     D["📉 미분<br/>변화율"]
     GD["⬇️ 경사하강법<br/>최적화"]
@@ -201,9 +208,10 @@ flowchart LR
     S["📊 통계<br/>데이터 특성"]
   end
 
-  V --> M
+  V --> M --> LA_Out
   D --> GD
-  M --> GD
+  LA_Out --> CAL_In
+  CAL_In --> GD
   P --> S
   GD --> ML["🤖 머신러닝 학습"]
 
@@ -540,7 +548,7 @@ flowchart TB
     direction TB
     Q2["💬 사용자 질문"]
     EmbedQ["🔢 질문 임베딩"]
-    Search["🔍 Vector DB 검색<br/>관련 문서 찾기"]
+    Search
     Context["📄 검색된 문서 + 질문"]
     LLM["🧠 LLM (GPT-4, Claude)"]
     Answer["✅ 최종 답변 생성"]
@@ -548,12 +556,15 @@ flowchart TB
 
   Q2 --> EmbedQ --> Search --> Context --> LLM --> Answer
 
+  Search["🔍 Vector DB 검색<br/>관련 문서 찾기"]
+  Store["💾 Vector Store<br/>Pinecone / Chroma"]
+
   subgraph VectorDB[🗄️ Vector Database 구축]
     direction TB
     Docs["📚 문서들"]
     Chunk["✂️ 문서 분할"]
     EmbedD["🔢 청크 임베딩"]
-    Store["💾 Vector Store<br/>Pinecone / Chroma"]
+    Store
   end
 
   Docs --> Chunk --> EmbedD --> Store
@@ -760,9 +771,9 @@ flowchart TB
 
   A1 --> R1 & R2 & R3 & R4
   
-  Example["💎 예: 행렬 곱셈<br/>수학: 직접 계산<br/>Python: @ 연산자 하나면 끝"]
+  ExampleNode["💎 예: 행렬 곱셈<br/>수학: 직접 계산<br/>Python: @ 연산자 하나면 끝"]
 
-  R2 --> Example
+  R2 --> ExampleNode
 
   classDef q fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#b71c1c
   classDef yes fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#1b5e20
@@ -771,7 +782,7 @@ flowchart TB
   class Question q
   class A1 yes
   class R1,R2,R3,R4 reason
-  class Example demo
+  class ExampleNode demo
 ```
 
 ---
