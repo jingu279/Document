@@ -36,7 +36,7 @@
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
-flowchart TB
+flowchart LR
   subgraph Part1[PART 1: 기초 다지기]
     direction TB
     Ch01["01장: AI 프로그래밍 개요"]
