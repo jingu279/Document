@@ -1,4 +1,4 @@
-# 13장: AI Agent, MCP, Harness
+# 13장: AI Agent, MCP, Harness 프로그래밍
 
 > **🎯 학습 목표**
 > - AI Agent의 개념과 ReAct 패턴을 이해하고 구현할 수 있습니다.
