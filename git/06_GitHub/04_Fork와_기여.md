@@ -96,23 +96,42 @@ flowchart TB
   classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   subgraph Upstream[원본 저장소 upstream]
     U["github.com/facebook/react<br/>main: C1-C2-C3-C4-C5"]:::main
+    U --> Up_Out1
+    Up_In -.-> U
+    U -.-> Up_Out2
   end
 
   subgraph Origin[내 저장소 origin]
-    O["github.com/me/react<br/>main: C1-C2-C3-C4-C5"]:::sub
+    Or_In1["←"] --> O["github.com/me/react<br/>main: C1-C2-C3-C4-C5"]:::sub
+    O --> Or_Out
+    Or_In2["←"] -.-> O
   end
 
   subgraph Local[내 컴퓨터 로컬 저장소]
-    L1["main: C1-C2-C3-C4-C5"]:::proc
+    Lo_In1["←"] --> L1["main: C1-C2-C3-C4-C5"]:::proc
     L2["fix/typo: C6"]:::highlight
     L1 --> L2
+    L1 -.-> Lo_Out1
+    L1 -.-> Lo_Out2
+    Lo_In2["←"] -.-> L1
   end
 
-  U -->|"① Fork (GitHub 서버에서 복사)"| O
-  O -->|"② Clone (내 컴퓨터로 복사)"| L1
-  L1 -.->|"③ PR은 upstream으로!"| U
-  L1 -.->|"④ origin에는 push 가능!"| O
-  U -.->|"⑤ upstream은 pull만!"| L1
+  Up_Out1["→"]
+  Up_Out2["→"]
+  Up_In["←"]
+  Or_In1["←"]
+  Or_Out["→"]
+  Or_In2["←"]
+  Lo_In1["←"]
+  Lo_Out1["→"]
+  Lo_Out2["→"]
+  Lo_In2["←"]
+
+  Up_Out1 -->|"① Fork (GitHub 서버에서 복사)"| Or_In1
+  Or_Out -->|"② Clone (내 컴퓨터로 복사)"| Lo_In1
+  Lo_Out1 -.->|"③ PR은 upstream으로!"| Up_In
+  Lo_Out2 -.->|"④ origin에는 push 가능!"| Or_In2
+  Up_Out2 -.->|"⑤ upstream은 pull만!"| Lo_In2
 ```
 
 위 다이어그램은 Fork의 전체적인 데이터 흐름을 보여줍니다. ① 원본 저장소(upstream)를 내 계정(origin)으로 Fork하고, ② origin을 로컬에 클론합니다. ③ 수정 사항이 있으면 PR을 통해 원본 저장소로 보내고, ④ origin에는 자유롭게 push할 수 있습니다. ⑤ 원본의 최신 변경 사항은 pull 명령어로 가져옵니다. 여기서 중요한 점은 upstream 저장소에는 push 권한이 없으므로, 모든 변경 요청은 PR을 통해서만 이루어져야 한다는 것입니다.

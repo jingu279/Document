@@ -86,16 +86,25 @@ flowchart TB
     Pending["📋 리뷰 대기열<br/>Change 123: 로그인 (PS2) [+2 CR]<br/>Change 124: 결제 (PS1) [-1 V]<br/>Change 125: 문서 (PS3) [NEW]"]:::proc
     MainBranch["🌿 main 브랜치<br/>C1-C2-C3-C4 (Submit된 변경들)"]:::sub
     Pending -->|"리뷰어 승인 → Submit"| MainBranch
+    MainBranch --> GS_Out
+    Dev_In["←"] --> Pending
   end
 
   subgraph Developer[개발자 로컬 저장소]
     DevBranch["🌿 feature/login<br/>C1-C2 (Change-Id: I123...)"]:::proc
     Push["📤 git push origin HEAD:refs/for/main"]:::highlight
     DevBranch --> Push
+    Push --> Dev_Out
+    GS_In["←"] --> DevBranch
   end
 
-  Push --> Pending
-  MainBranch -->|"git fetch / clone"| Developer
+  Dev_Out["→"]
+  GS_Out["→"]
+  Dev_In["←"]
+  GS_In["←"]
+
+  Dev_Out --> Dev_In
+  GS_Out -->|"git fetch / clone"| GS_In
 
 classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
 classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
