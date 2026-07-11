@@ -365,7 +365,7 @@ flowchart LR
     FP["➡️ 순전파<br/>예측값 계산"] --> Loss["📉 손실 계산<br/>예측 vs 정답"]
     Loss --> BP["⬅️ 역전파<br/>그래디언트 계산"]
     BP --> Update["🔄 가중치 갱신<br/>Adam 옵티마이저"]
-    Update -.->|반복 (Epoch)| FP
+    Update -.->|반복| FP
   end
 
   classDef layer fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
