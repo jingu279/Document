@@ -158,10 +158,16 @@ Projects는 칸반 보드 스타일의 프로젝트 관리 도구입니다. Issu
 
 GitHub 저장소에서 **Projects** 탭 클릭 → **Create project** → **Board** 선택
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Todo["📋 To Do<br/>#42 버그 수정<br/>#44 문서 업데이트"] --> InProgress["🔨 In Progress<br/>#45 다크 모드"]
-  InProgress --> Review["👀 Review<br/>#43 결제 모듈"]
-  Review --> Done["✅ Done<br/>#40 로그인 구현"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Todo["📋 To Do<br/>#42 버그 수정<br/>#44 문서 업데이트"]:::proc --> InProgress["🔨 In Progress<br/>#45 다크 모드"]:::proc
+  InProgress --> Review["👀 Review<br/>#43 결제 모듈"]:::proc
+  Review --> Done["✅ Done<br/>#40 로그인 구현"]:::proc
 ```
 
 ### Projects 자동화

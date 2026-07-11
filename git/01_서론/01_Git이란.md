@@ -19,6 +19,7 @@ Git은 소프트웨어 개발 프로젝트의 **버전 관리 시스템 (Version
 초보자가 가장 혼동하는 개념 중 하나가 **"Git"**과 **"저장소(Repository)"**의 차이입니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
   G[("⚙️ Git = 버전 관리 도구<br/>컴퓨터에 한 번만 설치")]
 
@@ -35,12 +36,30 @@ flowchart TB
 
   style G fill:#2d5a2d,stroke:#2d5a2d,color:#fff
   style Repos fill:#1a1a2e,stroke:#16213e,color:#eee
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class G main
+  class R1,R2,R3 sub
+  class Repos highlight
 ```
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   Git["<b>Git</b><br/>📷 카메라 (찍는 도구)<br/>버전 관리 소프트웨어<br/>한 번만 설치하면 모든 프로젝트에서 사용<br/>/usr/bin/git 실행 파일"]
   Repo["<b>Repository</b><br/>🖼️ 사진 앨범 (찍힌 결과물)<br/>Git으로 관리되는 프로젝트<br/>프로젝트마다 새로 생성 (git init)<br/>.git/ 숨김 폴더 (프로젝트 안에 생성)"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class Git main
+  class Repo sub
 ```
 
 ```bash
@@ -73,20 +92,31 @@ $ git commit -m "첫 커밋"    # ← Repository에 저장
 프로젝트를 시간에 따라 사진을 찍듯이 스냅샷으로 저장한다고 상상해보세요.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph Traditional[전통적 방식 - 파일명 관리]
-    T1[index.html] --> T2[index_v2.html]
-    T2 --> T3[index_v3.html]
-    T3 --> T4[index_최종.html]
+    T1["📄 index.html"] --> T2["📄 index_v2.html"]
+    T2 --> T3["📄 index_v3.html"]
+    T3 --> T4["📄 index_최종.html"]
     T4 -.-> Q["❓ 뭐가 최종 버전이지...?"]
   end
 
   subgraph Git[Git 방식 - 스냅샷 관리]
-    G1["커밋 a1b2c3d<br/>(첫 번째 버전)"] --> G2["커밋 d4e5f6f<br/>(로그인 버튼 추가)"]
-    G2 --> G3["커밋 g7h8i9j<br/>(레이아웃 수정)"]
-    G3 --> G4["커밋 k1l2m3n<br/>(푸터 추가)"]
+    G1["💾 커밋 a1b2c3d<br/>(첫 번째 버전)"] --> G2["💾 커밋 d4e5f6f<br/>(로그인 버튼 추가)"]
+    G2 --> G3["💾 커밋 g7h8i9j<br/>(레이아웃 수정)"]
+    G3 --> G4["💾 커밋 k1l2m3n<br/>(푸터 추가)"]
     G4 -.-> OK["✅ git log로 언제든지 확인 가능!"]
   end
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class T1,T2,T3,T4 sub
+  class Q decision
+  class G1,G2,G3,G4 proc
+  class OK highlight
 ```
 
 ### VCS 사용 예시: 전통적인 방식 vs Git
@@ -134,29 +164,49 @@ Git은 여러 버전 관리 시스템 중에서도 특히 **분산형 버전 관
     **중앙집중식 vs 분산식 구조 비교:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
       subgraph Centralized[중앙집중식 SVN]
-        CS[서버<br/>중앙 저장소<br/>전체 이력] --- CA[개발자 A<br/>일부만 가짐]
-        CS --- CB[개발자 B<br/>일부만 가짐]
-        CS --- CC[개발자 C<br/>일부만 가짐]
+        CS["🖥️ 서버<br/>중앙 저장소<br/>전체 이력"] --- CA["👤 개발자 A<br/>일부만 가짐"]
+        CS --- CB["👤 개발자 B<br/>일부만 가짐"]
+        CS --- CC["👤 개발자 C<br/>일부만 가짐"]
       end
 
       subgraph Distributed[분산식 Git]
-        DS[서버<br/>원격 저장소<br/>전체 이력] --- DA[개발자 A<br/>전체 이력!]
-        DS --- DB[개발자 B<br/>전체 이력!]
-        DS --- DC[개발자 C<br/>전체 이력!]
+        DS["🖥️ 서버<br/>원격 저장소<br/>전체 이력"] --- DA["👤 개발자 A<br/>전체 이력!"]
+        DS --- DB["👤 개발자 B<br/>전체 이력!"]
+        DS --- DC["👤 개발자 C<br/>전체 이력!"]
       end
 
       CS -.-> Note1["⛔ 서버 없으면 작업 불가!"]
       DS -.-> Note2["✅ 서버가 죽어도 각자 계속 작업 가능!"]
+
+      classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+      classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+      classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+      classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+      classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+      class CS,DS main
+      class CA,CB,CC,DA,DB,DC sub
+      class Note1 decision
+      class Note2 highlight
 ```
 
     **분산형 vs 중앙집중식 비교 예시:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   Centralized["<b>중앙집중식 SVN</b><br/>⛔ 서버 다운 → 모든 작업 중단<br/>⛔ 인터넷 없음 → 커밋 불가<br/>⛔ 서버 데이터 손실 → 모든 이력 손실<br/>🐢 속도: 네트워크 속도에 의존"]
   Distributed["<b>분산식 Git</b><br/>✅ 서버 다운 → 로컬에서 계속 작업 가능<br/>✅ 인터넷 없음 → 로컬에 자유롭게 커밋 가능<br/>✅ 서버 데이터 손실 → 각 개발자 로컬에 복사본 존재<br/>⚡ 속도: 로컬 디스크 속도로 즉시 처리"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class Centralized decision
+  class Distributed highlight
 ```
 
 *   **성능 (Performance):** Git은 매우 빠르게 동작합니다. 대부분의 작업이 로컬에서 이루어지기 때문에 네트워크 지연 없이 즉각적으로 반응합니다.

@@ -15,6 +15,7 @@
 **Reset과 Revert의 동작 방식 비교:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
    commit id: "C1"
    commit id: "C2"
@@ -25,6 +26,7 @@ gitGraph
 ```
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
    commit id: "C1"
    commit id: "C2"
@@ -33,9 +35,16 @@ gitGraph
 ```
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Reset["<b>git reset</b><br/>히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)<br/>이미 푸시된 커밋에는 사용하면 위험함<br/>로컬 작업에 적합"]
-  Revert["<b>git revert</b><br/>히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)<br/>이미 푸시된 커밋에도 안전하게 사용 가능<br/>원격 저장소와 공유된 작업에 적합"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  Reset["🔙 <b>git reset</b><br/>히스토리를 덮어씁니다 (과거를 없었던 일로 만듦)<br/>이미 푸시된 커밋에는 사용하면 위험함<br/>로컬 작업에 적합"]:::main
+  Revert["🔒 <b>git revert</b><br/>히스토리를 보존합니다 (되돌린 사실을 새 커밋으로 기록)<br/>이미 푸시된 커밋에도 안전하게 사용 가능<br/>원격 저장소와 공유된 작업에 적합"]:::sub
 ```
 
 지금까지 Reset과 Revert의 핵심 차이에 대해 살펴보았습니다. 이제 각각의 명령어를 더욱 자세히 알아보겠습니다.
@@ -47,32 +56,39 @@ flowchart LR
 ### reset의 세 가지 모드 상세 비교
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  subgraph Initial[초기 상태]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  subgraph Initial[📦 초기 상태]
     direction LR
-    C1a[C1] --> C2a[C2] --> C3a[C3]
-    C3a -.- H1["HEAD (main)"]
+    C1a["📄 C1"]:::proc --> C2a["📄 C2"]:::proc --> C3a["📄 C3"]:::proc
+    C3a -.- H1["📍 HEAD (main)"]:::highlight
   end
 
-  subgraph Soft["--soft: 커밋만 취소, Staged 유지"]
+  subgraph Soft["🔶 --soft: 커밋만 취소, Staged 유지"]
     direction LR
-    C1b[C1] --> C2b[C2]
-    C2b -.- H2["HEAD"]
-    S1["📋 Staging Area: C3 변경 내용<br/>→ 바로 git commit 가능!"]
+    C1b["📄 C1"]:::proc --> C2b["📄 C2"]:::proc
+    C2b -.- H2["📍 HEAD"]:::highlight
+    S1["📋 Staging Area: C3 변경 내용<br/>→ 바로 git commit 가능!"]:::main
   end
 
-  subgraph Mixed["--mixed: 커밋 취소 + Staging 초기화"]
+  subgraph Mixed["🔷 --mixed: 커밋 취소 + Staging 초기화"]
     direction LR
-    C1c[C1] --> C2c[C2]
-    C2c -.- H3["HEAD"]
-    S2["📝 Working Dir: C3 변경 내용<br/>→ 수정 후 git add 필요!"]
+    C1c["📄 C1"]:::proc --> C2c["📄 C2"]:::proc
+    C2c -.- H3["📍 HEAD"]:::highlight
+    S2["📝 Working Dir: C3 변경 내용<br/>→ 수정 후 git add 필요!"]:::proc
   end
 
-  subgraph Hard["--hard: 모두 초기화"]
+  subgraph Hard["🔴 --hard: 모두 초기화"]
     direction LR
-    C1d[C1] --> C2d[C2]
-    C2d -.- H4["HEAD"]
-    S3["🗑️ C3 변경 내용 완전 삭제!<br/>⚠️ 복구 불가!"]
+    C1d["📄 C1"]:::proc --> C2d["📄 C2"]:::proc
+    C2d -.- H4["📍 HEAD"]:::highlight
+    S3["🗑️ C3 변경 내용 완전 삭제!<br/>⚠️ 복구 불가!"]:::decision
   end
 
   C3a -.->|--soft| C1b
@@ -132,18 +148,25 @@ nothing to commit, working tree clean
 ### 세 가지 모드 한눈에 비교
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  subgraph Modes[세 가지 모드 비교]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  subgraph Modes[📊 세 가지 모드 비교]
     direction LR
-    S[--soft] --> S1["HEAD 이동"]
-    S --> S2["Staging Area: 변경 사항 보존"]
-    S --> S3["Working Directory: 변경 사항 보존"]
-    M[--mixed] --> M1["HEAD 이동"]
-    M --> M2["Staging Area: 초기화"]
-    M --> M3["Working Directory: 변경 사항 보존"]
-    H[--hard] --> H1["HEAD 이동"]
-    H --> H2["Staging Area: 초기화"]
-    H --> H3["Working Directory: 초기화 모두 삭제"]
+    S["🔶 --soft"]:::main --> S1["HEAD 이동"]:::proc
+    S --> S2["Staging Area: 변경 사항 보존"]:::sub
+    S --> S3["Working Directory: 변경 사항 보존"]:::sub
+    M["🔷 --mixed"]:::proc --> M1["HEAD 이동"]:::proc
+    M --> M2["Staging Area: 초기화"]:::decision
+    M --> M3["Working Directory: 변경 사항 보존"]:::sub
+    H["🔴 --hard"]:::decision --> H1["HEAD 이동"]:::proc
+    H --> H2["Staging Area: 초기화"]:::decision
+    H --> H3["Working Directory: 초기화 모두 삭제"]:::highlight
   end
 ```
 
@@ -234,11 +257,18 @@ $ git commit -m "C1, C2, C3를 한 번에 revert"
 ## 언제 무엇을 사용할까?
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  S1["로컬에서 작업 중이고, 커밋을 아직 푸시하지 않음"] --> C1["git reset"]
-  S2["이미 원격 저장소에 푸시된 커밋을 되돌려야 함"] --> C2["git revert"]
-  S3["작업 중인 변경 사항을 모두 버리고 마지막 커밋 상태로 돌아가고 싶음"] --> C3["git reset --hard HEAD"]
-  S4["특정 커밋의 변경 사항만 취소하고 싶음 (히스토리 보존)"] --> C4["git revert <커밋해시>"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  S1["💻 로컬에서 작업 중이고, 커밋을 아직 푸시하지 않음"]:::proc --> C1["🔙 git reset"]:::main
+  S2["☁️ 이미 원격 저장소에 푸시된 커밋을 되돌려야 함"]:::decision --> C2["🔒 git revert"]:::sub
+  S3["🗑️ 작업 중인 변경 사항을 모두 버리고 마지막 커밋 상태로 돌아가고 싶음"]:::highlight --> C3["⚠️ git reset --hard HEAD"]:::decision
+  S4["🎯 특정 커밋의 변경 사항만 취소하고 싶음 (히스토리 보존)"]:::sub --> C4["✅ git revert &lt;커밋해시&gt;"]:::main
 ```
 
 > **중요:** 이미 원격 저장소에 푸시된 커밋을 `git reset`으로 되돌리고 강제로 푸시(`git push --force`)하는 것은 팀원들에게 혼란을 줄 수 있으므로 피해야 합니다. 공유된 히스토리는 `git revert`를 사용하여 안전하게 되돌리는 것이 좋습니다.

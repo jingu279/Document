@@ -27,7 +27,13 @@ GitHub Flow는 다음과 같은 5가지 핵심 원칙을 기반으로 합니다.
 **워크플로우 시각화:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
+   classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+   classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+   classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+   classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+   classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
    commit id: "C1"
    commit id: "C2"
     branch feature-add-search
@@ -134,9 +140,15 @@ $ git switch -c feature/profile
 두 가지 시나리오를 통해 GitHub Flow의 실제 활용법을 살펴보았습니다. 그렇다면 GitHub Flow는 다른 브랜치 전략과 무엇이 다를까요? 가장 널리 알려진 Git Flow와 비교해보겠습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  GitHubFlow["<b>GitHub Flow</b><br/>복잡도: 매우 간단<br/>브랜치: main + feature만<br/>배포 주기: 지속적 (매 PR마다)<br/>적합: 웹 서비스, CI/CD 환경<br/>릴리스 관리: 필요 없음 (항상 배포 가능)"]
-  GitFlow["<b>Git Flow</b><br/>복잡도: 복잡함<br/>브랜치: main, develop, release, hotfix, feature<br/>배포 주기: 정기적 (릴리스 단위)<br/>적합: 정기 릴리스가 있는 제품<br/>릴리스 관리: release 브랜치로 관리"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  GitHubFlow["<b>GitHub Flow</b><br/>복잡도: 매우 간단<br/>브랜치: main + feature만<br/>배포 주기: 지속적 (매 PR마다)<br/>적합: 웹 서비스, CI/CD 환경<br/>릴리스 관리: 필요 없음 (항상 배포 가능)"]:::main
+  GitFlow["<b>Git Flow</b><br/>복잡도: 복잡함<br/>브랜치: main, develop, release, hotfix, feature<br/>배포 주기: 정기적 (릴리스 단위)<br/>적합: 정기 릴리스가 있는 제품<br/>릴리스 관리: release 브랜치로 관리"]:::sub
 ```
 
 ## GitHub Flow의 모범 사례

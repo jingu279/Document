@@ -13,16 +13,28 @@
 **Init vs Clone 개념도:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  subgraph Init[git init - 처음부터 시작]
-    I1["내 컴퓨터<br/>my-project/ (빈 폴더)"] --> I2["내 컴퓨터<br/>.git/ 폴더 생성"]
+  subgraph Init["📁 git init - 처음부터 시작"]
+    I1["🖥️ 내 컴퓨터<br/>📂 my-project/ (빈 폴더)"] --> I2["🖥️ 내 컴퓨터<br/>⚙️ .git/ 폴더 생성"]
     I2 --> I3["💡 내가 처음부터 만들래!"]
   end
 
-  subgraph Clone[git clone - 기존 저장소 복사]
-    C1["GitHub<br/>원격 저장소<br/>C1-C2-C3"] -->|"git clone URL"| C2["내 컴퓨터<br/>my-project/<br/>C1-C2-C3 + .git/ 자동 설정"]
+  subgraph Clone["📋 git clone - 기존 저장소 복사"]
+    C1["☁️ GitHub<br/>📦 원격 저장소<br/>C1-C2-C3"] -->|"⬇️ git clone URL"| C2["🖥️ 내 컴퓨터<br/>📂 my-project/<br/>📦 C1-C2-C3 + ⚙️ .git/ 자동 설정"]
     C2 --> C3["💡 다른 사람이 만든 걸 가져올래!"]
   end
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  class Init,I1,I2 main
+  class I3 decision
+  class Clone,C1,C2 sub
+  class C3 decision
 ```
 
 ## 1. `git init` — 새로운 Git 저장소 만들기
@@ -147,9 +159,19 @@ g7h8i9j 프로젝트 초기화
 지금까지 `git init`과 `git clone`이라는 두 가지 저장소 생성 방법을 배웠습니다. 이 두 방법의 차이점을 한눈에 비교해보겠습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Init["<b>git init</b><br/>새로운 프로젝트를 시작할 때 사용<br/>로컬에서 처음부터 모든 것을 만듦<br/>원격 저장소와 자동으로 연결되지 않음"]
-  Clone["<b>git clone</b><br/>기존 프로젝트에 참여할 때 사용<br/>원격 저장소에서 코드를 가져옴<br/>원격 저장소와 자동으로 연결됨 (origin)"]
+  Init["📁 <b>git init</b><br/>🆕 새로운 프로젝트를 시작할 때 사용<br/>🖥️ 로컬에서 처음부터 모든 것을 만듦<br/>🔗 원격 저장소와 자동으로 연결되지 않음"]
+  Clone["📋 <b>git clone</b><br/>📥 기존 프로젝트에 참여할 때 사용<br/>☁️ 원격 저장소에서 코드를 가져옴<br/>🔗 원격 저장소와 자동으로 연결됨 (origin)"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  class Init main
+  class Clone sub
 ```
 
 `git init`으로 생성한 저장소는 나중에 `git remote add` 명령어를 통해 원격 저장소와 연결할 수 있습니다.

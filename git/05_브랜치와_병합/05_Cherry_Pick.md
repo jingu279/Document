@@ -13,6 +13,7 @@
 Cherry-Pick은 다른 브랜치의 **특정 커밋 하나만** 골라서 현재 브랜치에 적용하는 기능입니다. 병합(merge)이나 리베이스(rebase)처럼 브랜치 전체를 가져오는 것이 아니라, 원하는 커밋만 선별적으로 가져올 때 사용합니다. 우리는 이미 병합을 통해 브랜치 전체를 통합하는 방법을 배웠습니다. 하지만 실제 개발 현장에서는 때때로 특정 커밋만 골라서 적용해야 하는 상황이 발생합니다. 이러한 상황에서 Cherry-Pick은 매우 유용한 도구가 됩니다. 지금부터 Cherry-Pick의 개념과 활용법을 자세히 알아보겠습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
    commit id: "C1"
    commit id: "C2"
@@ -29,11 +30,20 @@ gitGraph
 ## Cherry-Pick이 필요한 상황
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Title["<b>Cherry-Pick이 필요한 상황</b>"]
-  Title --> HF["🚑 버그 수치 (hotfix)<br/>개발 중인 브랜치에서<br/>버그 수정 커밋만 골라서<br/>main에 적용"]
+  Title["📋 <b>Cherry-Pick이 필요한 상황</b>"]
+  Title --> HF["🚑 버그 수정 (hotfix)<br/>개발 중인 브랜치에서<br/>버그 수정 커밋만 골라서<br/>main에 적용"]
   Title --> BP["📦 선별적 기능 백포트<br/>최신 브랜치의 특정 기능만<br/>예전 릴리스 브랜치에 적용"]
   Title --> MV["🔀 실수한 커밋 위치 수정<br/>잘못된 브랜치에 한 커밋을<br/>올바른 브랜치로 이동"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class Title main
+  class HF,BP,MV proc
 ```
 
 ## 기본 사용법
@@ -149,12 +159,21 @@ $ git cherry-pick main       # main의 최신 커밋을 가져옴
 Cherry-Pick은 다양한 옵션을 제공하여 상황에 맞게 유연하게 사용할 수 있습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Options["<b>Cherry-Pick 옵션</b>"]
-  Options --> O1["-e, --edit<br/>커밋 메시지 편집 허용"]
-  Options --> O2["--no-commit<br/>변경 사항만 적용, 커밋은 직접 수행"]
-  Options --> O3["-x<br/>커밋 메시지에 원본 커밋 해시 추가"]
-  Options --> O4["--signoff<br/>커밋에 Signed-off-by 줄 추가"]
+  Options["📋 <b>Cherry-Pick 옵션</b>"]
+  Options --> O1["✏️ -e, --edit<br/>커밋 메시지 편집 허용"]
+  Options --> O2["📝 --no-commit<br/>변경 사항만 적용, 커밋은 직접 수행"]
+  Options --> O3["🔗 -x<br/>커밋 메시지에 원본 커밋 해시 추가"]
+  Options --> O4["📜 --signoff<br/>커밋에 Signed-off-by 줄 추가"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  class Options main
+  class O1,O2,O3,O4 proc
 ```
 
 ```bash

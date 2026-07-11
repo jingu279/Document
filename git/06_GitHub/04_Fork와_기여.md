@@ -15,18 +15,24 @@
 Fork는 다른 사람의 GitHub 저장소를 자신의 계정으로 복사하는 기능입니다. 오픈소스 프로젝트에 기여할 때 사용하는 표준 방식입니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   subgraph Upstream[원본 저장소 upstream]
-    U["github.com/facebook/react<br/>main: C1-C2-C3-C4-C5"]
+    U["github.com/facebook/react<br/>main: C1-C2-C3-C4-C5"]:::main
   end
 
   subgraph Origin[내 저장소 origin]
-    O["github.com/me/react<br/>main: C1-C2-C3-C4-C5"]
+    O["github.com/me/react<br/>main: C1-C2-C3-C4-C5"]:::sub
   end
 
   subgraph Local[내 컴퓨터 로컬 저장소]
-    L1["main: C1-C2-C3-C4-C5"]
-    L2["fix/typo: C6"]
+    L1["main: C1-C2-C3-C4-C5"]:::proc
+    L2["fix/typo: C6"]:::highlight
     L1 --> L2
   end
 
@@ -139,9 +145,15 @@ $ gh pr merge 12346 --squash   # Squash 병합
 기여자와 관리자 두 관점에서 오픈소스 기여 과정을 살펴보았습니다. 그렇다면 Fork를 사용하는 방식과 팀 내에서 브랜치를 직접 사용하는 방식은 어떤 차이가 있을까요?
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Fork["<b>Fork 전략</b><br/>적용 대상: 외부 기여자 (오픈소스)<br/>저장소 권한: Fork는 누구나 가능<br/>브랜치 위치: 기여자의 Fork에 생성<br/>PR 방식: cross-repo PR<br/>장점: 원본 보호, 자유로운 실험"]
-  Branch["<b>브랜치 전략</b><br/>적용 대상: 팀 내부 개발자<br/>저장소 권한: 저장소 쓰기 권한 필요<br/>브랜치 위치: 같은 저장소에 직접 생성<br/>PR 방식: same-repo PR<br/>장점: 간단한 워크플로우"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Fork["<b>Fork 전략</b><br/>적용 대상: 외부 기여자 (오픈소스)<br/>저장소 권한: Fork는 누구나 가능<br/>브랜치 위치: 기여자의 Fork에 생성<br/>PR 방식: cross-repo PR<br/>장점: 원본 보호, 자유로운 실험"]:::main
+  Branch["<b>브랜치 전략</b><br/>적용 대상: 팀 내부 개발자<br/>저장소 권한: 저장소 쓰기 권한 필요<br/>브랜치 위치: 같은 저장소에 직접 생성<br/>PR 방식: same-repo PR<br/>장점: 간단한 워크플로우"]:::sub
 ```
 
 ## 유명 오픈소스 프로젝트 Fork 해보기

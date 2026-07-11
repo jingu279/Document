@@ -17,27 +17,39 @@ GitHub Actions는 코드 푸시, PR 생성 등 특정 이벤트가 발생하면 
 **워크플로우 실행 흐름:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Dev["🧑 개발자 코드 푸시"] --> Event["⚡ Event 발생!<br/>(push / PR 생성 등)"]
-  Event --> Trigger["🚀 Workflow 트리거<br/>(ci.yml 파일 실행)"]
-  Trigger --> Runner["🖥️ Runner 서버<br/>ubuntu-latest"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Dev["🧑 개발자 코드 푸시"]:::proc --> Event["⚡ Event 발생!<br/>(push / PR 생성 등)"]:::proc
+  Event --> Trigger["🚀 Workflow 트리거<br/>(ci.yml 파일 실행)"]:::proc
+  Trigger --> Runner["🖥️ Runner 서버<br/>ubuntu-latest"]:::proc
 
   subgraph Job[Job: test]
     direction TB
-    S1["① actions/checkout@v4<br/>→ 내 코드를 Runner로 가져오기"]
-    S2["② actions/setup-node@v4<br/>→ Node.js 20 설치"]
-    S3["③ npm ci<br/>→ 의존성 설치"]
-    S4["④ npm test<br/>→ ✅ 테스트 실행"]
+    S1["① actions/checkout@v4<br/>→ 내 코드를 Runner로 가져오기"]:::sub
+    S2["② actions/setup-node@v4<br/>→ Node.js 20 설치"]:::sub
+    S3["③ npm ci<br/>→ 의존성 설치"]:::sub
+    S4["④ npm test<br/>→ ✅ 테스트 실행"]:::sub
 
     S1 --> S2 --> S3 --> S4
   end
 
   Runner --> S1
-  S4 --> Result["📊 GitHub Actions 탭<br/>✅ CI / test (ubuntu-latest)<br/>✓ actions/checkout@v4<br/>✓ actions/setup-node@v4<br/>✓ npm ci<br/>✓ npm test"]
+  S4 --> Result["📊 GitHub Actions 탭<br/>✅ CI / test (ubuntu-latest)<br/>✓ actions/checkout@v4<br/>✓ actions/setup-node@v4<br/>✓ npm ci<br/>✓ npm test"]:::main
 ```
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Terms["<b>GitHub Actions 용어</b><br/>📋 Workflow - 자동화 프로세스 전체 (.github/workflows/ YAML 파일)<br/>🔧 Job - 워크플로우 내의 작업 단위 (test, build, deploy)<br/>📝 Step - Job 내의 개별 명령어 또는 액션 실행<br/>⚙️ Action - 재사용 가능한 자동화 단위 (Marketplace)<br/>🖥️ Runner - 워크플로우를 실행하는 서버<br/>⚡ Event - 워크플로우를 트리거 (push, pull_request 등)"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Terms["<b>GitHub Actions 용어</b><br/>📋 Workflow - 자동화 프로세스 전체 (.github/workflows/ YAML 파일)<br/>🔧 Job - 워크플로우 내의 작업 단위 (test, build, deploy)<br/>📝 Step - Job 내의 개별 명령어 또는 액션 실행<br/>⚙️ Action - 재사용 가능한 자동화 단위 (Marketplace)<br/>🖥️ Runner - 워크플로우를 실행하는 서버<br/>⚡ Event - 워크플로우를 트리거 (push, pull_request 등)"]:::main
 ```
 
 ## 첫 번째 워크플로우 만들기

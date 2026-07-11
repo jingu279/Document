@@ -169,11 +169,18 @@ $ git restore --staged --worktree app.js
 ## 요약: `git restore` 사용법
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  R1["git restore &lt;파일&gt;"] --> D1["작업 디렉토리의 파일을 마지막 커밋 상태로 복원"]
-  R2["git restore --staged &lt;파일&gt;"] --> D2["스테이징 영역에서 파일 제거 Unstage"]
-  R3["git restore --source=&lt;커밋해시&gt; &lt;파일&gt;"] --> D3["특정 커밋 시점의 파일로 복원"]
-  R4["git restore --staged --worktree &lt;파일&gt;"] --> D4["스테이징과 작업 디렉토리 모두 복원"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  R1["🔄 git restore &lt;파일&gt;"]:::proc --> D1["📄 작업 디렉토리의 파일을 마지막 커밋 상태로 복원"]:::sub
+  R2["⬇️ git restore --staged &lt;파일&gt;"]:::decision --> D2["📋 스테이징 영역에서 파일 제거 Unstage"]:::highlight
+  R3["📌 git restore --source=&lt;커밋해시&gt; &lt;파일&gt;"]:::main --> D3["📂 특정 커밋 시점의 파일로 복원"]:::proc
+  R4["🔄 git restore --staged --worktree &lt;파일&gt;"]:::highlight --> D4["📦 스테이징과 작업 디렉토리 모두 복원"]:::main
 ```
 
 ## `git checkout` 팁

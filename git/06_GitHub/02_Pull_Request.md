@@ -15,10 +15,20 @@ Pull Request(PR)는 GitHub 기반 협업의 핵심입니다. 우리는 PR을 통
 PR이 어떻게 진행되는지 먼저 전체 흐름을 살펴보겠습니다. 아래 다이어그램은 개발자가 로컬에서 작업한 내용을 GitHub에 푸시하고, 팀이 리뷰한 후 최종적으로 병합되기까지의 과정을 보여줍니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 sequenceDiagram
+    classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+    classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+    classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
     participant Local as "개발자 로컬"
     participant GitHub as GitHub
     participant Team as "팀"
+
+    class Local proc
+    class GitHub proc
+    class Team proc
 
     Local->>GitHub: ① git push origin feature/login
     GitHub->>Team: ② Pull Request 생성 "리뷰해주세요!"
@@ -127,10 +137,16 @@ $ git push origin feature/login-form
 ### 리뷰 상태
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Comment["💬 Comment<br/>의견만 남김 (승인/거절 아님)"]
-  Approve["✅ Approve<br/>변경 승인, 병합 가능"]
-  RequestChanges["❌ Request Changes<br/>수정 필요, 재리뷰 필요"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Comment["💬 Comment<br/>의견만 남김 (승인/거절 아님)"]:::sub
+  Approve["✅ Approve<br/>변경 승인, 병합 가능"]:::sub
+  RequestChanges["❌ Request Changes<br/>수정 필요, 재리뷰 필요"]:::sub
 ```
 
 ## PR 병합하기
@@ -150,10 +166,16 @@ $ gh pr merge feature/login-form --merge
 ### 병합 옵션
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Merge["Create a merge commit<br/>모든 커밋 유지 + 병합 커밋 생성<br/>A━B━C━M"]
-  Squash["Squash and merge<br/>여러 커밋을 하나로 압축<br/>A━B━C━S (Squash)"]
-  Rebase["Rebase and merge<br/>커밋을 그대로 재배치 (fast-forward)<br/>A━B━C"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Merge["Create a merge commit<br/>모든 커밋 유지 + 병합 커밋 생성<br/>A━B━C━M"]:::proc
+  Squash["Squash and merge<br/>여러 커밋을 하나로 압축<br/>A━B━C━S (Squash)"]:::proc
+  Rebase["Rebase and merge<br/>커밋을 그대로 재배치 (fast-forward)<br/>A━B━C"]:::proc
 ```
 
 **Squash 예시:**

@@ -13,16 +13,23 @@ Gerrit에서 가장 중요한 개념 중 하나는 Change와 Patch Set입니다.
 **Change와 Patch Set의 관계:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph Change123["Change 123: 로그인 페이지 추가<br/>(같은 Change-ID 유지)"]
     direction TB
-    PS1["Patch Set 1<br/>(최초 제출)<br/>login.html (30줄)<br/>Status: Open<br/>리뷰: 0/2"]
-    PS2["Patch Set 2<br/>(스타일 추가)<br/>login.html (35줄)<br/>style.css (20줄)<br/>Status: Open<br/>리뷰: +1/2"]
-    PS3["Patch Set 3<br/>(리뷰 반영)<br/>login.html (38줄)<br/>style.css (25줄)<br/>README.md (5줄)<br/>Status: Merged ✅<br/>리뷰: +2/2"]
+    PS1["Patch Set 1<br/>(최초 제출)<br/>login.html (30줄)<br/>Status: Open<br/>리뷰: 0/2"]:::proc
+    PS2["Patch Set 2<br/>(스타일 추가)<br/>login.html (35줄)<br/>style.css (20줄)<br/>Status: Open<br/>리뷰: +1/2"]:::proc
+    PS3["Patch Set 3<br/>(리뷰 반영)<br/>login.html (38줄)<br/>style.css (25줄)<br/>README.md (5줄)<br/>Status: Merged ✅<br/>리뷰: +2/2"]:::sub
 
     PS1 --> PS2 --> PS3
   end
-  Explanation["💡 PS1→PS2: '스타일이 없습니다' 리뷰 반영<br/>💡 PS2→PS3: 'README도 업데이트해주세요' 리뷰 반영<br/>💡 각 PS 간의 diff를 Gerrit UI에서 볼 수 있음"]
+  Explanation["💡 PS1→PS2: '스타일이 없습니다' 리뷰 반영<br/>💡 PS2→PS3: 'README도 업데이트해주세요' 리뷰 반영<br/>💡 각 PS 간의 diff를 Gerrit UI에서 볼 수 있음"]:::highlight
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Change (변경)
@@ -69,11 +76,18 @@ $ git commit -m "내용"
 Change는 생성부터 병합 또는 포기까지 여러 상태를 거치게 됩니다. 아래 다이어그램에서 상태 전이를 확인해보겠습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  New["🆕 New<br/>새로 생성됨, 아직 리뷰 전"] --> Open["🔍 Open<br/>리뷰 진행 중"]
-  Open --> Merged["✅ Merged<br/>리뷰 완료, main에 병합"]
-  Open --> Abandoned["🗑️ Abandoned<br/>포기됨"]
-  New --> Draft["✏️ Draft<br/>비공개 초안"]
+  New["🆕 New<br/>새로 생성됨, 아직 리뷰 전"]:::main --> Open["🔍 Open<br/>리뷰 진행 중"]:::proc
+  Open --> Merged["✅ Merged<br/>리뷰 완료, main에 병합"]:::sub
+  Open --> Abandoned["🗑️ Abandoned<br/>포기됨"]:::decision
+  New --> Draft["✏️ Draft<br/>비공개 초안"]:::highlight
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Patch Set (패치 세트)

@@ -23,8 +23,14 @@ GitHub를 사용하기 위한 첫걸음은 계정을 생성하는 것입니다. 
 계정을 생성하였다면, 이제 GitHub가 제공하는 다양한 기능들을 살펴보겠습니다. GitHub는 단순한 코드 저장소를 넘어 개발 생명주기 전반을 관리할 수 있는 도구를 제공합니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Features["<b>GitHub 주요 기능</b><br/>📦 저장소 (Repository) - Git 저장소를 웹에서 호스팅<br/>🔄 Pull Request - 코드 변경 요청 및 리뷰 시스템<br/>🐛 Issues - 버그, 기능 요청, 할 일 추적<br/>📋 Projects - 칸반 보드 형태의 프로젝트 관리<br/>⚡ Actions - CI/CD 자동화 (빌드, 테스트, 배포)<br/>📖 Wiki - 프로젝트 문서화<br/>🌐 GitHub Pages - 정적 웹사이트 호스팅<br/>💬 Discussions - 팀 커뮤니케이션 포럼"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Features["<b>GitHub 주요 기능</b><br/>📦 저장소 (Repository) - Git 저장소를 웹에서 호스팅<br/>🔄 Pull Request - 코드 변경 요청 및 리뷰 시스템<br/>🐛 Issues - 버그, 기능 요청, 할 일 추적<br/>📋 Projects - 칸반 보드 형태의 프로젝트 관리<br/>⚡ Actions - CI/CD 자동화 (빌드, 테스트, 배포)<br/>📖 Wiki - 프로젝트 문서화<br/>🌐 GitHub Pages - 정적 웹사이트 호스팅<br/>💬 Discussions - 팀 커뮤니케이션 포럼"]:::main
 ```
 
 ## GitHub 저장소 만들기
@@ -79,10 +85,16 @@ Settings    → 저장소 설정 (브랜치 보호, 협업자 등)
 저장소의 각 기능에 대해 알아보았습니다. 다음으로 저장소의 공개 범위, 즉 가시성에 대해 알아보겠습니다. GitHub 저장소는 목적에 따라 공개 범위를 설정할 수 있습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Public["🌍 Public<br/>누구나 저장소를 볼 수 있음 (오픈소스)"]
-  Private["🔒 Private<br/>초대된 사람만 볼 수 있음"]
-  Internal["🏢 Internal (Enterprise)<br/>조직 내 모든 구성원이 볼 수 있음"]
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+  Public["🌍 Public<br/>누구나 저장소를 볼 수 있음 (오픈소스)"]:::sub
+  Private["🔒 Private<br/>초대된 사람만 볼 수 있음"]:::sub
+  Internal["🏢 Internal (Enterprise)<br/>조직 내 모든 구성원이 볼 수 있음"]:::sub
 ```
 
 ## README와 .gitignore

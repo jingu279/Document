@@ -47,6 +47,7 @@ $ git revert a1b2c3d --no-edit
 **브랜치 협업 개념도:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
    commit id: "C1"
    commit id: "C2"

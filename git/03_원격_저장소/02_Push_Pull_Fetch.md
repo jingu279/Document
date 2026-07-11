@@ -15,19 +15,30 @@
 **세 가지 명령어의 데이터 흐름:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  subgraph Remote[원격 저장소<br/>GitHub]
-    R[origin/main]
+  subgraph Remote[🌐 원격 저장소<br/>GitHub]
+    R[📦 origin/main]
   end
 
-  subgraph Local[로컬 저장소]
+  subgraph Local[💻 로컬 저장소]
     direction LR
-    OT[origin/main<br/>원격 추적 브랜치] -->|merge| M[main<br/>로컬 브랜치<br/>C1-C2-C3-C4-C5]
+    OT[🔍 origin/main<br/>원격 추적 브랜치] -->|🔀 merge| M[📁 main<br/>로컬 브랜치<br/>C1-C2-C3-C4-C5]
   end
 
-  Remote -->|"① git push<br/>로컬 → 원격 (업로드)"| R
-  Remote -->|"② git fetch<br/>원격 → 로컬 (확인만)"| OT
-  Remote -->|"③ git pull<br/>fetch + merge<br/>원격 → 로컬 (자동 병합)"| M
+  Remote -->|"① ⬆️ git push<br/>로컬 → 원격 (업로드)"| R
+  Remote -->|"② ⬇️ git fetch<br/>원격 → 로컬 (확인만)"| OT
+  Remote -->|"③ 🔄 git pull<br/>fetch + merge<br/>원격 → 로컬 (자동 병합)"| M
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  class R main
+  class M sub
+  class OT proc
 ```
 
 ## 1. Push (푸시) — 로컬 → 원격
@@ -112,9 +123,19 @@ git merge origin/main
 `git pull`과 `git fetch`는 모두 원격 저장소에서 데이터를 가져오지만, 그 이후의 동작에서 큰 차이가 있습니다. 이 차이를 정확히 이해하는 것이 중요합니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Pull["<b>git pull</b><br/>원격 변경 사항을 가져와서 자동으로 병합<br/>바로 작업을 이어나갈 수 있음<br/>⚠️ 편리하지만 예상치 못한 충돌이 발생할 수 있음"]
-  Fetch["<b>git fetch</b><br/>원격 변경 사항을 가져오기만 함<br/>변경 사항을 검토한 후 수동으로 병합해야 함<br/>✅ 더 안전하게 변경 사항을 관리할 수 있음"]
+  Pull["<b>🔽 git pull</b><br/>원격 변경 사항을 가져와서 자동으로 병합<br/>바로 작업을 이어나갈 수 있음<br/>⚠️ 편리하지만 예상치 못한 충돌이 발생할 수 있음"]
+  Fetch["<b>🔼 git fetch</b><br/>원격 변경 사항을 가져오기만 함<br/>변경 사항을 검토한 후 수동으로 병합해야 함<br/>✅ 더 안전하게 변경 사항을 관리할 수 있음"]
+
+  classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+  classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
+
+  class Pull decision
+  class Fetch highlight
 ```
 
 > **팁:** 초보자에게는 단순히 `git pull`을 사용하는 것이 편리합니다. 하지만 변경 사항을 먼저 검토하고 싶다면 `git fetch`를 사용하는 습관을 들이는 것이 좋습니다.

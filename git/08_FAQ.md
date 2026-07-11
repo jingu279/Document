@@ -97,10 +97,17 @@ $ git switch -c new-branch
 ### Q: `reset`, `revert`, `restore`의 차이는 무엇인가요?
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Reset["<b>git reset</b><br/>용도: 커밋 자체를 되돌림 (삭제)<br/>히스토리: 수정됨 (과거를 없었던 일로)"]
-  Revert["<b>git revert</b><br/>용도: 커밋의 변경을 취소하는 새 커밋 생성<br/>히스토리: 보존됨"]
-  Restore["<b>git restore</b><br/>용도: 파일을 특정 시점으로 복원<br/>히스토리: 영향 없음"]
+  Reset["🔄 <b>git reset</b><br/>용도: 커밋 자체를 되돌림 (삭제)<br/>히스토리: 수정됨 (과거를 없었던 일로)"]:::main
+  Revert["⏪ <b>git revert</b><br/>용도: 커밋의 변경을 취소하는 새 커밋 생성<br/>히스토리: 보존됨"]:::main
+  Restore["💾 <b>git restore</b><br/>용도: 파일을 특정 시점으로 복원<br/>히스토리: 영향 없음"]:::main
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ### Q: `git stash`는 언제 사용하나요?
@@ -716,32 +723,33 @@ $ git config --global pull.rebase true
 Git Flow는 main, develop, release, hotfix, feature의 5가지 브랜치를 사용하는 워크플로우입니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 gitGraph
-   commit id: "v1.0"
+   commit id: "🏷️ v1.0"
    branch develop
    checkout develop
-   commit id: "d1"
+   commit id: "🔄 d1"
    branch feature
    checkout feature
-   commit id: "f1"
-   commit id: "f2"
+   commit id: "✨ f1"
+   commit id: "✨ f2"
    checkout develop
    merge feature
-   commit id: "d2"
+   commit id: "🔄 d2"
    branch release
    checkout release
-   commit id: "r1"
+   commit id: "📦 r1"
    checkout main
    merge release
    branch hotfix
    checkout hotfix
-   commit id: "h1"
+   commit id: "🐛 h1"
    checkout main
    merge hotfix
-   commit id: "v1.1"
+   commit id: "🏷️ v1.1"
    checkout develop
    merge hotfix
-   commit id: "d3"
+   commit id: "🔄 d3"
 ```
 
 주로 정기 릴리스가 있는 제품 개발에 적합합니다. 단순한 프로젝트에는 GitHub Flow가 더 적합합니다.

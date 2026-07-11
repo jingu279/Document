@@ -15,9 +15,16 @@
 Gerrit는 GitHub와 유사하게 코드 리뷰 기능을 제공하지만, 몇 가지 중요한 차이점이 있습니다. 아래 다이어그램에서 두 시스템의 특징을 비교해보겠습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Gerrit["<b>Gerrit</b><br/>리뷰 방식: 모든 변경이 리뷰 필수<br/>병합 방식: 리뷰어 승인 후 버튼 클릭<br/>Push 방식: refs/for/&lt;branch&gt;<br/>변경 이력: Patch Set 관리<br/>대상: 대규모 팀, 엄격한 리뷰<br/>설치: 자체 호스팅 필요"]
-  GitHub["<b>GitHub</b><br/>리뷰 방식: PR 선택적 사용<br/>병합 방식: PR 머지 버튼<br/>Push 방식: 일반 push + PR<br/>변경 이력: 일반 커밋 히스토리<br/>대상: 모든 규모의 팀<br/>설치: SaaS (클라우드)"]
+  Gerrit["<b>Gerrit</b><br/>리뷰 방식: 모든 변경이 리뷰 필수<br/>병합 방식: 리뷰어 승인 후 버튼 클릭<br/>Push 방식: refs/for/&lt;branch&gt;<br/>변경 이력: Patch Set 관리<br/>대상: 대규모 팀, 엄격한 리뷰<br/>설치: 자체 호스팅 필요"]:::main
+  GitHub["<b>GitHub</b><br/>리뷰 방식: PR 선택적 사용<br/>병합 방식: PR 머지 버튼<br/>Push 방식: 일반 push + PR<br/>변경 이력: 일반 커밋 히스토리<br/>대상: 모든 규모의 팀<br/>설치: SaaS (클라우드)"]:::main
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Gerrit 워크플로우 개념
@@ -27,21 +34,28 @@ flowchart LR
 **Gerrit 전체 아키텍처와 데이터 흐름:**
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
   subgraph GerritServer[Gerrit 서버]
-    Pending["📋 리뷰 대기열<br/>Change 123: 로그인 (PS2) [+2 CR]<br/>Change 124: 결제 (PS1) [-1 V]<br/>Change 125: 문서 (PS3) [NEW]"]
-    MainBranch["🌿 main 브랜치<br/>C1-C2-C3-C4 (Submit된 변경들)"]
+    Pending["📋 리뷰 대기열<br/>Change 123: 로그인 (PS2) [+2 CR]<br/>Change 124: 결제 (PS1) [-1 V]<br/>Change 125: 문서 (PS3) [NEW]"]:::proc
+    MainBranch["🌿 main 브랜치<br/>C1-C2-C3-C4 (Submit된 변경들)"]:::sub
     Pending -->|"리뷰어 승인 → Submit"| MainBranch
   end
 
   subgraph Developer[개발자 로컬 저장소]
-    DevBranch["🌿 feature/login<br/>C1-C2 (Change-Id: I123...)"]
-    Push["📤 git push origin HEAD:refs/for/main"]
+    DevBranch["🌿 feature/login<br/>C1-C2 (Change-Id: I123...)"]:::proc
+    Push["📤 git push origin HEAD:refs/for/main"]:::highlight
     DevBranch --> Push
   end
 
   Push --> Pending
   MainBranch -->|"git fetch / clone"| Developer
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Gerrit 주요 용어
@@ -49,8 +63,15 @@ flowchart TB
 Gerrit를 처음 접하면 생소한 용어들이 많습니다. 아래 다이어그램에서 Gerrit의 주요 용어를 한눈에 정리하였습니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
-  Terms["<b>Gerrit 주요 용어</b><br/>📦 Change - 하나의 PR 단위 (커밋 하나당 하나의 Change)<br/>🆔 Change-ID - 고유 ID (커밋 메시지에 포함)<br/>📋 Patch Set - Change의 버전 (PS1, PS2, ...)<br/>👤 Reviewer - 코드 리뷰를 수행하는 사람<br/>✅ Submit - 리뷰 완료 후 변경을 병합<br/>✅ Verified - CI/테스트 통과 확인<br/>👍 Code-Review - 코드 리뷰 승인<br/>🏷️ Label - 리뷰 점수 (-2, -1, 0, +1, +2)"]
+  Terms["<b>Gerrit 주요 용어</b><br/>📦 Change - 하나의 PR 단위 (커밋 하나당 하나의 Change)<br/>🆔 Change-ID - 고유 ID (커밋 메시지에 포함)<br/>📋 Patch Set - Change의 버전 (PS1, PS2, ...)<br/>👤 Reviewer - 코드 리뷰를 수행하는 사람<br/>✅ Submit - 리뷰 완료 후 변경을 병합<br/>✅ Verified - CI/테스트 통과 확인<br/>👍 Code-Review - 코드 리뷰 승인<br/>🏷️ Label - 리뷰 점수 (-2, -1, 0, +1, +2)"]:::main
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Gerrit 기본 사용 흐름
@@ -153,9 +174,16 @@ Submit 버튼 클릭 → main 브랜치에 병합!
 Gerrit의 라벨 시스템은 엄격한 리뷰 프로세스를 가능하게 합니다. 각 라벨의 의미를 정확히 이해하는 것이 중요합니다.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
-  Verified["<b>Verified</b><br/>-1: CI/테스트 실패<br/>+1: CI/테스트 통과<br/>+2: 추가 검증 완료 (선택 사항)"]
-  CodeReview["<b>Code-Review</b><br/>-2: 강력 반대 (병합 불가)<br/>-1: 의견: 수정 권장<br/>0: 아직 리뷰 안 함<br/>+1: 의견: 괜찮음<br/>+2: 승인 (병합 가능)"]
+  Verified["<b>Verified</b><br/>-1: CI/테스트 실패<br/>+1: CI/테스트 통과<br/>+2: 추가 검증 완료 (선택 사항)"]:::proc
+  CodeReview["<b>Code-Review</b><br/>-2: 강력 반대 (병합 불가)<br/>-1: 의견: 수정 권장<br/>0: 아직 리뷰 안 함<br/>+1: 의견: 괜찮음<br/>+2: 승인 (병합 가능)"]:::proc
+
+classDef main fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
+classDef sub fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef proc fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
+classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
 ## Gerrit 명령어 모음
