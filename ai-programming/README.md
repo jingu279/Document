@@ -44,8 +44,6 @@ flowchart LR
     Ch03["03장: 수학 기초"]
     Ch04["04장: Python 데이터 과학"]
   end
-  P1_Out["→"]
-  P2_In["←"]
   subgraph Part2[PART 2: 머신러닝]
     direction TB
     Ch05["05장: 머신러닝 개념"]
@@ -53,8 +51,6 @@ flowchart LR
     Ch07["07장: 비지도 학습"]
     Ch08["08장: 모델 평가와 최적화"]
   end
-  P2_Out["→"]
-  P3_In["←"]
   subgraph Part3[PART 3: 딥러닝과 응용]
     direction TB
     Ch09["09장: 신경망 기초"]
@@ -63,22 +59,12 @@ flowchart LR
     Ch12["12장: 생성형 AI와 LLM"]
     Ch13["13장: AI Agent, MCP, Harness"]
   end
-  P3_Out["→"]
-  P4_In["←"]
   subgraph Part4[PART 4: 실무 프로젝트]
     direction TB
     Ch14["14장: AI 개발 워크플로우"]
     Ch15["15장: 실전 프로젝트"]
     Ch16["16장: AI 윤리와 미래"]
   end
-
-  Ch01 --> Ch02 --> Ch03 --> Ch04 --> P1_Out
-  P2_In --> Ch05 --> Ch06 --> Ch07 --> Ch08 --> P2_Out
-  P3_In --> Ch09 --> Ch10 --> Ch11 --> Ch12 --> Ch13 --> P3_Out
-  P4_In --> Ch14 --> Ch15 --> Ch16
-  P1_Out --> P2_In
-  P2_Out --> P3_In
-  P3_Out --> P4_In
 
   classDef p1 fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   classDef p2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
