@@ -1,6 +1,66 @@
 # Change와 Patch Set 이해하기
 
-Gerrit에서 가장 중요한 개념 중 하나는 Change와 Patch Set입니다. 이 두 개념을 올바르게 이해해야 Gerrit 워크플로우를 효과적으로 활용할 수 있습니다. 우리는 이 장에서 Change와 Patch Set의 관계와 생명주기, 그리고 여러 커밋을 다루는 방법까지 상세히 알아보겠습니다. 이 개념을 숙지하면 리뷰 과정에서 발생하는 다양한 상황에 유연하게 대처할 수 있습니다.
+Gerrit에서 가장 중요한 개념 중 하나는 Change와 Patch Set입니다. 이 두 개념을 올바르게 이해해야 Gerrit 워크플로우를 효과적으로 활용할 수 있습니다. 많은 초보자들이 Change와 Patch Set의 차이를 혼동하곤 하는데, Change는 논리적인 작업 단위이고 Patch Set은 그 작업의 버전을 의미합니다. 우리는 이 장에서 Change와 Patch Set의 관계와 생명주기, 그리고 여러 커밋을 다루는 방법까지 상세히 알아보겠습니다. 이 개념을 숙지하면 리뷰 과정에서 발생하는 다양한 상황에 유연하게 대처할 수 있습니다.
+
+
+## 👨‍💻 실전 프로젝트: Change와 Patch Set 관리하기
+
+이번 실전 프로젝트에서는 Change와 Patch Set의 개념을 직접 실습을 통해 익혀보겠습니다. 여러분은 하나의 Change를 생성한 후, 리뷰어의 피드백을 받아 여러 번 수정하면서 여러 개의 Patch Set을 만들어보게 됩니다. `git commit --amend` 명령어를 사용하여 동일한 Change-ID를 유지하면서 새로운 Patch Set을 push하는 과정을 체험할 수 있습니다.
+
+```bash
+# 1. 초기 Change 생성 (Patch Set 1)
+$ git clone ssh://username@gerrit.example.com:29418/my-project
+$ cd my-project
+$ scp -p -P 29418 username@gerrit.example.com:hooks/commit-msg .git/hooks/
+$ chmod +x .git/hooks/commit-msg
+$ git switch -c feature/payment
+
+# 결제 모듈 기본 코드 작성
+$ cat > payment.py << 'EOF'
+def process_payment(amount):
+    print(f"Processing {amount}")
+EOF
+
+$ git add payment.py
+$ git commit -m "결제 처리 모듈 추가
+
+기본 결제 처리 함수를 구현하였습니다.
+
+Change-Id: I1111222233334444555566667777888899990000"
+$ git push origin HEAD:refs/for/main
+# → Change 125 생성, Patch Set 1
+
+# 2. 리뷰 피드백 반영 (Patch Set 2)
+# 리뷰어: "금액 검증 로직이 필요합니다"
+$ cat >> payment.py << 'EOF'
+def validate_amount(amount):
+    if amount <= 0:
+        raise ValueError("Invalid amount")
+    return True
+EOF
+$ git add payment.py
+$ git commit --amend --no-edit
+# 동일한 Change-ID 유지됨
+$ git push origin HEAD:refs/for/main
+# → Change 125, Patch Set 2 생성
+
+# 3. 추가 피드백 반영 (Patch Set 3)
+# 리뷰어: "로그 기록 기능을 추가해주세요"
+$ cat >> payment.py << 'EOF'
+import logging
+logger = logging.getLogger(__name__)
+EOF
+$ git add payment.py
+$ git commit --amend -m "결제 처리 모듈 추가
+
+금액 검증 및 로깅 기능을 포함합니다.
+
+Change-Id: I1111222233334444555566667777888899990000"
+$ git push origin HEAD:refs/for/main
+# → Change 125, Patch Set 3 생성
+```
+
+Gerrit 웹 UI에서 Change 125를 열어보면 Patch Set 1, 2, 3이 모두 보존되어 있음을 확인할 수 있습니다. 각 Patch Set 간의 차이(diff)를 선택적으로 확인할 수 있어, 리뷰어는 변경된 부분만 집중적으로 검토할 수 있습니다.
 
 
 ## 학습 목표
@@ -34,11 +94,11 @@ classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 
 ## Change (변경)
 
-Change는 하나의 논리적인 작업 단위입니다. GitHub의 Pull Request와 유사하지만, Gerrit에서는 하나의 **커밋**이 하나의 Change가 된다는 차이점이 있습니다.
+실전 프로젝트를 통해 Change와 Patch Set의 동작을 직접 확인해보았습니다. 이제 각 개념을 더 깊이 있게 이해해보겠습니다. Change는 하나의 논리적인 작업 단위입니다. GitHub의 Pull Request와 유사하지만, Gerrit에서는 하나의 **커밋**이 하나의 Change가 된다는 차이점이 있습니다.
 
 ### Change의 구성 요소
 
-Change는 다양한 메타데이터로 구성됩니다. 아래 예시를 통해 각 구성 요소를 살펴보겠습니다.
+Change는 다양한 메타데이터로 구성됩니다. 아래 예시를 통해 각 구성 요소를 살펴보겠습니다. 이러한 메타데이터는 Gerrit 웹 UI에서 자동으로 표시되며, Change의 현재 상태를 한눈에 파악할 수 있게 해줍니다.
 
 ```
 Change 12345
@@ -60,7 +120,7 @@ Change 12345
 
 ### Change-ID
 
-Change-ID는 Change를 식별하는 고유 값입니다. 커밋 메시지에 포함되며, `git commit --amend`로 수정해도 같은 Change-ID를 유지하면 동일한 Change의 새 Patch Set이 됩니다. Change-ID가 없다면 Gerrit는 매번 새로운 Change로 인식합니다.
+Change-ID는 Change를 식별하는 고유 값입니다. 커밋 메시지에 포함되며, `git commit --amend`로 수정해도 같은 Change-ID를 유지하면 동일한 Change의 새 Patch Set이 됩니다. Change-ID가 없다면 Gerrit는 매번 새로운 Change로 인식합니다. 따라서 Change-ID는 Gerrit에서 가장 중요한 식별자라고 할 수 있습니다.
 
 ```bash
 # Change-ID의 형식
@@ -71,9 +131,11 @@ $ git commit -m "내용"
 # → 자동으로 Change-Id 추가됨
 ```
 
+Change-ID의 또 다른 중요한 특징은 Git 커밋의 SHA-1 해시와 달리 변경意图(의도)를 식별한다는 점입니다. 즉, 같은 기능을 구현한 커밋이라면 여러 번 수정하더라도 동일한 Change-ID를 유지함으로써 하나의 Change로 관리됩니다.
+
 ### Change 상태
 
-Change는 생성부터 병합 또는 포기까지 여러 상태를 거치게 됩니다. 아래 다이어그램에서 상태 전이를 확인해보겠습니다.
+Change는 생성부터 병합 또는 포기까지 여러 상태를 거치게 됩니다. 각 상태는 Change의 현재 진행 단계를 나타내며, 리뷰어와 개발자가 현재 무엇을 해야 하는지 명확히 알려줍니다. 아래 다이어그램에서 상태 전이를 확인해보겠습니다.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
@@ -92,9 +154,7 @@ classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 
 ## Patch Set (패치 세트)
 
-지금까지 Change의 개념과 구성 요소에 대해 배웠습니다. 이제 Change의 버전을 나타내는 Patch Set에 대해 알아보겠습니다.
-
-Patch Set은 Change의 버전입니다. 첫 push는 PS1, 수정 후 다시 push하면 PS2가 됩니다.
+지금까지 Change의 개념과 구성 요소에 대해 배웠습니다. 이제 Change의 버전을 나타내는 Patch Set에 대해 알아보겠습니다. Patch Set은 Change의 버전입니다. 첫 push는 PS1, 수정 후 다시 push하면 PS2가 됩니다. 각 Patch Set은 독립적인 코드 스냅샷으로, Gerrit은 이들 간의 차이를 자동으로 계산하여 리뷰어가 변경된 부분만 효율적으로 검토할 수 있게 해줍니다.
 
 ### Patch Set 생명주기
 
@@ -125,7 +185,7 @@ $ git push origin HEAD:refs/for/main
 
 ### Patch Set 간 차이 보기
 
-Gerrit 웹 UI에서 각 Patch Set 간의 차이를 확인할 수 있습니다. 이를 통해 리뷰어는 변경된 부분만 집중적으로 검토할 수 있습니다.
+Gerrit 웹 UI에서 각 Patch Set 간의 차이를 확인할 수 있습니다. 이를 통해 리뷰어는 변경된 부분만 집중적으로 검토할 수 있습니다. 특히 "Diff against" 기능을 사용하면 특정 Patch Set을 기준으로 변경된 내용만 선택적으로 확인할 수 있어 효율적인 리뷰가 가능합니다.
 
 ```
 Gerrit UI:
@@ -149,9 +209,9 @@ Gerrit UI:
 
 ## 여러 커밋 다루기
 
-지금까지 단일 Change의 Patch Set 관리에 대해 배웠습니다. 다음으로 여러 커밋을 Gerrit에서 어떻게 다루는지 알아보겠습니다.
+지금까지 단일 Change의 Patch Set 관리에 대해 배웠습니다. 다음으로 여러 커밋을 Gerrit에서 어떻게 다루는지 알아보겠습니다. 실제 개발에서는 하나의 기능을 구현하기 위해 여러 개의 커밋을 만들게 되는 경우가 많습니다.
 
-Gerrit은 기본적으로 **커밋 하나 = Change 하나**입니다. 여러 커밋을 푸시하면 각각 별도의 Change가 생성됩니다.
+Gerrit은 기본적으로 **커밋 하나 = Change 하나**입니다. 여러 커밋을 푸시하면 각각 별도의 Change가 생성됩니다. 이는 각 변경 사항을 독립적으로 리뷰하고 승인할 수 있다는 장점이 있습니다.
 
 ```bash
 # 여러 커밋 푸시
@@ -169,7 +229,7 @@ $ git push origin HEAD:refs/for/main
 
 ### 의존 관계 (Dependency)
 
-순서대로 적용되어야 하는 변경은 의존 관계가 생깁니다. 의존 관계가 있는 Change는 선행 Change가 먼저 승인되어야 합니다.
+순서대로 적용되어야 하는 변경은 의존 관계가 생깁니다. 의존 관계가 있는 Change는 선행 Change가 먼저 승인되어야 합니다. Gerrit은 이러한 의존 관계를 자동으로 감지하고 UI에 표시해줍니다.
 
 ```
 Change 124: 문서 업데이트 (의존성 없음)
@@ -188,7 +248,7 @@ Change 125
 
 ## Patch Set 관리 팁
 
-효과적인 Patch Set 관리를 위한 몇 가지 실용적인 팁을 소개합니다.
+여러 커밋과 의존 관계를 이해했다면, 이제 효과적인 Patch Set 관리를 위한 몇 가지 실용적인 팁을 소개합니다. 이 팁들을 실무에 적용하면 더 효율적으로 Gerrit을 활용할 수 있습니다.
 
 ### 1. 작은 단위로 유지
 
@@ -244,6 +304,8 @@ $ git push origin HEAD:refs/for/main%ready
 
 ## 한눈에 정리
 
+지금까지 배운 Change와 Patch Set의 핵심 개념을 한눈에 정리하면 다음과 같습니다. 이 표를 참고하면 각 개념의 정의와 관계를 빠르게 복습할 수 있습니다.
+
 | 개념 | 설명 |
 |------|------|
 | Change | 하나의 논리적 작업 단위, GitHub의 PR과 유사 |
@@ -255,6 +317,8 @@ $ git push origin HEAD:refs/for/main%ready
 | 커밋 = Change | Gerrit에서 각 커밋은 독립적인 Change로 생성됨 |
 
 ## 연습 문제
+
+지금까지 배운 내용을 바탕으로 다음 연습 문제를 풀어보면서 자신의 이해도를 점검해보시기 바랍니다. 각 문제는 실제 Gerrit 사용 시 마주칠 수 있는 Patch Set 관리 상황을 반영하였습니다.
 
 1. Gerrit에서 Change와 Patch Set의 차이점을 설명하고, Change-ID가 동일할 때와 다를 때 각각 어떤 동작이 발생하는지 서술하시오.
 

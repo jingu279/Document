@@ -1,6 +1,50 @@
 # Gerrit 소개
 
-소프트웨어 개발에서 코드의 품질을 보장하는 것은 팀의 생산성과 유지보수성에 직결되는 중요한 과제입니다. 우리는 이 장에서 Git 기반의 대표적인 코드 리뷰 시스템인 **Gerrit**에 대해 알아보겠습니다. Gerrit는 모든 변경이 리뷰를 거쳐야만 저장소에 반영되는 엄격한 워크플로우를 제공하며, 안드로이드(Android)나 크롬(Chrome)과 같은 대규모 프로젝트에서 널리 사용되고 있습니다. 이 장을 통해 Gerrit의 핵심 개념과 워크플로우를 이해하고, 실제 협업 환경에서 효과적으로 활용하는 방법을 익힐 수 있습니다.
+소프트웨어 개발에서 코드의 품질을 보장하는 것은 팀의 생산성과 유지보수성에 직결되는 중요한 과제입니다. 코드 리뷰 없이 변경 사항이 저장소에 직접 반영되면 예상치 못한 버그가 발생하거나 코드 일관성이 무너지기 쉽습니다. 이러한 문제를 해결하기 위해 많은 팀이 체계적인 코드 리뷰 시스템을 도입하고 있으며, 그중에서도 Git 기반의 대표적인 코드 리뷰 시스템이 바로 **Gerrit**입니다. Gerrit는 모든 변경이 리뷰를 거쳐야만 저장소에 반영되는 엄격한 워크플로우를 제공하며, 안드로이드(Android)나 크롬(Chrome)과 같은 대규모 프로젝트에서 널리 사용되고 있습니다. 이 장을 통해 Gerrit의 핵심 개념과 워크플로우를 이해하고, 실제 협업 환경에서 효과적으로 활용하는 방법을 익힐 수 있습니다.
+
+
+## 👨‍💻 실전 프로젝트: Gerrit 코드 리뷰 첫 경험
+
+이번 실전 프로젝트에서는 Gerrit의 전체 워크플로우를 직접 체험해보겠습니다. 여러분은 개발자로서 로그인 페이지를 구현하고 이를 Gerrit에 push하여 코드 리뷰를 요청하게 됩니다. 이후 Gerrit 웹 UI에서 자신의 Change가 어떻게 등록되는지 확인하고, 리뷰어가 남긴 피드백을 반영하는 과정까지 경험할 수 있습니다. 이 프로젝트를 마치면 Gerrit을 사용한 협업 개발의 기본기를 확실히 익힐 수 있을 것입니다.
+
+실습을 위해 먼저 Gerrit 서버가 준비되어 있다고 가정하겠습니다. 만약 테스트용 Gerrit 서버가 필요하다면 Docker를 사용하여 로컬에 간단히 설치할 수 있습니다.
+
+```bash
+# Docker로 Gerrit 테스트 서버 실행 (선택 사항)
+$ docker run -d -p 8080:8080 -p 29418:29418 gerritcodereview/gerrit
+```
+
+이제 본격적인 실습을 시작해보겠습니다. 아래 명령어를 순서대로 실행하면서 Gerrit의 동작 방식을 몸으로 익혀보시기 바랍니다.
+
+```bash
+# 1. 저장소 클론 및 hook 설치
+$ git clone ssh://username@gerrit.example.com:29418/my-project
+$ cd my-project
+$ scp -p -P 29418 username@gerrit.example.com:hooks/commit-msg .git/hooks/
+$ chmod +x .git/hooks/commit-msg
+
+# 2. 기능 브랜치에서 작업
+$ git switch -c feature/login
+$ echo "<h1>로그인 페이지</h1>" > login.html
+$ git add login.html
+$ git commit -m "로그인 페이지 추가
+
+로그인 폼 기본 HTML 구조를 추가하였습니다.
+
+Change-Id: I1234567890abcdef1234567890abcdef12345678"
+
+# 3. Gerrit에 push하여 리뷰 요청
+$ git push origin HEAD:refs/for/main
+
+# 출력 예시:
+# remote: Uploading patch set 1 for change 123
+# remote: https://gerrit.example.com/c/my-project/+/123
+
+# 4. Gerrit 웹 UI에서 확인
+# 브라우저에서 https://gerrit.example.com/c/my-project/+/123 접속
+```
+
+push가 성공하면 Gerrit 웹 UI에서 새로운 Change가 생성된 것을 확인할 수 있습니다. Change 화면에는 Patch Set 1이 등록되어 있고, 아직 리뷰어가 지정되지 않은 상태로 표시됩니다. 이제 리뷰어가 해당 Change를 검토하고 코멘트를 남길 때까지 기다리면 됩니다.
 
 
 ## 학습 목표
@@ -12,7 +56,7 @@
 
 ## Gerrit vs GitHub
 
-Gerrit는 GitHub와 유사하게 코드 리뷰 기능을 제공하지만, 몇 가지 중요한 차이점이 있습니다. 아래 다이어그램에서 두 시스템의 특징을 비교해보겠습니다.
+Gerrit는 GitHub와 유사하게 코드 리뷰 기능을 제공하지만, 몇 가지 중요한 차이점이 있습니다. 가장 큰 차이는 Gerrit가 모든 변경에 대해 리뷰를 필수로 요구하는 반면, GitHub는 Pull Request(PR)를 선택적으로 사용할 수 있다는 점입니다. 또한 Gerrit는 `refs/for/<branch>`라는 특수한 참조를 사용하여 변경 사항을 푸시하며, Patch Set 시스템을 통해 변경의 각 버전을 체계적으로 관리합니다. 아래 다이어그램에서 두 시스템의 특징을 비교해보겠습니다.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
@@ -27,9 +71,11 @@ classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
 classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
+이러한 차이점을 이해하면 프로젝트의 성격과 팀의 규모에 따라 적합한 코드 리뷰 시스템을 선택할 수 있습니다. 예를 들어 안드로이드와 같이 수백 명의 개발자가 참여하는 대규모 프로젝트에서는 Gerrit의 엄격한 통제 방식이 효과적입니다. 반면 스타트업이나 소규모 팀에서는 GitHub의 유연한 PR 방식이 더 생산적일 수 있습니다.
+
 ## Gerrit 워크플로우 개념
 
-이제 Gerrit의 전체 아키텍처와 데이터 흐름을 살펴보겠습니다. 아래 다이어그램은 개발자 로컬 저장소와 Gerrit 서버 간의 관계를 보여줍니다.
+앞서 Gerrit와 GitHub의 차이점을 살펴보았습니다. 이제 Gerrit의 전체 아키텍처와 데이터 흐름을 살펴보겠습니다. Gerrit의 워크플로우는 크게 세 주체, 즉 개발자의 로컬 저장소, Gerrit 서버, 그리고 리뷰어 간의 상호작용으로 이루어집니다. 개발자가 로컬에서 작업한 내용을 Gerrit 서버에 push하면, 해당 변경은 리뷰 대기열에 등록되어 리뷰어의 승인을 기다리게 됩니다. 아래 다이어그램은 개발자 로컬 저장소와 Gerrit 서버 간의 관계를 보여줍니다.
 
 **Gerrit 전체 아키텍처와 데이터 흐름:**
 
@@ -58,9 +104,11 @@ classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
 classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
+이 다이어그램에서 중요한 점은 일반적인 `git push origin main`이 아닌 `git push origin HEAD:refs/for/main`을 사용한다는 것입니다. 이 특수한 push 방식 덕분에 변경 사항이 main 브랜치에 직접 반영되지 않고 리뷰 대기열에 안전하게 등록됩니다. 리뷰어가 승인하고 Submit 버튼을 클릭해야만 비로소 변경 사항이 main 브랜치에 병합됩니다.
+
 ## Gerrit 주요 용어
 
-Gerrit를 처음 접하면 생소한 용어들이 많습니다. 아래 다이어그램에서 Gerrit의 주요 용어를 한눈에 정리하였습니다.
+Gerrit의 워크플로우 개념을 이해했다면, 이제 Gerrit에서 사용하는 주요 용어들을 숙지할 차례입니다. Gerrit를 처음 접하면 생소한 용어들이 많기 때문에, 각 용어의 의미를 정확히 이해하는 것이 중요합니다. 아래 다이어그램에서 Gerrit의 주요 용어를 한눈에 정리하였습니다.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
@@ -74,13 +122,15 @@ classDef decision fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#e65100
 classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 ```
 
+이 용어들 중에서도 특히 **Change**와 **Patch Set**의 개념을 확실히 구분하는 것이 중요합니다. Change는 하나의 논리적인 작업 단위를 의미하며, Patch Set은 해당 Change의 버전을 나타냅니다. 예를 들어 "로그인 페이지 추가"라는 Change가 있을 때, 첫 번째 제출은 Patch Set 1, 리뷰 피드백을 반영한 수정본은 Patch Set 2가 되는 식입니다.
+
 ## Gerrit 기본 사용 흐름
 
-지금까지 Gerrit의 개념과 용어에 대해 배웠습니다. 이제 실제로 Gerrit를 사용하는 기본 흐름을 단계별로 알아보겠습니다.
+지금까지 Gerrit의 개념과 용어에 대해 배웠습니다. 이제 실제로 Gerrit를 사용하는 기본 흐름을 단계별로 알아보겠습니다. 이 흐름을 이해하면 Gerrit을 사용하는 모든 프로젝트에서 일관된 방식으로 협업할 수 있습니다. 각 단계는 실제 개발 현장에서 발생하는 상황을 기준으로 구성하였습니다.
 
 ### 1. Clone 및 설정
 
-가장 먼저 원격 저장소를 클론하고 Commit-msg hook을 설치해야 합니다. 이 hook은 커밋 메시지에 Change-ID를 자동으로 생성해주는 중요한 도구입니다.
+가장 먼저 원격 저장소를 클론하고 Commit-msg hook을 설치해야 합니다. 이 hook은 커밋 메시지에 Change-ID를 자동으로 생성해주는 중요한 도구입니다. Change-ID가 없으면 Gerrit에 push할 때 거부되므로, 반드시 설치해야 합니다.
 
 ```bash
 # 저장소 클론
@@ -97,7 +147,7 @@ $ chmod +x .git/hooks/commit-msg
 
 ### 2. 변경 사항 Push
 
-다음으로 기능 브랜치에서 작업한 후 커밋을 생성합니다. Commit-msg hook이 자동으로 Change-ID를 추가해줍니다.
+Clone과 hook 설치가 완료되었다면, 이제 실제 코드를 작성하고 Gerrit에 push하는 단계로 넘어갑니다. 다음으로 기능 브랜치에서 작업한 후 커밋을 생성합니다. Commit-msg hook이 자동으로 Change-ID를 추가해줍니다.
 
 ```bash
 # feature 브랜치에서 작업
@@ -117,7 +167,7 @@ Change-Id: I1234567890abcdef1234567890abcdef12345678"
 
 ### 3. 리뷰를 위해 Push
 
-일반적인 push와 달리 Gerrit는 `refs/for/main`으로 push해야 합니다. 이렇게 하면 변경 사항이 main 브랜치에 직접 반영되지 않고 리뷰 대기열에 등록됩니다.
+커밋을 생성한 후에는 Gerrit에 push하여 리뷰를 요청해야 합니다. 일반적인 push와 달리 Gerrit는 `refs/for/main`으로 push해야 합니다. 이렇게 하면 변경 사항이 main 브랜치에 직접 반영되지 않고 리뷰 대기열에 등록됩니다.
 
 ```bash
 # 일반 push가 아니라 refs/for/main 으로 push
@@ -130,7 +180,7 @@ $ git push origin HEAD:refs/for/main
 
 ### 4. 리뷰 및 피드백 반영
 
-리뷰어가 코멘트를 남기면 수정 후 `--amend` 옵션으로 커밋을 수정하고 다시 push합니다. 같은 Change-ID를 유지하면 동일한 Change에 새로운 Patch Set이 생성됩니다.
+push가 완료되면 리뷰어가 변경 사항을 검토하고 코멘트를 남깁니다. 리뷰어가 코멘트를 남기면 수정 후 `--amend` 옵션으로 커밋을 수정하고 다시 push합니다. 같은 Change-ID를 유지하면 동일한 Change에 새로운 Patch Set이 생성됩니다.
 
 ```bash
 # 리뷰어가 코멘트를 남김 ("login.html에 스타일이 없습니다")
@@ -152,7 +202,7 @@ $ git push origin HEAD:refs/for/main
 
 ### 5. 리뷰 승인 및 Submit
 
-리뷰어가 승인하고 Verified 상태가 통과되면 Submit 버튼이 활성화됩니다. Submit을 클릭하면 변경 사항이 main 브랜치에 병합됩니다.
+리뷰어가 승인하고 Verified 상태가 통과되면 Submit 버튼이 활성화됩니다. Submit을 클릭하면 변경 사항이 main 브랜치에 병합됩니다. 이때 Code-Review +2와 Verified +1이 모두 충족되어야 Submit이 가능합니다.
 
 ```
 Gerrit 웹 UI:
@@ -171,7 +221,7 @@ Submit 버튼 클릭 → main 브랜치에 병합!
 
 ## Gerrit 코드 리뷰 라벨
 
-Gerrit의 라벨 시스템은 엄격한 리뷰 프로세스를 가능하게 합니다. 각 라벨의 의미를 정확히 이해하는 것이 중요합니다.
+앞서 기본 사용 흐름에서 Submit 조건으로 Code-Review와 Verified 라벨이 언급되었습니다. 이번 절에서는 각 라벨의 의미와 부여 기준을 더 자세히 알아보겠습니다. Gerrit의 라벨 시스템은 엄격한 리뷰 프로세스를 가능하게 합니다. 각 라벨의 의미를 정확히 이해하는 것이 중요합니다.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
@@ -188,7 +238,7 @@ classDef highlight fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
 
 ## Gerrit 명령어 모음
 
-지금까지 기본 흐름을 살펴보았습니다. 이제 자주 사용하는 Gerrit 명령어들을 모아서 알아보겠습니다.
+지금까지 기본 흐름을 살펴보았습니다. 이제 자주 사용하는 Gerrit 명령어들을 모아서 알아보겠습니다. 이러한 명령어들을 숙지하면 다양한 상황에서 적절히 대처할 수 있습니다. 특히 `%` 옵션을 사용하면 리뷰어 지정, WIP 설정, 토픽 지정 등을 한 번에 처리할 수 있어 생산성이 크게 향상됩니다.
 
 ```bash
 # 리뷰 요청을 위해 push
@@ -213,7 +263,7 @@ $ git checkout FETCH_HEAD
 
 ## Gerrit 웹 UI 둘러보기
 
-Gerrit의 웹 인터페이스는 대시보드 형태로 구성되어 있습니다. 내가 리뷰해야 할 변경과 내가 요청한 변경을 한눈에 확인할 수 있습니다.
+명령어를 통해 Gerrit과 상호작용하는 방법을 배웠다면, 이제 웹 UI를 통해 시각적으로 정보를 확인하는 방법도 익혀야 합니다. Gerrit의 웹 인터페이스는 대시보드 형태로 구성되어 있습니다. 내가 리뷰해야 할 변경과 내가 요청한 변경을 한눈에 확인할 수 있습니다.
 
 ```
 Gerrit 대시보드:
@@ -231,9 +281,11 @@ Gerrit 대시보드:
 └─────────────────────────────────────────────────┘
 ```
 
+이 대시보드는 크게 두 섹션으로 나뉩니다. "내 대기 중인 리뷰"는 자신이 작성한 변경 사항 중 아직 리뷰가 완료되지 않은 것들을 보여줍니다. "내가 리뷰해야 할 변경"은 자신이 리뷰어로 지정된 변경 사항을 표시하여 놓치는 리뷰가 없도록 도와줍니다.
+
 ## Gerrit의 Patch Set 관리
 
-Patch Set은 Gerrit의 핵심 기능입니다. 각 버전의 변경 사항을 추적할 수 있습니다. 리뷰어는 이전 Patch Set과의 차이(diff)를 확인하며 피드백을 줄 수 있습니다.
+Gerrit 웹 UI를 통해 변경 사항의 목록을 확인하는 방법을 배웠습니다. 이제 각 Change 내부에서 Patch Set이 어떻게 관리되는지 자세히 알아보겠습니다. Patch Set은 Gerrit의 핵심 기능입니다. 각 버전의 변경 사항을 추적할 수 있습니다. 리뷰어는 이전 Patch Set과의 차이(diff)를 확인하며 피드백을 줄 수 있습니다.
 
 ```
 Patch Set 1: "로그인 페이지 추가" (첫 번째 시도)
@@ -249,9 +301,11 @@ Patch Set 3: "로그인 페이지 추가" (리뷰 반영)
 # Gerrit UI에서 PS1 → PS2 → PS3 간의 차이(diff)를 볼 수 있음
 ```
 
+Patch Set 관리의 가장 큰 장점은 리뷰어가 변경의 전체 이력을 투명하게 확인할 수 있다는 점입니다. 예를 들어 리뷰어가 PS1에서 "스타일이 없습니다"라고 코멘트를 남겼다면, PS2에서 해당 피드백이 반영되었는지 diff를 통해 바로 확인할 수 있습니다.
+
 ## Gerrit과 GitHub 비교 예시
 
-실제 명령어를 통해 Gerrit 방식과 GitHub PR 방식을 비교해보겠습니다. 이 차이를 이해하면 각 환경에 맞는 워크플로우를 선택할 수 있습니다.
+지금까지 Gerrit의 여러 기능을 살펴보았습니다. 이 절에서는 실제 명령어를 통해 Gerrit 방식과 GitHub PR 방식을 비교해보겠습니다. 이 차이를 이해하면 각 환경에 맞는 워크플로우를 선택할 수 있습니다.
 
 ### GitHub PR 방식:
 ```bash
@@ -278,7 +332,7 @@ $ git push origin HEAD:refs/for/main
 
 ## Gerrit 사용 팁
 
-끝으로 Gerrit를 효과적으로 사용하기 위한 몇 가지 필수 팁을 정리하였습니다.
+지금까지 Gerrit의 개념부터 실전 사용법까지 폭넓게 학습하였습니다. 끝으로 Gerrit를 효과적으로 사용하기 위한 몇 가지 필수 팁을 정리하였습니다. 이 팁들을 실무에 적용하면 더욱 원활하게 Gerrit을 활용할 수 있습니다.
 
 1. **Commit-msg hook 필수 설치** — Change-ID가 없으면 push가 거부됨
 2. **`--amend`로 커밋 수정** — 같은 Change-ID 유지, 새로운 Patch Set 생성
@@ -287,6 +341,8 @@ $ git push origin HEAD:refs/for/main
 5. **여러 커밋을 하나의 Change로** — squash 후 push
 
 ## 한눈에 정리
+
+지금까지 배운 Gerrit의 핵심 개념을 한눈에 정리하면 다음과 같습니다. 이 표를 참고하면 각 개념의 정의와 역할을 빠르게 복습할 수 있습니다.
 
 | 개념 | 설명 |
 |------|------|
@@ -300,6 +356,8 @@ $ git push origin HEAD:refs/for/main
 | Code-Review | 코드 리뷰 승인 점수 (-2 ~ +2) |
 
 ## 연습 문제
+
+지금까지 배운 내용을 바탕으로 다음 연습 문제를 풀어보면서 이해도를 점검해보시기 바랍니다. 각 문제는 Gerrit 사용 시 실제로 마주칠 수 있는 상황을 기반으로 구성하였습니다.
 
 1. Gerrit에서 GitHub와 달리 일반 `git push origin main` 대신 `git push origin HEAD:refs/for/main`을 사용하는 이유는 무엇인지 설명하시오.
 
