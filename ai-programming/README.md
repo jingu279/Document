@@ -357,25 +357,17 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph NN[🧠 신경망 구조]
-    direction LR
-    I["📥 Input Layer<br/>데이터 입력"]
-    H1["⚡ Hidden Layer 1<br/>64 nodes, ReLU"]
-    H2["⚡ Hidden Layer 2<br/>32 nodes, ReLU"]
-    O["📤 Output Layer<br/>10 nodes, Softmax"]
+    I["📥 Input Layer<br/>데이터 입력"] --> H1["⚡ Hidden Layer 1<br/>64 nodes, ReLU"]
+    H1 --> H2["⚡ Hidden Layer 2<br/>32 nodes, ReLU"]
+    H2 --> O["📤 Output Layer<br/>10 nodes, Softmax"]
   end
 
-  I --> H1 --> H2 --> O
-  
   subgraph Process[🔄 학습 과정]
-    direction LR
-    FP["➡️ 순전파<br/>예측값 계산"]
-    Loss["📉 손실 계산<br/>예측 vs 정답"]
-    BP["⬅️ 역전파<br/>그래디언트 계산"]
-    Update["🔄 가중치 갱신<br/>Adam 옵티마이저"]
+    FP["➡️ 순전파<br/>예측값 계산"] --> Loss["📉 손실 계산<br/>예측 vs 정답"]
+    Loss --> BP["⬅️ 역전파<br/>그래디언트 계산"]
+    BP --> Update["🔄 가중치 갱신<br/>Adam 옵티마이저"]
+    Update -.->|반복 (Epoch)| FP
   end
-
-  FP --> Loss --> BP --> Update
-  Update -.->|반복 (Epoch)| FP
 
   classDef layer fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   classDef process fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
