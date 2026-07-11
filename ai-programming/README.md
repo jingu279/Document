@@ -65,19 +65,20 @@ flowchart TB
     Ch10["10장: 컴퓨터 비전"]
     Ch11["11장: 자연어 처리"]
     Ch12["12장: 생성형 AI와 LLM"]
+    Ch13["13장: AI Agent, MCP, Harness"]
   end
 
   subgraph Part4[PART 4: 실무 프로젝트]
-    Ch13["13장: AI 개발 워크플로우"]
-    Ch14["14장: 실전 프로젝트"]
-    Ch15["15장: AI 윤리와 미래"]
+    Ch14["14장: AI 개발 워크플로우"]
+    Ch15["15장: 실전 프로젝트"]
+    Ch16["16장: AI 윤리와 미래"]
   end
 
   Ch01 --> Ch02 --> Ch03 --> Ch04
   Ch04 --> Ch05 --> Ch06 --> Ch07 --> Ch08
   Ch08 --> Ch09 --> Ch10
   Ch09 --> Ch11 --> Ch12
-  Ch12 --> Ch13 --> Ch14 --> Ch15
+  Ch12 --> Ch13 --> Ch14 --> Ch15 --> Ch16
 ```
 
 ---
@@ -367,9 +368,19 @@ flowchart TB
   Store --> Search
 ```
 
+#### 13장: AI Agent, MCP, Harness
+- AI Agent 개념과 ReAct 패턴
+- Function Calling / Tool Use
+- Multi-Agent 시스템과 Skills
+- MCP (Model Context Protocol) 구조
+- AI Harness (LLM/Agent 평가)
+- API 제공자와 토큰 관리
+
+---
+
 ### PART 4: 실무 프로젝트
 
-#### 13장: AI 개발 워크플로우
+#### 14장: AI 개발 워크플로우
 - 프로젝트 구조와 파일 관리
 - 데이터 수집 및 라벨링
 - 실험 관리 (MLflow, Weights & Biases)
@@ -392,7 +403,7 @@ flowchart LR
   end
 ```
 
-#### 14장: 실전 프로젝트
+#### 15장: 실전 프로젝트
 - **프로젝트 1:** 이미지 분류기 (개 vs 고양이)
 - **프로젝트 2:** 영화 리뷰 감성 분석기
 - **프로젝트 3:** RAG 기반 문서 Q&A 챗봇
@@ -422,7 +433,7 @@ flowchart TB
   end
 ```
 
-#### 15장: AI 윤리와 미래
+#### 16장: AI 윤리와 미래
 - AI 편향 (Bias) 사례
 - 공정성 (Fairness) 평가
 - 설명 가능한 AI (XAI)
