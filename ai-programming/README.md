@@ -39,7 +39,7 @@
 flowchart TB
   subgraph Part1[PART 1: 기초 다지기]
     direction TB
-    Ch01["01장: AI란 무엇인가?"]
+    Ch01["01장: AI 프로그래밍 개요"]
     Ch02["02장: 개발 환경 설정"]
     Ch03["03장: 수학 기초"]
     Ch04["04장: Python 데이터 과학"]
@@ -74,8 +74,7 @@ flowchart TB
 
   Ch01 --> Ch02 --> Ch03 --> Ch04 --> P1_Out
   P2_In --> Ch05 --> Ch06 --> Ch07 --> Ch08 --> P2_Out
-  P3_In --> Ch09 --> Ch10
-  Ch09 --> Ch11 --> Ch12 --> Ch13 --> P3_Out
+  P3_In --> Ch09 --> Ch10 --> Ch11 --> Ch12 --> Ch13 --> P3_Out
   P4_In --> Ch14 --> Ch15 --> Ch16
   P1_Out --> P2_In
   P2_Out --> P3_In
