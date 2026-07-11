@@ -735,4 +735,76 @@ print(feature_importance)
 
 ---
 
+## 📝 연습 문제 정답
+
+<details>
+<summary>정답 보기</summary>
+
+**1. 5×5 행렬 생성, 통계, 정규화**
+```python
+import numpy as np
+M = np.random.randn(5, 5)
+print(f"합계: {M.sum():.3f}")
+print(f"평균: {M.mean():.3f}")
+print(f"표준편차: {M.std():.3f}")
+# 각 열의 평균을 0으로 (열 중심화)
+M_centered = M - M.mean(axis=0)
+print(f"중심화 후 열 평균: {M_centered.mean(axis=0).round(10)}")  # 모두 0
+```
+
+**2. Pandas 데이터 분석**
+```python
+import pandas as pd
+df = pd.DataFrame({
+    '이름': ['철수','영희','민수','지현','수진'],
+    '나이': [25,30,28,22,35],
+    '성별': ['남','여','남','여','여'],
+    '점수': [85,92,78,95,88]
+})
+print(f"성별 평균 점수:\n{df.groupby('성별')['점수'].mean()}")
+# 여: 91.67, 남: 81.5
+print(f"30세 이상 평균: {df[df['나이']>=30]['점수'].mean()}")  # 90.0
+print(f"90점 이상:\n{df[df['점수']>=90][['이름','점수']]}")
+```
+
+**3. Matplotlib 그래프**
+```python
+import numpy as np, matplotlib.pyplot as plt
+x = np.linspace(-5, 5, 100)
+plt.plot(x, x**2, label='y=x²')
+plt.plot(x, 2*x+3, label='y=2x+3')
+plt.legend(); plt.title('그래프'); plt.grid(True); plt.show()
+```
+
+**4. 손글씨 숫자 분류**
+```python
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+digits = load_digits()
+X_train, X_test, y_train, y_test = train_test_split(
+    digits.data, digits.target, test_size=0.2, random_state=42
+)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print(f"정확도: {accuracy_score(y_test, y_pred):.4f}")  # 약 0.97
+```
+
+**5. CSV 결측치 처리**
+```python
+import pandas as pd
+import numpy as np
+df = pd.DataFrame({'A': [1,np.nan,3], 'B': [4,5,np.nan], 'C': [7,8,9]})
+print(f"결측치:\n{df.isnull().sum()}")
+df = df.fillna(df.mean())  # 평균으로 채우기
+print(f"처리 후:\n{df}")
+```
+
+</details>
+
+---
+
 > **🔄 다음 장에서는** 머신러닝의 기본 개념을 본격적으로 배웁니다. 지도학습과 비지도학습의 차이, 모델의 학습 과정, 과대적합과 과소적합, 편향-분산 트레이드오프 등 ML의 핵심 개념을 다룹니다.
