@@ -17,34 +17,16 @@
 
 ## 독자가 알고 있어야 할 것
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e3f2fd', 'primaryTextColor': '#0d47a1', 'primaryBorderColor': '#1565c0', 'lineColor': '#1565c0', 'fontSize': '14px'}}}%%
-flowchart LR
-  subgraph Prerequisites[시작하기 전에 알면 좋은 것]
-    direction LR
-    Python["🐍 Python 기본 문법<br/>변수, 함수, 클래스"]
-    Logic["🧩 기초 논리 & 알고리즘<br/>조건문, 반복문, 배열"]
-    English["📖 영어 독해 능력<br/>공식 문서와 논문"]
-    English --> Pre_Out
-  end
-  Pre_Out["➡️"]
-  Nice_In["⬅️"]
-  subgraph NiceToHave[있으면 더 좋지만,<br/>책에서 다시 가르쳐줌]
-    direction LR
-    Nice_In --> Math["📐 고등학교 수학<br/>행렬, 미분, 확률"]
-    Git["🔀 Git 기초"]
-    Linux["💻 터미널 사용 경험"]
-  end
+| 구분 | 필요 지식 | 설명 |
+|------|----------|------|
+| ✅ **필수** | Python 기본 문법 | 변수, 함수, 클래스, 파일 입출력 |
+| ✅ **필수** | 기초 논리 & 알고리즘 | 조건문, 반복문, 배열, 리스트 |
+| ✅ **필수** | 영어 독해 능력 | 공식 문서와 튜토리얼이 영어인 경우가 많음 |
+| 📖 **책에서 설명** | 고등학교 수학 | 선형대수, 미분, 확률 — **필요한 만큼만** |
+| 📖 **책에서 설명** | Git 기초 | 버전 관리 기본 개념 |
+| 📖 **책에서 설명** | 터미널 사용법 | 기본 커맨드라인 명령어 |
 
-  Pre_Out --- Nice_In
-
-  classDef blue fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
-  classDef green fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
-  class Python,Logic,English blue
-  class Math,Git,Linux green
-```
-
-> **걱정 마세요.** 선형대수, 미적분, 통계는 **필요한 만큼만** 책에서 다시 설명합니다. "수포자"도 따라올 수 있습니다.
+> **💡 수학이 두려우신가요?** 선형대수, 미적분, 통계는 이 책에서 **AI 프로그래밍에 필요한 수준만** 골라서 설명합니다. NumPy와 PyTorch가 행렬 연산과 미분을 자동으로 처리해 주므로, 공식 암기보다 원리 이해에 집중하면 됩니다. "수포자"도 충분히 따라올 수 있습니다.
 
 ---
 
