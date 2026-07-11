@@ -170,17 +170,17 @@ flowchart LR
   subgraph CAL[📈 미적분]
     D["📉 미분<br/>변화율"]
     GD["⬇️ 경사하강법<br/>최적화"]
+  D --> GD
   end
   subgraph STAT[🎲 확률통계]
     P["❓ 확률<br/>불확실성"]
     S["📊 통계<br/>데이터 특성"]
+  P --> S
   end
 
   V --> M --> LA_Out
-  D --> GD
   LA_Out --> CAL_In
   CAL_In --> GD
-  P --> S
   GD --> ML["🤖 머신러닝 학습"]
 
   classDef la fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
@@ -203,15 +203,14 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph EDA[📊 데이터 분석 과정]
-    direction LR
     Load["📂 데이터 불러오기<br/>Pandas read_csv"]
     Explore["🔍 데이터 탐색<br/>info, describe, head"]
     Clean["🧹 데이터 정제<br/>결측치 처리, 중복 제거"]
     Viz["📈 데이터 시각화<br/>Matplotlib, Seaborn"]
     MLReady["✅ ML 학습 준비 완료"]
+  Load --> Explore --> Clean --> Viz --> MLReady
   end
 
-  Load --> Explore --> Clean --> Viz --> MLReady
 
   classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   classDef done fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
@@ -398,13 +397,12 @@ flowchart LR
   Input --> Conv1 --> Pool1 --> Conv2 --> Pool2 --> FC --> Output
 
   subgraph Kernel[🔍 합성곱 연산]
-    direction LR
     K["🧩 입력 이미지"]
     Filter["🎛️ 필터 (Kernel)<br/>3x3"]
     Result["🗺️ 특징 맵<br/>(Feature Map)"]
+  K --> Filter --> Result
   end
 
-  K --> Filter --> Result
 
   classDef input fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   classDef conv fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
@@ -431,15 +429,14 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
   subgraph NLP_Pipeline[📝 NLP 파이프라인]
-    direction TB
     Raw["📄 원본 텍스트<br/>'나는 오늘 기분이 좋다'"]
     Token["✂️ 토큰화<br/>['나', '는', '오늘', '기분', '좋다']"]
     Embed["🔢 임베딩<br/>단어 → 벡터"]
     Model["🧠 NLP 모델<br/>BERT, GPT 등"]
     Result["🎯 결과<br/>긍정/부정, 요약, 번역"]
+  Raw --> Token --> Embed --> Model --> Result
   end
 
-  Raw --> Token --> Embed --> Model --> Result
 
   classDef raw fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   classDef proc fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
@@ -455,7 +452,6 @@ flowchart TB
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph Transformer[🏗️ 트랜스포머 아키텍처]
-    direction LR
     Input2["📥 입력 문장"]
     Pos["📍 위치 인코딩"]
     MH["👁️ Multi-Head<br/>Attention"]
@@ -463,25 +459,24 @@ flowchart LR
     FF["⚡ Feed Forward"]
     Add2["➕ Add & Norm"]
     Output2["📤 출력"]
+  Input2 --> Pos --> MH --> Add1 --> FF --> Add2 --> Output2
   end
 
-  Input2 --> Pos --> MH --> Add1 --> FF --> Add2 --> Output2
 
   subgraph Attention[🎯 어텐션 메커니즘]
-    direction LR
     Q["❓ Query"]
     K["🔑 Key"]
     V["💎 Value"]
     Score["📊 점수 계산"]
     Soft["🌀 Softmax"]
     Weight["⚖️ 가중합"]
-  end
-
   Q --> Score
   K --> Score
   Score --> Soft
   V --> Weight
   Soft --> Weight
+  end
+
 
   classDef input fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
   classDef proc fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
@@ -505,7 +500,6 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
   subgraph RAG[🔗 RAG 시스템]
-    direction TB
     Q2["💬 사용자 질문"]
     EmbedQ["🔢 질문 임베딩"]
     Search
@@ -520,7 +514,6 @@ flowchart TB
   Store["💾 Vector Store<br/>Pinecone / Chroma"]
 
   subgraph VectorDB[🗄️ Vector Database 구축]
-    direction TB
     Docs["📚 문서들"]
     Chunk["✂️ 문서 분할"]
     EmbedD["🔢 청크 임베딩"]
@@ -565,7 +558,6 @@ flowchart TB
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph MLOps[🔄 ML 개발 → 배포 파이프라인]
-    direction LR
     Data["📦 데이터 수집"]
     Prep["🧹 데이터 전처리"]
     Train2["⚙️ 모델 학습"]
@@ -574,12 +566,12 @@ flowchart LR
     Deploy["🚀 모델 배포<br/>FastAPI + Docker"]
     Monitor["📈 성능 모니터링"]
     Retrain["🔄 재학습"]
-  end
-
   Data --> Prep --> Train2 --> Eval2
   Eval2 -->|통과| Register --> Deploy --> Monitor
   Eval2 -->|실패| Train2
   Monitor -->|데이터 드리프트| Retrain --> Train2
+  end
+
 
   classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
   classDef train fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#4a148c
@@ -601,38 +593,34 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart TB
   subgraph Proj1[📱 프로젝트 1: 이미지 분류]
-    direction TB
     P1Data["🐱 고양이/개 사진"]
     P1Train["🧠 CNN or 전이 학습"]
     P1Result["📷 웹캠으로 실시간 분류"]
+  P1Data --> P1Train --> P1Result
   end
 
   subgraph Proj2[🎬 프로젝트 2: 감성 분석]
-    direction TB
     P2Data["🎥 영화 리뷰 데이터"]
     P2Train["🔤 BERT Fine-tuning"]
     P2Result["😊 리뷰 긍정/부정 판단"]
+  P2Data --> P2Train --> P2Result
   end
 
   subgraph Proj3[🤖 프로젝트 3: RAG 챗봇]
-    direction TB
     P3Data["📄 회사 문서 PDF"]
     P3Embed["🔢 임베딩 + Vector DB"]
     P3RAG["🔗 RAG 파이프라인"]
     P3Result["💬 문서 기반 질의응답"]
+  P3Data --> P3Embed --> P3RAG --> P3Result
   end
 
   subgraph Proj4[🎯 프로젝트 4: 객체 탐지]
-    direction TB
     P4Data["📹 실시간 영상"]
     P4Model["👁️ YOLOv8"]
     P4Result["📦 객체 탐지 + 바운딩 박스"]
+  P4Data --> P4Model --> P4Result
   end
 
-  P1Data --> P1Train --> P1Result
-  P2Data --> P2Train --> P2Result
-  P3Data --> P3Embed --> P3RAG --> P3Result
-  P4Data --> P4Model --> P4Result
 
   classDef p1 fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   classDef p2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
@@ -661,15 +649,14 @@ flowchart TB
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
 flowchart LR
   subgraph Chapter[📋 각 장의 구성]
-    direction LR
     Goals["🎯 학습 목표<br/>이 장에서 배울 것"]
     Theory["📖 이론 설명<br/>개념 + Mermaid 다이어그램"]
     Code["💻 코드 예제<br/>실행 가능한 Python 코드"]
     Practice["✏️ 실습 문제<br/>직접 해보는 문제"]
     Summary["📋 한눈에 정리<br/>핵심 요약 표"]
+  Goals --> Theory --> Code --> Practice --> Summary
   end
 
-  Goals --> Theory --> Code --> Practice --> Summary
 
   classDef goal fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c
   classDef theory fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
