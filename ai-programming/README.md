@@ -23,15 +23,17 @@ flowchart LR
     Python["Python 기본 문법<br/>변수, 함수, 클래스, 파일 입출력"]
     Logic["기초 논리 & 알고리즘<br/>조건문, 반복문, 배열, 리스트"]
     English["영어 독해 능력<br/>공식 문서와 논문은<br/>대부분 영어"]
+    Pre_Out["→"]
   end
 
   subgraph NiceToHave[있으면 더 좋지만,<br/>책에서 다시 가르쳐줌]
+    Nice_In["←"]
     Math["고등학교 수학<br/>행렬, 미분, 확률"]
     Git["Git 기초"]
     Linux["터미널 사용 경험"]
   end
 
-  Prerequisites --- NiceToHave
+  Pre_Out --- Nice_In
 ```
 
 > **걱정 마세요.** 선형대수, 미적분, 통계는 **필요한 만큼만** 책에서 다시 설명합니다. "수포자"도 따라올 수 있습니다.
