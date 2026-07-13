@@ -409,3 +409,19 @@ $ git commit --amend
 2. git review를 사용하여 Change 456의 최신 Patch Set을 로컬로 다운로드하는 명령어를 작성하시오.
 
 3. 리뷰 피드백을 반영한 후 `git review`를 실행하면 Gerrit에서 어떤 동작이 발생하는지 설명하시오.
+
+---
+
+📌 정답 및 해설
+
+**문제 1 정답 및 해설:**
+
+`git push origin HEAD:refs/for/main%r=alice@example.com,topic=login`과 동일한 동작을 하는 git review 명령어는 `git review -t login --reviewers alice@example.com`입니다. `-t login` 옵션은 topic을 "login"으로 설정하여 Gerrit에서 관련 Change들을 그룹화합니다. `--reviewers alice@example.com` 옵션은 리뷰어로 alice를 미리 지정하여, push와 동시에 리뷰 요청이 전달됩니다. git review는 이러한 긴 명령어를 단순화하여, `git review`만 입력해도 자동으로 현재 브랜치의 변경 사항을 Gerrit에 푸시하고 적절한 리뷰어를 지정합니다. 기본적으로 git review는 `gerrit.review` 설정이나 `.gitreview` 파일에 정의된 Gerrit 서버 정보를 사용합니다.
+
+**문제 2 정답 및 해설:**
+
+git review를 사용하여 Change 456의 최신 Patch Set을 로컬로 다운로드하는 명령어는 `git review -d 456`입니다. `-d`(--download) 옵션은 지정된 Change 번호의 최신 Patch Set을 로컬에 다운로드하고, 해당 Change를 기반으로 하는 새로운 브랜치를 자동으로 생성합니다. 이 명령어를 실행하면 Gerrit에서 Change 456의 최신 코드를 가져와서 로컬에 `review/456`과 같은 이름의 브랜치를 만들고 자동으로 전환합니다. 이 기능은 다른 개발자의 작업을 로컬에서 테스트해 보거나, 리뷰 중인 코드를 직접 실행하여 검증할 때 매우 유용합니다. `git review -d 456`은 Gerrit의 Change ID를 기준으로 동작하므로, 원격 저장소의 브랜치 이름을 알 필요 없이 간편하게 코드를 내려받을 수 있습니다.
+
+**문제 3 정답 및 해설:**
+
+리뷰 피드백을 반영한 후 `git review`를 실행하면, Gerrit에서 다음과 같은 동작이 발생합니다. 먼저 `git review`는 현재 브랜치의 변경 사항을 Gerrit에 푸시하면서, 자동으로 적절한 refs/for/ 대상과 Change-Id를 처리합니다. Gerrit은 동일한 Change-Id를 감지하여 기존 Change의 새로운 Patch Set(예: PS2)으로 등록합니다. 이전 Patch Set(PS1)의 리뷰 코멘트와 점수는 유지되며, 새로운 Patch Set에 대해 리뷰어에게 업데이트 알림이 전송됩니다. 리뷰어는 Gerrit 웹 UI에서 PS1과 PS2의 차이(diff)를 확인하고, 개발자가 피드백을 적절히 반영했는지 검토합니다. 만약 git review가 자동으로 Change-Id를 찾지 못하면 커밋 메시지에 수동으로 추가하라는 메시지를 출력하며, 이 경우 `git commit --amend`로 Change-Id를 추가한 후 다시 시도해야 합니다. git review는 gerrit review를 위한 명령어를 간소화하여, 개발자가 복잡한 refs/for/ 푸시 명령어를 외우지 않아도 되게 해줍니다.

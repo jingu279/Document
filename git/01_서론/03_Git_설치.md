@@ -216,3 +216,19 @@ $ git config user.name
 1. 자신의 운영 체제에 맞는 Git 설치 방법을 순서대로 서술해보세요.
 2. Git 설치 후 반드시 설정해야 하는 최초 설정 두 가지는 무엇이며, 왜 중요한지 설명해보세요.
 3. `git config --global alias.lg "log --oneline --graph --all"` 명령어의 의미를 설명하고, 이 단축어(alias)를 사용하면 어떤 이점이 있는지 서술해보세요.
+
+---
+
+📌 정답 및 해설
+
+**문제 1 정답 및 해설:**
+
+운영 체제별 Git 설치는 다음과 같은 순서로 진행합니다. Windows의 경우 Git 공식 웹사이트(git-scm.com)에서 설치 파일을 다운로드하여 실행한 후 기본 설정을 유지한 채로 설치를 완료하고, Git Bash를 실행하여 `git --version`으로 정상 설치를 확인합니다. macOS의 경우 Homebrew를 사용하여 `brew install git` 명령어로 간편하게 설치하거나, Xcode Command Line Tools를 설치하는 방법이 있습니다. Linux(Ubuntu/Debian)의 경우 `sudo apt update`로 패키지 목록을 갱신한 후 `sudo apt install git` 명령어로 설치합니다. 모든 운영 체제에서 설치 후 `git --version` 명령어로 설치가 정상적으로 완료되었는지 반드시 확인해야 합니다.
+
+**문제 2 정답 및 해설:**
+
+Git 설치 후 반드시 설정해야 하는 최초 설정 두 가지는 사용자 이름(`user.name`)과 이메일(`user.email`)입니다. 이 정보는 모든 커밋에 작성자 정보로 기록되며, 커밋 히스토리에서 누가 변경을 수행했는지를 추적하는 데 사용됩니다. 설정은 `git config --global user.name "이름"`과 `git config --global user.email "이메일"` 명령어로 수행합니다. 이 설정이 올바르게 되어 있지 않으면 커밋할 때마다 경고 메시지가 표시되고, 협업 환경에서 누가 어떤 변경을 했는지 추적할 수 없게 됩니다. 특히 오픈소스 프로젝트에서는 커밋의 작성자 정보가 기여도 측정과 라이선스 준수에 직접적으로 사용되므로 정확한 정보를 입력하는 것이 매우 중요합니다.
+
+**문제 3 정답 및 해설:**
+
+이 명령어는 `git config --global`로 전역 설정에 `alias.lg`라는 별칭을 등록하여, `git lg`라는 단축 명령어로 `git log --oneline --graph --all`을 실행할 수 있게 합니다. 즉 사용자가 터미널에 `git lg`만 입력해도 모든 브랜치의 커밋 히스토리를 한 줄짜리 그래프 형태로 시각화하여 볼 수 있습니다. 이 단축어를 사용하면 매번 긴 명령어를 입력할 필요가 없어 생산성이 크게 향상되며, `--graph`와 `--all` 옵션을 통해 브랜치 구조를 직관적으로 파악할 수 있습니다. Git 사용자들 사이에서 가장 널리 사용되는 alias 중 하나로, `git config --global alias.lg "log --oneline --graph --all"`을 설정해 두면 매일같이 사용하게 될 유용한 단축키입니다.

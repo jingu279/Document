@@ -325,3 +325,19 @@ $ git push origin HEAD:refs/for/main%ready
 2. 세 개의 커밋(a, b, c)을 순서대로 push했습니다. 세 커밋이 서로 의존 관계에 있을 때 Gerrit에서 어떤 순서로 승인되어야 하는지 설명하시오.
 
 3. 리뷰어가 "PS1의 스타일이 마음에 들지 않습니다. 수정해주세요."라고 코멘트를 남겼습니다. 개발자가 취해야 할 git 명령어 단계를 순서대로 작성하시오.
+
+---
+
+📌 정답 및 해설
+
+**문제 1 정답 및 해설:**
+
+Gerrit에서 Change는 하나의 리뷰 단위로, 특정 기능이나 버그 수정을 위한 전체 작업을 나타냅니다. Patch Set은 동일한 Change에 대해 여러 번 수정된 버전을 의미합니다. Change는 고유한 Change-Id로 식별되며, 여러 개의 Patch Set(PS1, PS2, PS3...)을 가질 수 있습니다. Change-Id가 동일하면 Gerrit은 동일한 Change의 새로운 Patch Set으로 인식합니다. 이 경우 리뷰어의 이전 코멘트와 리뷰 점수가 유지되며, 개발자는 피드백을 반영하여 지속적으로 개선할 수 있습니다. 반면 Change-Id가 다르면 Gerrit은 완전히 새로운 Change로 인식합니다. 이 경우 이전의 리뷰 내역이 모두 초기화되며, 새로운 리뷰 프로세스를 처음부터 다시 시작해야 합니다. 따라서 동일한 기능에 대한 수정 사항을 푸시할 때는 반드시 `git commit --amend`를 사용하여 동일한 Change-Id를 유지해야 합니다.
+
+**문제 2 정답 및 해설:**
+
+세 개의 커밋(a, b, c)이 서로 의존 관계에 있을 때(즉, b는 a를 기반으로 하고, c는 b를 기반으로 함), Gerrit에서는 a → b → c 순서로 승인되어야 합니다. Gerrit은 각 커밋을 별도의 Change로 등록하며, 의존 관계가 있는 Change는 "Depends On" 관계로 표시됩니다. a가 승인(Code-Review +2, Verified +1)되고 Submit되어 main 브랜치에 병합되어야 b를 Submit할 수 있고, b가 병합되어야 c를 Submit할 수 있습니다. 이러한 순차적 승인이 필요한 이유는 의존 관계에 있는 Change가 순서 없이 병합되면 코드의 일관성이 깨지거나 빌드가 실패할 수 있기 때문입니다. Gerrit은 이러한 의존 관계를 자동으로 감지하고, 상위 Change가 먼저 병합될 때까지 하위 Change의 Submit을 차단합니다. 이 기능을 "Submit Strategy"라고 하며, 팀은 의존성이 있는 Change를 작업할 때 이 순서를 고려하여 리뷰와 병합 계획을 수립해야 합니다.
+
+**문제 3 정답 및 해설:**
+
+리뷰어가 PS1(Patch Set 1)의 스타일 수정을 요청했을 때, 개발자는 다음과 같은 git 명령어 단계를 수행합니다. 1단계: `git checkout <해당 브랜치>`로 작업 중인 브랜치로 전환합니다. 2단계: 리뷰어가 지적한 스타일 문제가 있는 파일을 수정합니다. 3단계: `git add <수정된 파일>`로 변경 사항을 스테이징합니다. 4단계: `git commit --amend`를 실행합니다. 이때 `--amend`는 기존 커밋을 수정하면서 동일한 Change-Id를 유지하므로, Gerrit에 푸시할 때 기존 Change의 새로운 Patch Set으로 등록됩니다. 5단계: `git push origin HEAD:refs/for/main`으로 Gerrit에 푸시합니다. 6단계: Gerrit 웹 UI에서 PS2가 생성된 것을 확인하고, 리뷰어에게 "스타일을 수정했습니다. 확인 부탁드립니다"라는 코멘트를 남깁니다. 여기서 핵심은 `git commit --amend`를 사용하여 동일한 Change-Id를 유지해야 Gerrit이 기존 Change의 업데이트된 버전(PS2)으로 인식한다는 점입니다. 만약 새로운 커밋을 만들면 새로운 Change-Id가 생성되어 별도의 Change가 되어 버립니다.

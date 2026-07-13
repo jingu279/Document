@@ -373,3 +373,19 @@ $ git push origin HEAD:refs/for/main
 2. Commit-msg hook이 설치되지 않은 상태에서 push를 시도하면 어떤 문제가 발생하는지 설명하고, 이를 해결하는 방법을 서술하시오.
 
 3. 리뷰어가 "이 부분은 수정이 필요합니다"라는 코멘트를 남겼습니다. 개발자는 어떤 순서로 대응해야 하는지 git 명령어를 포함하여 설명하시오.
+
+---
+
+📌 정답 및 해설
+
+**문제 1 정답 및 해설:**
+
+Gerrit에서 `git push origin HEAD:refs/for/main`을 사용하는 이유는 모든 푸시된 코드가 자동으로 코드 리뷰 프로세스를 거치도록 하기 위해서입니다. GitHub와 달리 Gerrit은 `refs/for/` 네임스페이스로 푸시된 변경 사항을 직접 브랜치에 병합하지 않고, 새로운 리뷰(Change)로 등록합니다. 이렇게 등록된 변경 사항은 리뷰어의 Code-Review +2 점수와 CI의 Verified +1 점수를 모두 받아야만 Submit(병합)될 수 있습니다. 일반적인 `git push origin main`은 리뷰 없이 직접 브랜치를 업데이트하므로, Gerrit의 코드 리뷰 정책을 우회하게 됩니다. 따라서 Gerrit을 사용하는 조직에서는 모든 푸시가 `refs/for/`를 통해 이루어져야 코드 품질 관문을 통과할 수 있습니다.
+
+**문제 2 정답 및 해설:**
+
+Commit-msg hook이 설치되지 않은 상태에서 push를 시도하면 Gerrit이 "missing Change-Id in commit message"와 같은 오류 메시지를 출력하며 push를 거부합니다. Change-Id는 Gerrit이 각 Change(리뷰 단위)를 식별하는 고유한 값으로, Commit-msg hook이 커밋 메시지에 자동으로 추가해 줍니다. 이 문제를 해결하려면 먼저 프로젝트의 저장소에서 `gitdir=$(git rev-parse --git-dir); scp -p -P 29418 <gerrit-server>:hooks/commit-msg ${gitdir}/hooks/` 명령어로 hook을 설치합니다. 이미 push가 거부된 상태라면, hook 설치 후 `git commit --amend`로 가장 최근 커밋을 수정하면 hook이 자동으로 Change-Id를 생성하여 추가합니다. 그 후 다시 `git push origin HEAD:refs/for/main`을 실행하면 정상적으로 push됩니다.
+
+**문제 3 정답 및 해설:**
+
+리뷰어가 수정을 요청하는 코멘트를 남겼을 때 개발자는 다음과 같은 순서로 대응합니다. 1단계: 코멘트의 내용을 분석하여 어떤 부분을 어떻게 수정할지 결정합니다. 2단계: 로컬에서 해당 파일을 수정합니다. 3단계: `git add <수정된 파일>`로 변경 사항을 스테이징합니다. 4단계: `git commit --amend`를 실행하여 이전 커밋을 수정합니다. (`--amend`를 사용하면 동일한 Change-Id가 유지되어 Gerrit에서 새로운 Patch Set으로 인식됩니다.) 5단계: `git push origin HEAD:refs/for/main`으로 Gerrit에 다시 푸시합니다. 6단계: Gerrit 웹 UI에서 리뷰어에게 "수정 완료했습니다. 다시 리뷰 부탁드립니다"라는 코멘트를 남깁니다. 이때 동일한 Change-Id가 유지되므로 Gerrit은 기존 Change의 새로운 Patch Set(PS2)으로 인식하고, 리뷰어는 이전 리뷰 내용을 유지한 채 업데이트된 코드를 검토할 수 있습니다.

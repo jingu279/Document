@@ -474,3 +474,45 @@ jobs:
 2. 다음 요구사항을 충족하는 워크플로우 YAML 파일을 작성해보세요: main 브랜치에 push 시 Node.js 20 환경에서 lint와 test를 실행하고, 테스트 결과를 아티팩트로 업로드합니다.
 3. Secrets를 사용하는 이유와 GitHub CLI로 Secrets를 설정하는 방법을 설명하고, Secrets와 일반 환경 변수의 차이점을 비교해보세요.
 4. 매트릭스 전략을 사용하는 이유와, `needs` 키워드를 통한 Job 간 의존성 설정의 이점을 설명해보세요.
+
+---
+
+📌 정답 및 해설
+
+**문제 1 정답 및 해설:**
+
+GitHub Actions의 주요 구성 요소는 다음과 같습니다. Workflow는 YAML 파일로 정의된 전체 자동화 프로세스로, `.github/workflows/` 디렉토리에 저장됩니다. Job은 Workflow 내에서 독립적으로 실행되는 작업 단위로, 하나의 Workflow는 여러 Job을 가질 수 있습니다(예: lint, test, build). Step은 Job 내에서 순차적으로 실행되는 개별 명령어나 Action입니다. Action은 재사용 가능한 작업 단위로, GitHub Marketplace에서 공유된 Action(예: `actions/checkout@v4`)을 사용할 수 있습니다. Runner는 Workflow를 실제로 실행하는 서버로, GitHub 호스팅 러너 또는 자체 호스팅 러너를 사용할 수 있습니다. Event는 Workflow 실행을 트리거하는 조건으로, `push`, `pull_request`, `schedule` 등이 있습니다. 실제 예시: `push` 이벤트가 발생하면 Node.js 20 러너에서 `npm install`과 `npm test`를 순차적으로 실행하는 Job이 동작합니다.
+
+**문제 2 정답 및 해설:**
+
+다음은 요구사항을 충족하는 GitHub Actions 워크플로우 YAML 파일입니다:
+```yaml
+name: CI Pipeline
+on:
+  push:
+    branches: [main]
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run lint
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+```
+이 워크플로우는 `on.push.branches: [main]`으로 main 브랜치에 push될 때 트리거됩니다. `actions/setup-node@v4`로 Node.js 20 환경을 설정하고, `npm run lint`로 정적 분석을, `npm test`로 테스트를 실행합니다. 마지막으로 `actions/upload-artifact@v4`를 사용하여 테스트 결과를 아티팩트로 업로드하여 개발자가 다운로드할 수 있게 합니다.
+
+**문제 3 정답 및 해설:**
+
+Secrets는 비밀번호, API 키, 토큰 등 민감한 정보를 안전하게 저장하고 워크플로우에서 사용할 수 있게 해주는 GitHub의 기능입니다. Secrets를 사용하는 이유는 이러한 민감 정보를 YAML 파일에 평문으로 직접 작성하면 저장소가 노출되었을 때 보안 사고로 이어질 수 있기 때문입니다. Secrets는 저장소의 Settings > Secrets and variables > Actions 메뉴에서 추가하거나, GitHub CLI를 사용하여 `gh secret set <이름> < <파일>` 명령어로 설정할 수 있습니다. Secrets와 일반 환경 변수의 차이점은, Secrets는 설정 후에 값을 다시 볼 수 없고(마스킹 처리), 워크플로우 로그에서도 자동으로 마스킹되어 출력되지 않습니다. 또한 Secrets는 fork된 저장소의 PR에서는 기본적으로 접근할 수 없어 외부 기여자로부터 안전하게 보호됩니다. 일반 환경 변수는 누구나 값을 확인할 수 있고 로그에 그대로 출력되므로, 민감하지 않은 설정 값에만 사용해야 합니다.
+
+**문제 4 정답 및 해설:**
+
+매트릭스 전략(Matrix Strategy)은 여러 버전의 언어, 운영 체제, 의존성 조합을 병렬로 테스트할 수 있게 해주는 기능입니다. 예를 들어 `matrix: {node: [18, 20, 22], os: [ubuntu-latest, windows-latest]}`로 설정하면 6가지 조합(2개 OS × 3개 Node 버전)의 테스트가 병렬로 실행됩니다. 이를 사용하는 이유는 다양한 환경에서 코드가 올바르게 동작하는지 한 번에 검증할 수 있어, 특정 환경에서만 발생하는 버그를 조기에 발견할 수 있기 때문입니다. `needs` 키워드는 Job 간의 의존성을 설정하여 특정 Job이 완료된 후에만 다음 Job이 실행되도록 합니다. 예를 들어 `test` Job이 `needs: [lint]`로 설정되면 lint Job이 성공적으로 완료된 후에만 test가 실행됩니다. 이를 통해 실패가 확실한 작업(예: lint 실패 시 테스트할 필요 없음)을 건너뛰어 CI 시간과 비용을 절약할 수 있으며, Job 간의 실행 순서를 명확히 정의할 수 있습니다.
