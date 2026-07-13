@@ -223,6 +223,122 @@ MCP와 Function Calling은 상호 보완적인 관계에 있습니다. Function 
 
 실제 시스템에서는 이 둘을 함께 사용하는 것이 일반적입니다. MCP Server에 Tool을 등록하고, Host의 LLM이 Function Calling을 통해 이 Tool을 호출하는 방식입니다. MCP는 Tool의 생애 주기(등록, 업데이트, 제거)를 관리하고, Function Calling은 실제 호출 시의 파라미터 전달과 결과 처리를 담당합니다.
 
+### MCP Server 설계 패턴
+
+MCP Server는 제공하는 기능의 성격에 따라 다양한 설계 패턴으로 구현될 수 있습니다. 각 패턴은 목적, 제공하는 Resource와 Tool의 종류, 그리고 보안 고려사항에서 차이를 보입니다. 다음은 세 가지 대표적인 MCP Server 설계 패턴을 비교한 표입니다.
+
+| 패턴 | 목적 | Resources | Tools | 보안 고려사항 |
+|------|------|-----------|-------|---------------|
+| 데이터베이스 MCP Server | SQL 쿼리 기능 제공 | 테이블 스키마, 데이터베이스 메타데이터 | query(읽기), execute(쓰기) | 읽기/쓰기 분리, SQL Injection 방지, LIMIT 강제 |
+| 파일 시스템 MCP Server | 파일 읽기/쓰기/검색 | 디렉토리 트리, 파일 메타데이터 | read, write, search, list | 경로 샌드박싱, 파일 크기 제한, 형식 제한 |
+| 외부 API MCP Server | REST/GraphQL API 래핑 | API 스키마, 엔드포인트 목록 | api_call, api_batch | 자격 증명 관리, Rate Limit 준수, 재시도 전략 |
+
+데이터베이스 MCP Server는 LLM이 구조화된 데이터에 접근할 수 있도록 SQL 쿼리 기능을 Tool 형태로 제공합니다. Resource로는 테이블 스키마와 데이터베이스 메타데이터를 노출하여 LLM이 데이터 구조를 이해할 수 있게 하고, Tool로는 읽기 전용 query와 쓰기 가능한 execute를 구분하여 제공합니다. 보안 측면에서 가장 중요한 설계 원칙은 읽기와 쓰기를 명확히 분리하는 것입니다. 기본적으로는 읽기 전용 계정을 사용하고, 쓰기 작업이 필요한 경우에만 별도의 인증 절차를 거쳐 execute Tool을 활성화하는 방식이 안전합니다. 또한 모든 SQL 쿼리는 파라미터 바인딩을 통해 실행되어 SQL Injection 공격을 방지해야 하며, SELECT 문에 LIMIT 절을 강제하여 과도한 데이터 조회를 제한해야 합니다.
+
+파일 시스템 MCP Server는 로컬 또는 원격 파일에 대한 읽기, 쓰기, 검색 기능을 제공합니다. Resource로는 디렉토리 트리 구조와 파일 메타데이터를 노출하고, Tool로는 read, write, search, list 등을 제공합니다. 보안에서 가장 중요한 것은 접근 가능한 경로를 엄격히 제한하는 것입니다. 특정 디렉토리(예: /home/user/workspace)로 샌드박싱하고, 경로 순회 공격을 방지하기 위해 모든 파일 경로를 정규화한 후 허용된 범위 내에 있는지 검증해야 합니다. 또한 파일 크기 제한과 허용 파일 형식(예: .txt, .md, .csv, .json)을 지정하여 악의적인 대용량 파일 업로드나 실행 파일 업로드를 차단해야 합니다.
+
+외부 API MCP Server는 REST API나 GraphQL API를 MCP의 Tool로 래핑하여 LLM이 외부 서비스를 호출할 수 있게 해줍니다. Resource로는 API 스키마와 엔드포인트 목록을 노출하고, Tool로는 개별 API 호출을 위한 api_call과 여러 호출을 묶어 처리하는 api_batch를 제공합니다. 보안 고려사항으로는 API 키와 OAuth 토큰 등의 자격 증명을 안전하게 관리하는 것이 최우선입니다. 자격 증명은 절대로 LLM 프롬프트나 로그에 노출되어서는 안 되며, MCP Server 내부에서 안전하게 보관하고 요청 시에만 사용해야 합니다. 또한 외부 API의 Rate Limit을 준수하도록 요청을 제어하고, API 호출 실패 시 적절한 재시도 및 폴백 전략을 구현해야 합니다.
+
+다음은 하나의 AI Agent가 여러 MCP Server를 동시에 활용하는 협업 아키텍처를 보여줍니다.
+
+```mermaid
+flowchart TB
+    Agent[AI Agent<br/>LLM + Function Calling]
+    
+    subgraph "MCP 생태계"
+        DB[MCP Server<br/>데이터베이스]
+        FS[MCP Server<br/>파일 시스템]
+        API[MCP Server<br/>외부 API]
+    end
+    
+    subgraph "데이터 소스"
+        DB_DS[(PostgreSQL<br/>MySQL)]
+        FS_DS[(로컬 파일<br/>네트워크 스토리지)]
+        API_DS[REST API<br/>GraphQL]
+    end
+    
+    Agent -->|Tool 호출| DB
+    Agent -->|Tool 호출| FS
+    Agent -->|Tool 호출| API
+    
+    DB -->|SQL 쿼리| DB_DS
+    FS -->|파일 I/O| FS_DS
+    API -->|HTTP 요청| API_DS
+    
+    style Agent fill:#e3f2fd
+    style DB fill:#c8e6c9
+    style FS fill:#c8e6c9
+    style API fill:#c8e6c9
+```
+
+### MCP 보안 심화
+
+MCP 환경에서 보안은 단일 계층이 아닌 여러 계층에 걸쳐 종합적으로 접근해야 합니다. Host에서 MCP Server로의 연결, Server 내부의 Tool 실행, 그리고 Server가 외부 시스템에 접근하는 각 단계마다 서로 다른 보안 위협이 존재합니다. 따라서 인증, 권한, 감사 로깅, 입력 검증, Rate Limiting의 다섯 가지 축을 모두 고려한 포괄적인 보안 아키텍처가 필요합니다.
+
+인증(Authentication)은 MCP Server에 접근하는 클라이언트의 신원을 확인하는 과정입니다. 가장 간단한 방식은 API 키를 사용하는 것으로, 각 MCP Server에 할당된 고유 키를 통해 접근을 제어합니다. 더 높은 보안이 필요한 환경에서는 OAuth 2.0 프로토콜을 도입하여 사용자별 인증을 수행하고, 기업 환경에서는 mTLS(Mutual TLS)를 통해 클라이언트와 서버가 서로의 인증서를 검증하는 양방향 인증을 적용할 수 있습니다. 인증 방식의 선택은 시스템의 규모와 보안 요구사항에 따라 결정되어야 합니다.
+
+권한 부여(Authorization)는 인증된 클라이언트가 어떤 Tool과 Resource에 접근할 수 있는지를 제어합니다. 역할 기반 접근 제어(RBAC)를 도입하여 사용자 그룹별로 허용된 Tool을 정의하고, 각 Tool의 실행 결과에 포함될 수 있는 데이터의 범위도 함께 제한해야 합니다. 예를 들어 관리자 역할은 데이터베이스 MCP Server의 query와 execute Tool을 모두 사용할 수 있지만, 일반 사용자 역할은 query Tool만 사용 가능하도록 설정하는 방식입니다. 또한 특정 Tool에 대해서는 추가적인 권한 상승 절차를 요구하여 민감한 작업을 보호할 수 있습니다.
+
+감사 로깅(Audit Logging)은 모든 MCP Server 호출을 기록하여 보안 사고 발생 시 원인을 추적할 수 있게 합니다. 감사 로그에는 호출 시간, 호출한 클라이언트 ID, 호출된 Tool 이름, 전달된 파라미터, 실행 결과(성공/실패), 응답 시간 등이 포함되어야 합니다. 민감한 파라미터(비밀번호, API 키 등)는 로그에 기록되기 전에 마스킹 처리하여 정보 노출을 방지해야 합니다. 감사 로그는 변조가 불가능한 중앙 집중식 저장소(예: AWS CloudTrail, ELK Stack)에 보관하고, 정기적인 검토와 이상 징후 탐지 자동화가 필요합니다.
+
+입력 검증(Input Validation)은 Tool 호출 시 전달되는 모든 파라미터를 실행 전에 검증하는 과정입니다. SQL Injection, 명령어 인젝션, 경로 순회 공격 등 악의적인 입력을 탐지하고 차단해야 합니다. 특히 LLM이 생성한 파라미터는 예상치 못한 값을 포함할 수 있으므로, JSON Schema에 정의된 타입과 제약 조건을 엄격히 검증한 후에만 실제 Tool을 실행해야 합니다. 예를 들어 문자열 길이 제한, 숫자 범위 제한, 허용된 값 목록(enum) 등을 체크하여 비정상적인 입력을 차단해야 합니다.
+
+Rate Limiting은 단기간에 과도한 Tool 호출이 발생하는 것을 방지합니다. 이는 악의적인 사용자가 대량의 API 호출로 비용을 발생시키거나 시스템 리소스를 고갈시키는 공격을 방어하는 데 필수적입니다. Rate Limiting은 사용자별, Tool별, IP별 등 다양한 단위로 적용할 수 있으며, 초과 시에는 적절한 대기 시간을 안내하거나 일시적으로 접근을 차단해야 합니다. 또한 머신러닝 기반의 이상 탐지를 도입하여 평소와 다른 호출 패턴을 자동으로 감지하고 대응할 수 있습니다.
+
+다음은 MCP 배포 시나리오별 보안 수준을 비교한 표입니다.
+
+| 보안 영역 | Embedded 모드 (개발) | Standalone 모드 (운영) | Cloud 모드 (대규모) |
+|-----------|---------------------|----------------------|--------------------|
+| 인증 | 기본 API 키 | OAuth 2.0 + JWT | mTLS + OAuth 2.0 |
+| 권한 부여 | 단일 사용자 전권 | 역할 기반 접근 제어(RBAC) | 세분화된 RBAC + 정책 엔진 |
+| 감사 로깅 | 파일 기반 로깅 | 중앙 집중식 로그 수집 | 실시간 스트리밍 + 이상 탐지 |
+| 입력 검증 | 기본 타입 체크 | JSON Schema 정적 검증 | 다중 레이어 검증 + ML 탐지 |
+| Rate Limiting | 제한 없음 | 사용자별 초당 호출 제한 | 사용자 + Tool + IP별 복합 제한 |
+| 네트워크 보안 | localhost만 허용 | 방화벽 + VPN | VPC + API Gateway + WAF |
+
+### MCP 배포 전략
+
+MCP Server의 배포 방식은 개발 단계와 운영 환경에 따라 달라지며, 각 방식은 장단점이 뚜렷합니다. Embedded 모드, Standalone 모드, Cloud 모드의 세 가지 주요 배포 전략을 상황에 맞게 선택하거나 혼합하여 사용할 수 있습니다. 각 배포 방식의 차이점을 아키텍처 다이어그램으로 비교하면 다음과 같습니다.
+
+```mermaid
+flowchart TB
+    subgraph "Embedded Mode (개발 환경)"
+        E_HOST[Host Process<br/>동일 프로세스]
+        E_SERVER[MCP Server<br/>인프로세스]
+        E_HOST --> E_SERVER
+    end
+    
+    subgraph "Standalone Mode (운영 환경)"
+        S_HOST[Host Process]
+        S_SERVER[MCP Server<br/>별도 프로세스]
+        S_HOST -->|stdio/SSE| S_SERVER
+    end
+    
+    subgraph "Cloud Mode (대규모 환경)"
+        C_HOST[Host Service]
+        C_GW[API Gateway<br/>인증 + 라우팅 + Rate Limit]
+        C_SRV1[MCP Server<br/>Container 1]
+        C_SRV2[MCP Server<br/>Container 2]
+        C_SRV3[MCP Server<br/>Container N]
+        
+        C_HOST --> C_GW
+        C_GW --> C_SRV1
+        C_GW --> C_SRV2
+        C_GW --> C_SRV3
+    end
+    
+    style E_HOST fill:#e3f2fd
+    style S_HOST fill:#e3f2fd
+    style C_HOST fill:#e3f2fd
+    style C_GW fill:#fff3e0
+```
+
+Embedded 모드는 MCP Server가 Host와 동일한 프로세스 내에서 실행되는 방식입니다. 주로 개발 환경에서 빠른 프로토타이핑과 디버깅을 위해 사용되며, 별도의 프로세스 관리 없이 Host 애플리케이션 내에 MCP Server를 라이브러리 형태로 포함시킵니다. 장점은 프로세스 간 통신 오버헤드가 없어 성능이 뛰어나고, 디버깅이 용이하며, 배포 구성이 단순하다는 점입니다. 단점으로는 Host와 MCP Server 간의 격리 수준이 낮아 한쪽의 장애가 다른 쪽에 영향을 미칠 수 있고, 확장성이 제한적입니다. Embedded 모드는 개발 초기 단계나 단일 사용자 애플리케이션에 적합합니다.
+
+Standalone 모드는 MCP Server가 Host와 별도의 프로세스로 실행되는 방식으로, 가장 일반적인 운영 환경 배포 방식입니다. Host와 MCP Server는 표준 입출력(stdin/stdout) 또는 SSE(Server-Sent Events)를 통해 통신합니다. 장점은 프로세스 간 격리를 통해 장애 전파를 방지하고, 각 MCP Server를 독립적으로 업데이트하거나 재시작할 수 있다는 점입니다. 단점으로는 프로세스 간 통신 오버헤드가 발생하고, 각 MCP Server의 생애 주기 관리(시작, 중지, 재시작)를 위한 별도의 오케스트레이션이 필요합니다. Standalone 모드는 일반적인 운영 환경과 CI/CD 파이프라인에 적합합니다.
+
+Cloud 모드는 MCP Server를 컨테이너화하여 클라우드 환경의 마이크로서비스로 배포하는 방식입니다. 각 MCP Server는 독립적인 컨테이너(예: Docker)로 패키징되어 Kubernetes와 같은 오케스트레이션 플랫폼 위에서 실행됩니다. API Gateway가 모든 MCP Server 요청을 중계하고 로드 밸런싱, 인증, Rate Limiting을 중앙에서 관리합니다. 장점으로는 수평적 확장이 용이하고, 각 Server의 리소스를 독립적으로 조정할 수 있으며, 높은 가용성을 보장할 수 있습니다. 단점으로는 네트워크 지연이 추가되고, 인프라 관리가 복잡해지며, 클라우드 비용이 발생합니다. Cloud 모드는 대규모 사용자 트래픽을 처리해야 하는 프로덕션 환경에 적합합니다.
+
 ---
 
 ## 4. 외부 API 통합 패턴
