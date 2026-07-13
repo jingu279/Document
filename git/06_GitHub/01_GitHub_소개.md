@@ -209,4 +209,4 @@ Public 저장소는 모든 사람이 코드를 볼 수 있고, fork하여 기여
 
 **문제 4 정답 및 해설:**
 
-GitHub Pages를 사용하여 개인 포트폴리오 웹사이트를 배포하는 과정은 다음과 같습니다. 첫째, GitHub에 `<username>.github.io` 형식으로 새 저장소를 생성합니다(예: `jingu279.github.io`). 둘째, 로컬에서 웹사이트 파일(HTML, CSS, JS)을 작성하고 `git add`, `git commit`, `git push`로 원격 저장소에 푸시합니다. 셋째, 저장소의 Settings > Pages 메뉴에서 배포 소스를 main 브랜치 또는 /docs 폴더로 설정합니다. 넷째, 몇 분 후 `https://<username>.github.io` 주소로 웹사이트가 자동으로 배포되어 접속할 수 있게 됩니다. GitHub Pages는 정적 웹사이트 호스팅을 무료로 제공하며, Jekyll과 같은 정적 사이트 생성기와 연동하여 더욱 풍부한 사이트를 구축할 수도 있습니다.
+GitHub Pages를 사용하여 개인 포트폴리오 웹사이트를 배포하는 과정은 다음과 같습니다. 첫째, GitHub에 `<username>.github.io` 형식으로 새 저장소를 생성합니다(예: `your-username.github.io`). 둘째, 로컬에서 웹사이트 파일(HTML, CSS, JS)을 작성하고 `git add`, `git commit`, `git push`로 원격 저장소에 푸시합니다. 셋째, 저장소의 Settings > Pages 메뉴에서 배포 소스를 main 브랜치 또는 /docs 폴더로 설정합니다. 넷째, 몇 분 후 `https://<username>.github.io` 주소로 웹사이트가 자동으로 배포되어 접속할 수 있게 됩니다. GitHub Pages는 정적 웹사이트 호스팅을 무료로 제공하며, Jekyll과 같은 정적 사이트 생성기와 연동하여 더욱 풍부한 사이트를 구축할 수도 있습니다.

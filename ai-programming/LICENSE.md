@@ -1,6 +1,6 @@
 # License / 라이선스
 
-Copyright © 2026 jingu279. All rights reserved.
+Copyright © 2026 [copyright holder]. All rights reserved.
 
 ## 한국어
 
@@ -12,7 +12,7 @@ Copyright © 2026 jingu279. All rights reserved.
 - 저자의 허가 없는 타 사이트 또는 매체에의 재게시
 
 **사용 허가 요청:**
-위 범위를 벗어난 사용을 원하시면 사전에 jingu279에게 허가를 받아야 합니다.
+위 범위를 벗어난 사용을 원하시면 사전에 [copyright holder]에게 허가를 받아야 합니다.
 
 ## English
 
@@ -24,4 +24,4 @@ This document may be freely used for **educational purposes only**.
 - Republishing without permission
 
 **Permission Requests:**
-Any use beyond the above requires prior written permission from jingu279.
+Any use beyond the above requires prior written permission from [copyright holder].
