@@ -45,7 +45,7 @@ flowchart TB
     end
     
     subgraph "2. 요청 처리 흐름"
-        B1[사용자: "김팀장에게<br/>미팅 안건 메일 발송"] --> B2[LLM에 요청 전달]
+        B1[사용자: 김팀장에게<br/>미팅 안건 메일 발송] --> B2[LLM에 요청 전달]
         B2 --> B3{LLM이 함수 판단}
         B3 --> B4[함수: send_email<br/>파라미터: to=kim@,<br/>subject=미팅 안건, ...]
     end
